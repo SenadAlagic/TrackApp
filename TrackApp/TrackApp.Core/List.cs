@@ -6,7 +6,7 @@ namespace TrackApp.Core
 		public int Id { get; set; }
 		public double TotalPrice { get; set; }
 		public DateOnly MonthOfYear { get; set; }
-		//public int ItemListId { get; set; }
+		public DateTime DateModified { get; set; }
 
 		public List()
 		{

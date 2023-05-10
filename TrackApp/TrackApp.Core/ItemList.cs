@@ -7,8 +7,8 @@ namespace TrackApp.Core
 		public int Quantity { get; set; }
 		public DateTime DateCreated { get; set; }
 		public DateTime DateModified { get; set; }
-		//public int ItemId { get; set; }
-		//public int ListId { get; set; }
+		public int ItemId { get; set; }
+		public int ListId { get; set; }
 
 		public ItemList()
 		{

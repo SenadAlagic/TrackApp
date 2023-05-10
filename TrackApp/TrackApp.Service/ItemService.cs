@@ -23,6 +23,7 @@ namespace TrackApp.Service
 				Id = InMemoryDb.Items.Count+1,
 				Name = item.Name,
 				Unit = item.Unit,
+				CategoryId=item.CategoryId
 			};
 			InMemoryDb.Items.Add(newItem);
 			return newItem;

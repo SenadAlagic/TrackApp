@@ -5,6 +5,7 @@ namespace TrackApp.Service.ViewModels
 	{
 		public string Name { get; set; }
 		public string Unit { get; set; }
+		public int CategoryId { get; set; }
 	}
 }
 
