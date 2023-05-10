@@ -1,0 +1,25 @@
+#wrapper{
+    width: 50%;
+    margin:auto;
+}
+button{
+    width: 100%;
+}
+.dropdown-item{
+    width: 100%;
+}
+.form-control{
+    width: 50%;
+}
+#confirm{
+    width: 50%;
+}
+#controls{
+    margin-top: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.control{
+    width: 30%;
+}

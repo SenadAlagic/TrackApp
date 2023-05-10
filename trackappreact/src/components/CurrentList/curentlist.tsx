@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./currentlist.css";
 
 interface ItemsList {
   id: number;
@@ -24,7 +25,6 @@ const CurrentList = () => {
         }
       );
       const data = await res.json();
-      console.log(data);
       setItems(data);
     } catch (error) {
       console.log(error);
@@ -37,12 +37,29 @@ const CurrentList = () => {
 
   return (
     <>
-      <h1>{items.length === 0 && <p>No items found</p>}</h1>
-      <ul className="list-group">
-        {items.map((item: any) => (
-          <li key={item.id}>{item.name}</li>
-        ))}
-      </ul>
+      <div id="wrapper">
+        <h1>{items.length === 0 && <p>No items found</p>}</h1>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>itemId</th>
+              <th>listId</th>
+              <th>quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item: any) => (
+              <>
+                <tr>
+                  <th>{item.itemId}</th>
+                  <th>{item.listId}</th>
+                  <th>{item.quantity}</th>
+                </tr>
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };
