@@ -12,7 +12,11 @@ interface ItemsList {
   listId: number;
 }
 
-const CurrentList = () => {
+interface Props {
+  changeParent: () => void;
+}
+
+const CurrentList = ({ changeParent }: Props) => {
   const [items, setItems] = useState<ItemsList[]>([]);
   const fetchData = async () => {
     try {
@@ -30,6 +34,7 @@ const CurrentList = () => {
     } catch (error) {
       console.log(error);
     }
+    changeParent();
   };
 
   useEffect(() => {

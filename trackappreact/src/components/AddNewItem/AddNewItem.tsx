@@ -1,4 +1,4 @@
-import { Dispatch, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./addnewitem.css";
 import { ItemService } from "../../services/itemService";
 
@@ -31,7 +31,6 @@ const AddNewItem = ({ callback }: IAddNewItem) => {
     if (!selectedItem) return;
     ItemService.addToList(parseInt(quantity), selectedItem.id, 1);
     callback();
-    // onChangeState("newState");
   }
 
   useEffect(() => {

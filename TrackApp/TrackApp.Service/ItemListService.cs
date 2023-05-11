@@ -8,7 +8,7 @@ namespace TrackApp.Service
 		public ItemList GetItemList(int id);
 		public ItemList AddItemToList(AddToListVM newEntry);
 		public ItemList RemoveFromList(int id);
-		public List<GetItemsVM> GetByListId(int id);
+		public List<GetItemsVM> GetByListId(int id, int numberOfResults);
 		public ItemList? RestockItems(RestockVM restock);
 	}
 	public class ItemListService : IItemListService
@@ -41,7 +41,7 @@ namespace TrackApp.Service
 			return existing;
         }
 
-        public List<GetItemsVM> GetByListId(int id)
+        public List<GetItemsVM> GetByListId(int id, int numberOfResults=5)
         {
 			var itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id && il.Quantity>0).ToList();
 			var items = InMemoryDb.Items.ToList();
@@ -63,6 +63,8 @@ namespace TrackApp.Service
 					Unit = item.Unit
 				};
 				returnList.Add(newItem);
+				if (returnList.Count == numberOfResults)
+					return returnList;
 			}
 			return returnList;
         }
