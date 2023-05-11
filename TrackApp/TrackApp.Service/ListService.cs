@@ -8,6 +8,7 @@ namespace TrackApp.Service
 		public List GetList(int id);
 		public List CreateList();
 		public List DeleteList(int id);
+        public List<List> GetAllLists();
 	}
 	public class ListService : IListService
     { 
@@ -31,13 +32,21 @@ namespace TrackApp.Service
         {
             var listToDelete=InMemoryDb.Lists.Where(l => l.Id == id).FirstOrDefault();
             if (listToDelete != null)
-                InMemoryDb.Lists.Remove(listToDelete);
+                listToDelete.IsVisible=false;
             return listToDelete;
         }
 
         public List GetList(int id)
         {
-            return InMemoryDb.Lists.Where(l => l.Id == id).FirstOrDefault();
+            var listToReturn = InMemoryDb.Lists.Where(l => l.Id == id && l.IsVisible == true).FirstOrDefault();
+            if (listToReturn?.IsVisible == false || listToReturn == null)
+                return null;
+            return listToReturn;
+        }
+
+        public List<List> GetAllLists()
+        {
+            return InMemoryDb.Lists.ToList();
         }
     }
 }

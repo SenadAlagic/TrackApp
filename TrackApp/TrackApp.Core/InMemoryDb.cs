@@ -4,7 +4,7 @@ namespace TrackApp.Core
 	public class InMemoryDb
 	{
 		public static List<Item> Items = GenerateItems(); 
-		public static List<List> Lists = new List<List>(); 
+		public static List<List> Lists = GenerateLists(); 
 		public static List<ItemList> ItemsLists = GenerateItemLists();
 		public static List<Category> Categories = GenerateCategories();
 
@@ -31,6 +31,15 @@ namespace TrackApp.Core
             {
                 new ItemList { Id=1, ItemId=1, ListId=1, Quantity=5, DateCreated=DateTime.Now, DateModified=DateTime.Now },
                 new ItemList { Id=2, ItemId=2, ListId=1, Quantity=2, DateCreated=DateTime.Now, DateModified=DateTime.Now }
+            };
+        }
+
+        public static List<List> GenerateLists()
+        {
+            return new List<List>()
+            {
+                new List { Id=1, TotalPrice=0, MonthOfYear=DateOnly.FromDateTime(DateTime.Now), DateModified=DateTime.Now, IsVisible=true},
+                new List { Id=2, TotalPrice=100, MonthOfYear=DateOnly.FromDateTime(DateTime.Now), DateModified=DateTime.Now, IsVisible=false}
             };
         }
     }

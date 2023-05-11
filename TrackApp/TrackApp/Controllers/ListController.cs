@@ -28,6 +28,12 @@ namespace TrackApp.Controllers
             return Ok(listToGet);
         }
 
+        [HttpGet]
+        public List<List> GetAllLists()
+        {
+            return listService.GetAllLists();
+        }
+
         [HttpPost]
         public ActionResult<List> CreateList()
         {

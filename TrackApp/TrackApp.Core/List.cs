@@ -7,10 +7,10 @@ namespace TrackApp.Core
 		public double TotalPrice { get; set; }
 		public DateOnly MonthOfYear { get; set; }
 		public DateTime DateModified { get; set; }
+		public bool IsVisible { get; set; } = true;
 
 		public List()
 		{
 		}
 	}
 }
-

@@ -21,7 +21,7 @@ namespace TrackApp.Controllers
         }
 
         [HttpGet]
-        public ActionResult<ItemList> GetItemList(int id)
+        public ActionResult<GetItemsVM> GetItemList(int id)
         {
             var itemToReturn = itemListService.GetItemList(id);
             if (itemToReturn == null)
