@@ -25,26 +25,35 @@ namespace TrackApp.Controllers
         {
             var itemToReturn = itemListService.GetItemList(id);
             if (itemToReturn == null)
-                return BadRequest("Nepostojeci Id");
+                return BadRequest("Nonexistant Id");
             return Ok(itemToReturn);
         }
 
         [HttpGet]
-        public ActionResult<List<ItemList>> GetByItemList(int id)
+        public ActionResult<List<ItemList>> GetByList(int id)
         {
             var itemsToReturn = itemListService.GetByListId(id);
             if (itemsToReturn == null)
-                return BadRequest("Nepostojeci id");
+                return BadRequest("Nonexistant id");
             return Ok(itemsToReturn);
         }
 
         [HttpPost]
         public ActionResult<ItemList> AddItemToList(AddToListVM newEntry)
         {
-            var itemToAdd=itemListService.AddItemToList(newEntry);
+            var itemToAdd = itemListService.AddItemToList(newEntry);
             if (itemToAdd == null)
-                return BadRequest("Greska pri dodavanju");
+                return BadRequest("Error while adding");
             return Ok(itemToAdd);
+        }
+
+        [HttpPost]
+        public ActionResult<ItemList> Restock([FromBody] RestockVM restock)
+        {
+            var itemToRestock = itemListService.RestockItems(restock);
+            if (itemToRestock == null)
+                return BadRequest("Nonexistant id");
+            return Ok(itemToRestock);
         }
 
         [HttpDelete]
@@ -52,7 +61,7 @@ namespace TrackApp.Controllers
         {
             var itemToRemove = itemListService.RemoveFromList(id);
             if (itemToRemove == null)
-                return BadRequest("Greska pri uklanjanju");
+                return BadRequest("Error while deleting");
             return Ok(itemToRemove);
         }
     }

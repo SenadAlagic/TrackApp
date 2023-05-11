@@ -9,6 +9,7 @@ namespace TrackApp.Core
 		public DateTime DateModified { get; set; }
 		public int ItemId { get; set; }
 		public int ListId { get; set; }
+		public bool CrossedOff { get; set; } = false;
 
 		public ItemList()
 		{

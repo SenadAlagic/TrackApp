@@ -20,6 +20,15 @@ namespace TrackApp.Controllers
         }
 
         [HttpGet]
+        public ActionResult<List> GetCurrentWorkingList()
+        {
+            var listToGet = listService.GetCurrentWorkingList();
+            if (listToGet == null)
+                return StatusCode(500,"Current working list not existant, server error");
+            return Ok(listToGet);
+        }
+
+        [HttpGet]
         public ActionResult<List> GetList(int id)
         {
             var listToGet=listService.GetList(id);

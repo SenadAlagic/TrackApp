@@ -38,7 +38,7 @@ namespace TrackApp.Core
         {
             return new List<List>()
             {
-                new List { Id=1, TotalPrice=0, MonthOfYear=DateOnly.FromDateTime(DateTime.Now), DateModified=DateTime.Now, IsVisible=true},
+                new List { Id=1, TotalPrice=0, MonthOfYear=DateOnly.FromDateTime(DateTime.Now), DateModified=DateTime.Now, IsVisible=true, CurrentWorkingList=true},
                 new List { Id=2, TotalPrice=100, MonthOfYear=DateOnly.FromDateTime(DateTime.Now), DateModified=DateTime.Now, IsVisible=false}
             };
         }

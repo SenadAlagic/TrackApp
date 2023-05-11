@@ -9,11 +9,14 @@ namespace TrackApp.Service
 		public ItemList AddItemToList(AddToListVM newEntry);
 		public ItemList RemoveFromList(int id);
 		public List<GetItemsVM> GetByListId(int id);
+		public ItemList? RestockItems(RestockVM restock);
 	}
 	public class ItemListService : IItemListService
 	{
-		public ItemListService()
+		IListService listService;
+		public ItemListService(IListService listService)
 		{
+			this.listService = listService;
 		}
 
         public ItemList AddItemToList(AddToListVM newEntry)
@@ -40,10 +43,10 @@ namespace TrackApp.Service
 
         public List<GetItemsVM> GetByListId(int id)
         {
-			var itemsFromDesiredLists= InMemoryDb.ItemsLists.Where(il => il.ListId == id).ToList();
+			var itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id && il.Quantity>0).ToList();
 			var items = InMemoryDb.Items.ToList();
 			var query = from item in items
-						join itemlist in itemsFromDesiredLists on item.Id equals itemlist.ItemId
+						join itemlist in itemsFromDesiredList on item.Id equals itemlist.ItemId
 						select new
 						{
 							Quantity = itemlist.Quantity,
@@ -75,6 +78,18 @@ namespace TrackApp.Service
 			if (itemToRemove != null)
 				InMemoryDb.ItemsLists.Remove(itemToRemove);
             return itemToRemove;
+        }
+
+        public ItemList? RestockItems(RestockVM restock)
+        {
+			var itemToRestock = InMemoryDb.ItemsLists.Where(il => il.ItemId == restock.ItemId && il.ListId==restock.ListId).FirstOrDefault();
+			if (itemToRestock == null)
+				return null;
+			itemToRestock.Quantity -= restock.Quantity;
+			if (itemToRestock.Quantity <= 0)
+				itemToRestock.CrossedOff = true;
+			listService.UpdatePrice(restock.ListId, restock.TotalPrice);
+			return itemToRestock;
         }
     }
 }
