@@ -6,8 +6,8 @@ namespace TrackApp.Service
 {
 	public interface IItemService
 	{
-		public Item AddToList(AddItemVM item);
-		public Item RemoveFromList(int id);
+		public Item AddItem(AddItemVM item);
+		public Item RemoveItem(int id);
 		public List<Item> GetItems();
 	}
 	public class ItemService : IItemService
@@ -16,7 +16,7 @@ namespace TrackApp.Service
 		{
 		}
 
-        public Item AddToList(AddItemVM item)
+        public Item AddItem(AddItemVM item)
         {
 			var newItem = new Item()
 			{
@@ -29,7 +29,7 @@ namespace TrackApp.Service
 			return newItem;
         }
 
-        public Item RemoveFromList(int id)
+        public Item RemoveItem(int id)
 		{
 			var itemToDelete=InMemoryDb.Items.Where(i => i.Id == id).FirstOrDefault();
 			if(itemToDelete!=null)

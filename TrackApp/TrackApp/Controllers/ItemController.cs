@@ -25,15 +25,15 @@ namespace TrackApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Item> AddToList([FromBody] AddItemVM newItem)
+        public ActionResult<Item> AddItem([FromBody] AddItemVM newItem)
         {
-            return Ok(itemService.AddToList(newItem));
+            return Ok(itemService.AddItem(newItem));
         }
 
         [HttpDelete]
-        public ActionResult<Item> RemoveFromList(int id)
+        public ActionResult<Item> RemoveItem(int id)
         {
-            var itemToRemove = itemService.RemoveFromList(id);
+            var itemToRemove = itemService.RemoveItem(id);
             if (itemToRemove == null)
                 return BadRequest("Nonexistant id");
             return Ok(itemToRemove);
