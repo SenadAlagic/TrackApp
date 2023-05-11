@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import "./addnewitem.css";
 import { ItemService } from "../../services/itemService";
-import { queryAllByAltText } from "@testing-library/react";
+
+interface IAddNewItem {
+  callback: () => Promise<void>;
+}
 
 export interface Items {
   id: number;
@@ -10,7 +13,7 @@ export interface Items {
   categoryId: number;
 }
 
-const AddNewItem = () => {
+const AddNewItem = ({ callback }: IAddNewItem) => {
   const [items, setItems] = useState<Items[]>([]);
   const [selectedItem, setSelected] = useState<Items>();
   const [quantity, setQuantity] = useState("");
@@ -27,6 +30,8 @@ const AddNewItem = () => {
   function AddToList() {
     if (!selectedItem) return;
     ItemService.addToList(parseInt(quantity), selectedItem.id, 1);
+    callback();
+    // onChangeState("newState");
   }
 
   useEffect(() => {
@@ -35,7 +40,7 @@ const AddNewItem = () => {
 
   return (
     <>
-      <div id="wrapper" className="dropdown">
+      <div id="wrapperAddNewItem" className="dropdown">
         <button
           className="btn btn-secondary dropdown-toggle"
           type="button"
@@ -69,6 +74,7 @@ const AddNewItem = () => {
           <button
             className="btn btn-primary control"
             type="button"
+            data-bs-dismiss="modal"
             onClick={() => AddToList()}
           >
             Confirm

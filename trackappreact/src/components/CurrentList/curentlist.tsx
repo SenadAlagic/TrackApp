@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./currentlist.css";
+import AddNewItem from "../AddNewItem/AddNewItem";
+import Modal from "../Modal/modal";
 
 interface ItemsList {
   id: number;
@@ -12,11 +14,10 @@ interface ItemsList {
 
 const CurrentList = () => {
   const [items, setItems] = useState<ItemsList[]>([]);
-
   const fetchData = async () => {
     try {
       const res = await fetch(
-        "https://localhost:7280/ItemList/GetByItemList?id=1",
+        "https://localhost:7280/ItemList/GetByList?id=1",
         {
           method: "GET",
           headers: {
@@ -42,23 +43,28 @@ const CurrentList = () => {
         <table className="table">
           <thead>
             <tr>
-              <th>itemId</th>
-              <th>listId</th>
-              <th>quantity</th>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Unit</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item: any) => (
               <>
                 <tr>
-                  <th>{item.itemId}</th>
-                  <th>{item.listId}</th>
+                  <th>{item.name}</th>
                   <th>{item.quantity}</th>
+                  <th>{item.unit}</th>
                 </tr>
               </>
             ))}
           </tbody>
         </table>
+        <Modal
+          modalBody={<AddNewItem callback={fetchData} />}
+          modalTitle="Add to list"
+          modalButtonTitle="Add a new item to list"
+        ></Modal>
       </div>
     </>
   );
