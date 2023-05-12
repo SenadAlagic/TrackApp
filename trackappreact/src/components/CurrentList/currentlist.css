@@ -1,15 +1,15 @@
 .CurrentList{
-    width: 50%;
+    width: 40%;
     margin:auto;
 }
 .CurrentList>button{
     width: 100%;
 }
-.CurrentList>a{
+a{
     text-decoration: none;
 }
 .CurrentList>table>tbody>tr>.indent {
-    padding-left: 2em;
+    padding-left: 2.5em;
 }
 .CurrentList>table>tbody>tr>.smallWidth {
     width: 5%;

@@ -55,13 +55,13 @@ const CurrentList = ({ changeParent, numberOfResults = 100 }: Props) => {
       <div id="wrapper" className="CurrentList">
         <h1>{items.length === 0 && <p>No items found</p>}</h1>
         <table className="table table-borderless table-sm">
-          <thead>
+          {/* <thead>
             <tr>
               <th></th>
               <th>Quantity</th>
               <th>Unit</th>
             </tr>
-          </thead>
+          </thead> */}
           <tbody>
             {items.map((item: any) => (
               <>
@@ -71,7 +71,7 @@ const CurrentList = ({ changeParent, numberOfResults = 100 }: Props) => {
                   <th></th>
                 </tr>
                 {item.items.map((rows: any) => (
-                  <tr>
+                  <tr onClick={() => toRestock(rows.itemId)}>
                     <td className="indent">{rows.name}</td>
                     <td className="smallWidth right">{rows.quantity}</td>
                     <td className="smallWidth left">{rows.unit}</td>

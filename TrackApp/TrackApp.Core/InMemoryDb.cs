@@ -21,8 +21,8 @@ namespace TrackApp.Core
             return new List<Item>()
             {
                 new Item() { Id=1, Name="Water", Unit="l", CategoryId=1},
-                new Item() { Id=2, Name="Eggs", Unit="carton", CategoryId=1},
-                new Item() { Id=3, Name="Tissues", Unit="box", CategoryId=2}
+                new Item() { Id=2, Name="Eggs", Unit="carton(s)", CategoryId=1},
+                new Item() { Id=3, Name="Tissues", Unit="box(es)", CategoryId=2}
             };
         }
         public static List<ItemList> GenerateItemLists()

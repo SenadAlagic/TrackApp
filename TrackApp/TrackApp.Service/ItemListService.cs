@@ -50,33 +50,6 @@ namespace TrackApp.Service
 			var itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id && il.Quantity>0).ToList();
 			var items = itemService.GetItems();
 			var categories = categoryService.GetAll();
-			//var query = from item in items
-			//			join itemlist in itemsFromDesiredList on item.Id equals itemlist.ItemId
-			//			join category in categories on item.CategoryId equals category.Id
-			//			select new
-			//			{
-			//				ItemId=item.Id,
-			//				Quantity = itemlist.Quantity,
-			//				Name = item.Name,
-			//				Unit = item.Unit,
-			//				CategoryName = category.Name
-			//			};
-			//var returnList = new List<GetItemsVM>(); 
-			//foreach(var item in query)
-			//{
-			//	var newItem = new GetItemsVM()
-			//	{
-			//		ItemId=item.ItemId,
-			//		Name = item.Name,
-			//		Quantity = item.Quantity,
-			//		Unit = item.Unit,
-			//		CategoryName=item.CategoryName
-			//	};
-			//	returnList.Add(newItem);
-			//	if (returnList.Count == numberOfResults)
-			//		return returnList;
-			//}
-
             var query2 = from item in items
                         join ItemList in itemsFromDesiredList on item.Id equals ItemList.ItemId
                         join category in categories on item.CategoryId equals category.Id
