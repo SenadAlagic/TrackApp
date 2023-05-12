@@ -8,15 +8,19 @@ namespace TrackApp.Service
 		public ItemList GetItemList(int id);
 		public ItemList AddItemToList(AddToListVM newEntry);
 		public ItemList RemoveFromList(int id);
-		public List<GetItemsVM> GetByListId(int id, int numberOfResults);
+		public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults);
 		public ItemList? RestockItems(RestockVM restock);
 	}
 	public class ItemListService : IItemListService
 	{
 		IListService listService;
-		public ItemListService(IListService listService)
+		IItemService itemService;
+		ICategoryService categoryService;
+		public ItemListService(IListService listService, IItemService itemService, ICategoryService categoryService)
 		{
 			this.listService = listService;
+			this.itemService = itemService;
+			this.categoryService = categoryService;
 		}
 
         public ItemList AddItemToList(AddToListVM newEntry)
@@ -41,34 +45,75 @@ namespace TrackApp.Service
 			return existing;
         }
 
-        public List<GetItemsVM> GetByListId(int id, int numberOfResults=5)
+        public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults=5)
         {
 			var itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id && il.Quantity>0).ToList();
-			var items = InMemoryDb.Items.ToList();
-			var query = from item in items
-						join itemlist in itemsFromDesiredList on item.Id equals itemlist.ItemId
-						select new
-						{
-							ItemId=item.Id,
-							Quantity = itemlist.Quantity,
-							Name = item.Name,
-							Unit = item.Unit
-						};
-			var returnList = new List<GetItemsVM>(); 
-			foreach(var item in query)
+			var items = itemService.GetItems();
+			var categories = categoryService.GetAll();
+			//var query = from item in items
+			//			join itemlist in itemsFromDesiredList on item.Id equals itemlist.ItemId
+			//			join category in categories on item.CategoryId equals category.Id
+			//			select new
+			//			{
+			//				ItemId=item.Id,
+			//				Quantity = itemlist.Quantity,
+			//				Name = item.Name,
+			//				Unit = item.Unit,
+			//				CategoryName = category.Name
+			//			};
+			//var returnList = new List<GetItemsVM>(); 
+			//foreach(var item in query)
+			//{
+			//	var newItem = new GetItemsVM()
+			//	{
+			//		ItemId=item.ItemId,
+			//		Name = item.Name,
+			//		Quantity = item.Quantity,
+			//		Unit = item.Unit,
+			//		CategoryName=item.CategoryName
+			//	};
+			//	returnList.Add(newItem);
+			//	if (returnList.Count == numberOfResults)
+			//		return returnList;
+			//}
+
+            var query2 = from item in items
+                        join ItemList in itemsFromDesiredList on item.Id equals ItemList.ItemId
+                        join category in categories on item.CategoryId equals category.Id
+                        group new { item, ItemList } by category.Name into grouped
+                        select new
+                        {
+                            CategoryName = grouped.Key,
+                            Items = from g in grouped
+                                    select new
+                                    {
+                                        g.item.Id,
+                                        g.ItemList.Quantity,
+                                        g.item.Name,
+                                        g.item.Unit
+                                    }
+                        };
+
+			var returnList = new List<GetItemsGroupedVM>();
+			foreach(var category in query2)
 			{
-				var newItem = new GetItemsVM()
+				var newCategory = new GetItemsGroupedVM();
+				newCategory.CategoryName = category.CategoryName;
+				newCategory.Items = new List<GetItemsVM>();
+				foreach (var item in category.Items)
 				{
-					ItemId=item.ItemId,
-					Name = item.Name,
-					Quantity = item.Quantity,
-					Unit = item.Unit
-				};
-				returnList.Add(newItem);
-				if (returnList.Count == numberOfResults)
-					return returnList;
+					var newItem = new GetItemsVM()
+					{
+						Quantity = item.Quantity,
+						Unit = item.Unit,
+						Name = item.Name,
+						ItemId = item.Id
+					};
+					newCategory.Items.Add(newItem);
+				}
+				returnList.Add(newCategory);
 			}
-			return returnList;
+            return returnList;
         }
 
         public ItemList GetItemList(int id)
