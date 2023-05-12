@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import CurrentList from "../CurrentList/curentlist";
 
 function Details() {
-  return <div>Details</div>;
+  let [state, setState] = useState("");
+  return <CurrentList />;
 }
 
 export default Details;

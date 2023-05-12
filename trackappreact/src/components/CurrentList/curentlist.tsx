@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./currentlist.css";
 import AddNewItem from "../AddNewItem/AddNewItem";
 import Modal from "../Modal/modal";
+import { useLocation, useNavigate } from "react-router-dom";
 
-interface ItemsList {
+export interface ItemsList {
   id: number;
   quantity: string;
   dateCreated: Date;
@@ -13,15 +14,18 @@ interface ItemsList {
 }
 
 interface Props {
-  changeParent: () => void;
+  changeParent?: () => void;
+  numberOfResults?: number;
 }
 
-const CurrentList = ({ changeParent }: Props) => {
+const CurrentList = ({ changeParent, numberOfResults = 100 }: Props) => {
   const [items, setItems] = useState<ItemsList[]>([]);
+  const navigate = useNavigate();
+
   const fetchData = async () => {
     try {
       const res = await fetch(
-        "https://localhost:7280/ItemList/GetByList?id=1",
+        `https://localhost:7280/ItemList/GetByList?id=1&numberOfResults=${numberOfResults}`,
         {
           method: "GET",
           headers: {
@@ -34,12 +38,16 @@ const CurrentList = ({ changeParent }: Props) => {
     } catch (error) {
       console.log(error);
     }
-    changeParent();
+    if (changeParent) changeParent();
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  function toRestock(id: number) {
+    navigate(`/restock/${id}`);
+  }
 
   return (
     <>
@@ -56,7 +64,7 @@ const CurrentList = ({ changeParent }: Props) => {
           <tbody>
             {items.map((item: any) => (
               <>
-                <tr>
+                <tr onClick={() => toRestock(item.itemId)}>
                   <th>{item.name}</th>
                   <th>{item.quantity}</th>
                   <th>{item.unit}</th>

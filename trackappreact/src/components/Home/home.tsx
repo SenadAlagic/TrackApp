@@ -5,9 +5,14 @@ function Home() {
   let [state, setState] = useState("");
 
   function handleState() {
+    console.log(state);
     setState("state changed from child");
   }
-  return <CurrentList changeParent={handleState}></CurrentList>;
+  return (
+    <a href="/details">
+      <CurrentList changeParent={handleState}></CurrentList>
+    </a>
+  );
 }
 
 export default Home;

@@ -6,6 +6,7 @@ namespace TrackApp.Service.ViewModels
 		public int Quantity { get; set; }
 		public string Unit { get; set; }
 		public string Name { get; set; }
+		public int ItemId { get; set; }
         public GetItemsVM()
 		{
 		}

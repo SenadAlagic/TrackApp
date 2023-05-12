@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 import { Items } from "../components/AddNewItem/AddNewItem";
 
-export class ItemService {
+export default class ItemService {
   static getAllItems = async (
     setItems: Dispatch<React.SetStateAction<Items[]>>
   ) => {
@@ -32,6 +32,20 @@ export class ItemService {
       );
       const data = await res.json();
       if (!data) alert("Nije uspjesno zavrseno slanje");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  static restock = async (reqBody: any) => {
+    try {
+      const res = await fetch(`https://localhost:7280/ItemList/Restock`, {
+        method: "Post",
+        headers: {
+          Accept: "application/json",
+        },
+        body: reqBody,
+      });
     } catch (error) {
       console.log(error);
     }

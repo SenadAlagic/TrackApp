@@ -24,6 +24,15 @@ namespace TrackApp.Controllers
             return Ok(itemService.GetItems());
         }
 
+        [HttpGet]
+        public ActionResult<Item> GetById(int id)
+        {
+            var itemToGet = itemService.GetById(id);
+            if (itemToGet == null)
+                return BadRequest("Nonexistant id");
+            return itemToGet;
+        }
+
         [HttpPost]
         public ActionResult<Item> AddItem([FromBody] AddItemVM newItem)
         {

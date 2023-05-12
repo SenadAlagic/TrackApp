@@ -9,6 +9,7 @@ namespace TrackApp.Service
 		public Item AddItem(AddItemVM item);
 		public Item RemoveItem(int id);
 		public List<Item> GetItems();
+		public Item GetById(int id);
 	}
 	public class ItemService : IItemService
 	{
@@ -40,6 +41,11 @@ namespace TrackApp.Service
         public List<Item> GetItems()
         {
 			return InMemoryDb.Items;
+        }
+
+        public Item GetById(int id)
+        {
+			return InMemoryDb.Items.Where(i => i.Id == id).FirstOrDefault();
         }
     }
 }

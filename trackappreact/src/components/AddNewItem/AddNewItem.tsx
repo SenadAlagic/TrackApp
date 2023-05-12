@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./addnewitem.css";
-import { ItemService } from "../../services/itemService";
+import ItemService from "../../services/itemService";
 
 interface IAddNewItem {
   callback: () => Promise<void>;
@@ -24,7 +24,6 @@ const AddNewItem = ({ callback }: IAddNewItem) => {
 
   function handleChange(event: any) {
     setQuantity(event.target.value);
-    console.log(quantity);
   }
 
   function AddToList() {

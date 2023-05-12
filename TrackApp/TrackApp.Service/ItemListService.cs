@@ -49,6 +49,7 @@ namespace TrackApp.Service
 						join itemlist in itemsFromDesiredList on item.Id equals itemlist.ItemId
 						select new
 						{
+							ItemId=item.Id,
 							Quantity = itemlist.Quantity,
 							Name = item.Name,
 							Unit = item.Unit
@@ -58,6 +59,7 @@ namespace TrackApp.Service
 			{
 				var newItem = new GetItemsVM()
 				{
+					ItemId=item.ItemId,
 					Name = item.Name,
 					Quantity = item.Quantity,
 					Unit = item.Unit
