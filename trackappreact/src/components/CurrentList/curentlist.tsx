@@ -34,6 +34,7 @@ const CurrentList = ({ changeParent, numberOfResults = 100 }: Props) => {
         }
       );
       const data = await res.json();
+      console.log(data);
       setItems(data);
     } catch (error) {
       console.log(error);
@@ -51,12 +52,12 @@ const CurrentList = ({ changeParent, numberOfResults = 100 }: Props) => {
 
   return (
     <>
-      <div id="wrapper">
+      <div id="wrapper" className="CurrentList">
         <h1>{items.length === 0 && <p>No items found</p>}</h1>
-        <table className="table">
+        <table className="table table-borderless table-sm">
           <thead>
             <tr>
-              <th>Name</th>
+              <th></th>
               <th>Quantity</th>
               <th>Unit</th>
             </tr>
@@ -64,11 +65,18 @@ const CurrentList = ({ changeParent, numberOfResults = 100 }: Props) => {
           <tbody>
             {items.map((item: any) => (
               <>
-                <tr onClick={() => toRestock(item.itemId)}>
-                  <th>{item.name}</th>
-                  <th>{item.quantity}</th>
-                  <th>{item.unit}</th>
+                <tr>
+                  <th>{item.categoryName}</th>
+                  <th></th>
+                  <th></th>
                 </tr>
+                {item.items.map((rows: any) => (
+                  <tr>
+                    <td className="indent">{rows.name}</td>
+                    <td className="smallWidth right">{rows.quantity}</td>
+                    <td className="smallWidth left">{rows.unit}</td>
+                  </tr>
+                ))}
               </>
             ))}
           </tbody>

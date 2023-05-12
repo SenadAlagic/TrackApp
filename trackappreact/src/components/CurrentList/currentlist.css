@@ -1,10 +1,21 @@
-#wrapper{
+.CurrentList{
     width: 50%;
     margin:auto;
 }
-button{
+.CurrentList>button{
     width: 100%;
 }
-a{
+.CurrentList>a{
     text-decoration: none;
+}
+.CurrentList>table>tbody>tr>.indent {
+    padding-left: 2em;
+}
+.CurrentList>table>tbody>tr>.smallWidth {
+    width: 5%;
+}
+.CurrentList>table>tbody>tr>.right {
+    text-align: right;
+}.CurrentList>table>tbody>tr>.left {
+    text-align: left;
 }
