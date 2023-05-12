@@ -40,11 +40,11 @@ export default class ItemService {
   static restock = async (reqBody: any) => {
     try {
       const res = await fetch(`https://localhost:7280/ItemList/Restock`, {
-        method: "Post",
+        method: "POST",
         headers: {
-          Accept: "application/json",
+          "Content-type": "application/json",
         },
-        body: reqBody,
+        body: JSON.stringify(reqBody),
       });
     } catch (error) {
       console.log(error);

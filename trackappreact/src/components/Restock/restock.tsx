@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Items } from "../AddNewItem/AddNewItem";
 import ItemService from "../../services/itemService";
+import { useNavigate } from "react-router-dom";
 import "./restock.css";
 
 function Restock() {
@@ -9,14 +10,13 @@ function Restock() {
   const [item, setItem] = useState<Items>();
   const [quantity, setQuantity] = useState();
   const [price, setPrice] = useState();
+  const navigate = useNavigate();
 
   function changeQuantity(event: any) {
     setQuantity(event.target.value);
-    console.log(quantity);
   }
   function changePrice(event: any) {
     setPrice(event.target.value);
-    console.log(price);
   }
 
   const fetchItem = async () => {
@@ -45,10 +45,11 @@ function Restock() {
     let body = {
       itemId: item?.id,
       listId: 1,
-      quantity: quantity,
-      totalPrice: price,
+      quantity: parseInt(quantity || ""),
+      totalPrice: parseInt(price || ""),
     };
     ItemService.restock(body);
+    navigate("/details");
   };
 
   return (

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./currentlist.css";
 import AddNewItem from "../AddNewItem/AddNewItem";
 import Modal from "../Modal/modal";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export interface ItemsList {
   id: number;

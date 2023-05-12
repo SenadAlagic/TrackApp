@@ -3,7 +3,12 @@ import CurrentList from "../CurrentList/curentlist";
 
 function Details() {
   let [state, setState] = useState("");
-  return <CurrentList />;
+
+  function handleState() {
+    console.log(state);
+    setState("state changed from child");
+  }
+  return <CurrentList changeParent={handleState} />;
 }
 
 export default Details;
