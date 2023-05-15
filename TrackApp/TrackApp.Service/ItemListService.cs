@@ -47,7 +47,7 @@ namespace TrackApp.Service
 
         public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults=100)
         {
-			var itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id && il.Quantity>0).ToList();
+			var itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id && il.CrossedOff==false).ToList();
 			var items = itemService.GetItems();
 			var categories = categoryService.GetAll();
             var query2 = from item in items

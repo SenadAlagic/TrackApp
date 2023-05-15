@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import "./currentlist.css";
-import AddNewItem from "../AddNewItem/AddNewItem";
-import Modal from "../Modal/modal";
 import { useNavigate } from "react-router-dom";
 
 export interface ItemsList {
@@ -14,20 +11,28 @@ export interface ItemsList {
 }
 
 interface Props {
-  numberOfResults?: number;
+  details?: boolean;
 }
 
-const CurrentList = ({ numberOfResults = 100 }: Props) => {
+const CurrentList = ({ details }: Props) => {
   const [items, setItems] = useState<ItemsList[]>([]);
+  const [currentListId, setCurrentListId] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
 
   function toRestock(id: number) {
     navigate(`/restock/${id}`);
   }
+  useEffect(() => {
+    getCurrentWorkingList(setCurrentListId);
+  }, []);
 
   useEffect(() => {
-    fetchData().then(setItems);
-  }, [items]);
+    if (!currentListId) return;
+    fetchData(currentListId, setItems);
+    fetchTotalPrice(currentListId, setTotalPrice);
+    //fetchTotalPrice(currentListId).then(setTotalPrice);
+  }, []);
 
   return (
     <>
@@ -51,14 +56,15 @@ const CurrentList = ({ numberOfResults = 100 }: Props) => {
                 ))}
               </>
             ))}
+            {details ? (
+              <tr>
+                <th>Total price:</th>
+                <th>{totalPrice}</th>
+                <th>KM</th>
+              </tr>
+            ) : null}
           </tbody>
         </table>
-        <Modal
-          modalTitle="Add to list"
-          modalButtonTitle="Add a new item to list"
-        >
-          <AddNewItem />
-        </Modal>
       </div>
     </>
   );
@@ -66,20 +72,50 @@ const CurrentList = ({ numberOfResults = 100 }: Props) => {
 
 export default CurrentList;
 
-async function fetchData() {
+async function getCurrentWorkingList(
+  set: React.Dispatch<React.SetStateAction<number>>
+) {
   try {
     const res = await fetch(
-      `https://localhost:7280/ItemList/GetByList?id=1&numberOfResults=5`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      }
+      `https://localhost:7280/List/GetCurrentWorkingList`
     );
     if (!res.ok) return;
     const data = await res.json();
+    set(data.id);
+    return data.id;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function fetchData(
+  listId: number,
+  set: React.Dispatch<React.SetStateAction<ItemsList[]>>
+) {
+  if (!listId) return;
+  try {
+    const res = await fetch(
+      `https://localhost:7280/ItemList/GetByList?id=${listId}`
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+    set(data);
     return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function fetchTotalPrice(
+  listId: number,
+  set: React.Dispatch<React.SetStateAction<number>>
+) {
+  if (listId) return;
+  try {
+    const res = await fetch(`https://localhost:7280/List/GetList?id=${listId}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    set(data.totalPrice);
+    return data.totalPrice;
   } catch (error) {
     console.log(error);
   }

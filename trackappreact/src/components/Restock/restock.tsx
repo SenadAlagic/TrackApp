@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { Items } from "../AddNewItem/AddNewItem";
 import ItemService from "../../services/itemService";
 import { useNavigate } from "react-router-dom";
-import "./restock.css";
 
 function Restock() {
   const { productId } = useParams();

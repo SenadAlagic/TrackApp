@@ -2,26 +2,21 @@ import AddNewItem from "../AddNewItem/AddNewItem";
 import CurrentList from "../CurrentList/curentlist";
 import Modal from "../Modal/modal";
 
-function Home() {
+function Details() {
   return (
     <>
-      <div className="dashboard">
-        <h1>Dashboard</h1>
-        <a href="/details">
-          <CurrentList />
-        </a>
+      <div className="details">
+        <h1>Details</h1>
+        <CurrentList details={true} />
         <Modal
           modalTitle="Add to list"
           modalButtonTitle="Add a new item to list"
         >
           <AddNewItem />
         </Modal>
-        <br />
-        <h1>Previous months</h1>
-        {/* <PreviousLists /> */}
       </div>
     </>
   );
 }
 
-export default Home;
+export default Details;
