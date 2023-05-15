@@ -9,7 +9,7 @@ export default class ItemService {
       const res = await fetch("https://localhost:7280/Item/GetItems", {
         method: "GET",
         headers: {
-          Accept: "text/plain",
+          Accept: "application/json",
         },
       });
       const data = await res.json();
@@ -26,7 +26,7 @@ export default class ItemService {
         {
           method: "POST",
           headers: {
-            Accept: "text/plain",
+            Accept: "application/json",
           },
         }
       );

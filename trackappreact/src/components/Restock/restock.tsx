@@ -26,7 +26,7 @@ function Restock() {
         {
           method: "GET",
           headers: {
-            Accept: "text/plain",
+            Accept: "application/json",
           },
         }
       );

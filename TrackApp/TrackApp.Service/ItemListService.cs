@@ -45,7 +45,7 @@ namespace TrackApp.Service
 			return existing;
         }
 
-        public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults=5)
+        public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults=100)
         {
 			var itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id && il.Quantity>0).ToList();
 			var items = itemService.GetItems();

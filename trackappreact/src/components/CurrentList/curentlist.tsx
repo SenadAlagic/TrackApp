@@ -14,54 +14,26 @@ export interface ItemsList {
 }
 
 interface Props {
-  changeParent?: () => void;
   numberOfResults?: number;
 }
 
-const CurrentList = ({ changeParent, numberOfResults = 100 }: Props) => {
+const CurrentList = ({ numberOfResults = 100 }: Props) => {
   const [items, setItems] = useState<ItemsList[]>([]);
   const navigate = useNavigate();
-
-  const fetchData = async () => {
-    try {
-      const res = await fetch(
-        `https://localhost:7280/ItemList/GetByList?id=1&numberOfResults=${numberOfResults}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "text/plain",
-          },
-        }
-      );
-      const data = await res.json();
-      console.log(data);
-      setItems(data);
-    } catch (error) {
-      console.log(error);
-    }
-    if (changeParent) changeParent();
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   function toRestock(id: number) {
     navigate(`/restock/${id}`);
   }
+
+  useEffect(() => {
+    fetchData().then(setItems);
+  }, [items]);
 
   return (
     <>
       <div id="wrapper" className="CurrentList">
         <h1>{items.length === 0 && <p>No items found</p>}</h1>
         <table className="table table-borderless table-sm">
-          {/* <thead>
-            <tr>
-              <th></th>
-              <th>Quantity</th>
-              <th>Unit</th>
-            </tr>
-          </thead> */}
           <tbody>
             {items.map((item: any) => (
               <>
@@ -82,13 +54,33 @@ const CurrentList = ({ changeParent, numberOfResults = 100 }: Props) => {
           </tbody>
         </table>
         <Modal
-          modalBody={<AddNewItem callback={fetchData} />}
           modalTitle="Add to list"
           modalButtonTitle="Add a new item to list"
-        ></Modal>
+        >
+          <AddNewItem />
+        </Modal>
       </div>
     </>
   );
 };
 
 export default CurrentList;
+
+async function fetchData() {
+  try {
+    const res = await fetch(
+      `https://localhost:7280/ItemList/GetByList?id=1&numberOfResults=5`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}

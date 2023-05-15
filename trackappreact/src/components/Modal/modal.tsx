@@ -1,12 +1,12 @@
 import React, { ReactNode } from "react";
 
 interface IModal {
-  modalBody: ReactNode;
+  children: ReactNode;
   modalTitle: string;
   modalButtonTitle: string;
 }
 
-function Modal({ modalBody, modalTitle, modalButtonTitle }: IModal) {
+function Modal({ children, modalTitle, modalButtonTitle }: IModal) {
   return (
     <>
       <button
@@ -32,7 +32,7 @@ function Modal({ modalBody, modalTitle, modalButtonTitle }: IModal) {
                 {modalTitle}
               </h5>
             </div>
-            <div className="modal-body">{modalBody}</div>
+            <div className="modal-body">{children}</div>
             <div className="modal-footer">
               <button
                 type="button"

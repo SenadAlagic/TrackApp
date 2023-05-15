@@ -2,10 +2,6 @@ import { useEffect, useState } from "react";
 import "./addnewitem.css";
 import ItemService from "../../services/itemService";
 
-interface IAddNewItem {
-  callback: () => Promise<void>;
-}
-
 export interface Items {
   id: number;
   name: string;
@@ -13,7 +9,7 @@ export interface Items {
   categoryId: number;
 }
 
-const AddNewItem = ({ callback }: IAddNewItem) => {
+const AddNewItem = () => {
   const [items, setItems] = useState<Items[]>([]);
   const [selectedItem, setSelected] = useState<Items>();
   const [quantity, setQuantity] = useState("");
@@ -29,7 +25,6 @@ const AddNewItem = ({ callback }: IAddNewItem) => {
   function AddToList() {
     if (!selectedItem) return;
     ItemService.addToList(parseInt(quantity), selectedItem.id, 1);
-    callback();
   }
 
   useEffect(() => {
