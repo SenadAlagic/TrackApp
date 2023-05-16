@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ItemService from "../../services/itemService";
+import styled from "styled-components";
 
 export interface Items {
   id: number;
@@ -32,8 +33,8 @@ const AddNewItem = () => {
 
   return (
     <>
-      <div id="wrapperAddNewItem" className="dropdown">
-        <button
+      <Wrapper id="wrapperAddNewItem" className="dropdown">
+        <Button
           className="btn btn-secondary dropdown-toggle"
           type="button"
           id="dropdownMenuButton"
@@ -43,7 +44,7 @@ const AddNewItem = () => {
           data-bs-toggle="dropdown"
         >
           {!selectedItem?.name ? "Select an item" : selectedItem.name}
-        </button>
+        </Button>
         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
           {items.map((item: Items) => (
             <div key={item.id}>
@@ -56,25 +57,47 @@ const AddNewItem = () => {
             </div>
           ))}
         </div>
-        <div id="controls">
-          <input
+        <Controls id="controls">
+          <Input
             type="email"
             className="form-control control"
             placeholder="Quantity"
             onChange={handleChange}
-          ></input>
-          <button
+          ></Input>
+          <SmallButton
             className="btn btn-primary control"
             type="button"
             data-bs-dismiss="modal"
             onClick={() => AddToList()}
           >
             Confirm
-          </button>
-        </div>
-      </div>
+          </SmallButton>
+        </Controls>
+      </Wrapper>
     </>
   );
 };
 
 export default AddNewItem;
+
+const Wrapper = styled.div`
+  #wrapperAddNewItem {
+    width: 100%;
+    margin: auto;
+  }
+`;
+const Button = styled.button`
+  width: 100%;
+`;
+const Controls = styled.div`
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+const Input = styled.input`
+  width: 30%;
+`;
+const SmallButton = styled(Button)`
+  width: 30%;
+`;

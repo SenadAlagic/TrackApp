@@ -8,7 +8,7 @@ namespace TrackApp.Service
 		public ItemList GetItemList(int id);
 		public ItemList AddItemToList(AddToListVM newEntry);
 		public ItemList RemoveFromList(int id);
-		public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults);
+		public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults, bool filterByQuantity);
 		public ItemList? RestockItems(RestockVM restock);
 	}
 	public class ItemListService : IItemListService
@@ -26,16 +26,18 @@ namespace TrackApp.Service
         public ItemList AddItemToList(AddToListVM newEntry)
         {
 			//check if the item already exists, if so, add quantity
-			var existing = InMemoryDb.ItemsLists.Where(il => il.ItemId == newEntry.ItemId).FirstOrDefault();
+			var existing = InMemoryDb.ItemsLists.Where(il => il.ItemId == newEntry.ItemId && il.CrossedOff==newEntry.CrossedOff).FirstOrDefault();
 			if (existing == null)
 			{
 				var newItemList = new ItemList()
 				{
+					Id=InMemoryDb.ItemsLists.Count,
 					Quantity = newEntry.Quantity,
 					ItemId = newEntry.ItemId,
 					ListId = newEntry.ListId,
 					DateCreated = DateTime.Now,
-					DateModified = DateTime.Now
+					DateModified = DateTime.Now,
+					CrossedOff = newEntry.CrossedOff,
 				};
 				InMemoryDb.ItemsLists.Add(newItemList);
 				return newItemList;
@@ -45,9 +47,11 @@ namespace TrackApp.Service
 			return existing;
         }
 
-        public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults=100)
+        public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults=100, bool filterByQuantity=true)
         {
-			var itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id && il.CrossedOff==false).ToList();
+			var itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id).ToList();
+			if (filterByQuantity)
+				itemsFromDesiredList = itemsFromDesiredList.Where(il => il.Quantity > 0).ToList();
 			var items = itemService.GetItems();
 			var categories = categoryService.GetAll();
             var query2 = from item in items
@@ -63,7 +67,8 @@ namespace TrackApp.Service
                                         g.item.Id,
                                         g.ItemList.Quantity,
                                         g.item.Name,
-                                        g.item.Unit
+                                        g.item.Unit,
+										g.ItemList.CrossedOff
                                     }
                         };
 
@@ -80,7 +85,8 @@ namespace TrackApp.Service
 						Quantity = item.Quantity,
 						Unit = item.Unit,
 						Name = item.Name,
-						ItemId = item.Id
+						ItemId = item.Id,
+						CrossedOff=item.CrossedOff
 					};
 					newCategory.Items.Add(newItem);
 				}
@@ -104,12 +110,21 @@ namespace TrackApp.Service
 
         public ItemList? RestockItems(RestockVM restock)
         {
-			var itemToRestock = InMemoryDb.ItemsLists.Where(il => il.ItemId == restock.ItemId && il.ListId==restock.ListId).FirstOrDefault();
+			var itemToRestock = InMemoryDb.ItemsLists.Where(il => il.ItemId == restock.ItemId && il.ListId==restock.ListId && il.CrossedOff==false).FirstOrDefault();
 			if (itemToRestock == null)
 				return null;
+
 			itemToRestock.Quantity -= restock.Quantity;
 			if (itemToRestock.Quantity <= 0)
-				itemToRestock.CrossedOff = true;
+				RemoveFromList(itemToRestock.Id);
+			var newItem = new AddToListVM()
+			{
+				ItemId = itemToRestock.ItemId,
+				Quantity = restock.Quantity,
+				ListId = restock.ListId,
+				CrossedOff=true,
+			};
+			AddItemToList(newItem);
 			listService.UpdatePrice(restock.ListId, restock.TotalPrice);
 			return itemToRestock;
         }

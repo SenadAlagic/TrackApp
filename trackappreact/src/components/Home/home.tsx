@@ -1,23 +1,28 @@
 import AddNewItem from "../AddNewItem/AddNewItem";
 import CurrentList from "../CurrentList/curentlist";
 import Modal from "../Modal/modal";
+import { StyledTitle } from "../../styles/title.styled";
+import { A } from "../../styles/a.styled";
+import styled from "styled-components";
 
 function Home() {
   return (
     <>
       <div className="dashboard">
-        <h1>Dashboard</h1>
-        <a href="/details">
-          <CurrentList />
-        </a>
-        <Modal
-          modalTitle="Add to list"
-          modalButtonTitle="Add a new item to list"
-        >
-          <AddNewItem />
-        </Modal>
+        <StyledTitle>Dashboard</StyledTitle>
+        <A href="/details">
+          <CurrentList details={false} />
+        </A>
+        <StyledDiv>
+          <Modal
+            modalTitle="Add to list"
+            modalButtonTitle="Add a new item to list"
+          >
+            <AddNewItem />
+          </Modal>
+        </StyledDiv>
         <br />
-        <h1>Previous months</h1>
+        <StyledTitle>Previous months</StyledTitle>
         {/* <PreviousLists /> */}
       </div>
     </>
@@ -25,3 +30,9 @@ function Home() {
 }
 
 export default Home;
+
+export const StyledDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

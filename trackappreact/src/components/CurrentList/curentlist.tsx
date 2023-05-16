@@ -1,5 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { StyledWrapper } from "../../styles/wrapper.styled";
+import styled from "styled-components";
+import { setPriority } from "os";
 
 export interface ItemsList {
   id: number;
@@ -11,7 +14,7 @@ export interface ItemsList {
 }
 
 interface Props {
-  details?: boolean;
+  details: boolean;
 }
 
 const CurrentList = ({ details }: Props) => {
@@ -23,20 +26,20 @@ const CurrentList = ({ details }: Props) => {
   function toRestock(id: number) {
     navigate(`/restock/${id}`);
   }
+
   useEffect(() => {
     getCurrentWorkingList(setCurrentListId);
   }, []);
 
   useEffect(() => {
     if (!currentListId) return;
-    fetchData(currentListId, setItems);
+    fetchData(currentListId, details, setItems);
     fetchTotalPrice(currentListId, setTotalPrice);
-    //fetchTotalPrice(currentListId).then(setTotalPrice);
-  }, []);
+  }, [currentListId]);
 
   return (
     <>
-      <div id="wrapper" className="CurrentList">
+      <StyledWrapper id="wrapper" className="CurrentList">
         <h1>{items.length === 0 && <p>No items found</p>}</h1>
         <table className="table table-borderless table-sm">
           <tbody>
@@ -48,11 +51,11 @@ const CurrentList = ({ details }: Props) => {
                   <th></th>
                 </tr>
                 {item.items.map((rows: any) => (
-                  <tr onClick={() => toRestock(rows.itemId)}>
-                    <td className="indent">{rows.name}</td>
-                    <td className="smallWidth right">{rows.quantity}</td>
-                    <td className="smallWidth left">{rows.unit}</td>
-                  </tr>
+                  <Tr onClick={() => toRestock(rows.itemId)}>
+                    <IndentTd>{rows.name}</IndentTd>
+                    <SWR>{rows.quantity}</SWR>
+                    <SWL>{rows.unit}</SWL>
+                  </Tr>
                 ))}
               </>
             ))}
@@ -65,7 +68,7 @@ const CurrentList = ({ details }: Props) => {
             ) : null}
           </tbody>
         </table>
-      </div>
+      </StyledWrapper>
     </>
   );
 };
@@ -90,21 +93,22 @@ async function getCurrentWorkingList(
 
 async function fetchData(
   listId: number,
+  filter: boolean,
   set: React.Dispatch<React.SetStateAction<ItemsList[]>>
 ) {
   if (!listId) return;
   try {
     const res = await fetch(
-      `https://localhost:7280/ItemList/GetByList?id=${listId}`
+      `https://localhost:7280/ItemList/GetByList?id=${listId}&filterByQuantity=${!filter}`
     );
     if (!res.ok) return;
     const data = await res.json();
     set(data);
-    return data;
   } catch (error) {
     console.log(error);
   }
 }
+
 async function fetchTotalPrice(
   listId: number,
   set: React.Dispatch<React.SetStateAction<number>>
@@ -120,3 +124,20 @@ async function fetchTotalPrice(
     console.log(error);
   }
 }
+
+const Tr = styled.tr`
+  &:hover {
+    background-color: rgb(232, 237, 234);
+  }
+`;
+const IndentTd = styled.td`
+  padding-left: 2.5em !important;
+`;
+const SWR = styled.td`
+  width: 5%;
+  text-align: right;
+`;
+const SWL = styled.td`
+  width: 5%;
+  text-align: left;
+`;

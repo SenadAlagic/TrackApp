@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import styled from "styled-components";
 
 interface IModal {
   children: ReactNode;
@@ -9,14 +10,14 @@ interface IModal {
 function Modal({ children, modalTitle, modalButtonTitle }: IModal) {
   return (
     <>
-      <button
+      <Button
         type="button"
         className="btn btn-primary"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
         {modalButtonTitle}
-      </button>
+      </Button>
 
       <div
         className="modal fade"
@@ -34,13 +35,13 @@ function Modal({ children, modalTitle, modalButtonTitle }: IModal) {
             </div>
             <div className="modal-body">{children}</div>
             <div className="modal-footer">
-              <button
+              <Close
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Close
-              </button>
+              </Close>
               {/* <button type="button" className="btn btn-primary">
                 Save changes
               </button> */}
@@ -53,3 +54,10 @@ function Modal({ children, modalTitle, modalButtonTitle }: IModal) {
 }
 
 export default Modal;
+
+const Button = styled.button`
+  width: 40%;
+`;
+const Close = styled(Button)`
+  width: 100%;
+`;

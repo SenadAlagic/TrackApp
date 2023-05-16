@@ -1,19 +1,23 @@
+import { StyledTitle } from "../../styles/title.styled";
 import AddNewItem from "../AddNewItem/AddNewItem";
 import CurrentList from "../CurrentList/curentlist";
+import { StyledDiv } from "../Home/home";
 import Modal from "../Modal/modal";
 
 function Details() {
   return (
     <>
       <div className="details">
-        <h1>Details</h1>
+        <StyledTitle>Details</StyledTitle>
         <CurrentList details={true} />
-        <Modal
-          modalTitle="Add to list"
-          modalButtonTitle="Add a new item to list"
-        >
-          <AddNewItem />
-        </Modal>
+        <StyledDiv>
+          <Modal
+            modalTitle="Add to list"
+            modalButtonTitle="Add a new item to list"
+          >
+            <AddNewItem />
+          </Modal>
+        </StyledDiv>
       </div>
     </>
   );

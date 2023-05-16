@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import { Items } from "../AddNewItem/AddNewItem";
 import ItemService from "../../services/itemService";
 import { useNavigate } from "react-router-dom";
+import { StyledTitle } from "../../styles/title.styled";
+import styled from "styled-components";
+import "./restock.css";
 
 function Restock() {
   const { productId } = useParams();
@@ -53,37 +56,58 @@ function Restock() {
 
   return (
     <>
-      <div className="restock">
-        <h1>Restock</h1>
-        <input
+      <Div className="restock">
+        <StyledTitle>Restock</StyledTitle>
+        <Input
           className="form-control control"
           value={item?.name}
           id="itemName"
-        ></input>
-        <div className="controls">
-          <input
+        ></Input>
+        <Controls className="controls">
+          <Inputwidth
             className="form-control control"
             placeholder="Quantity"
             onChange={changeQuantity}
             value={quantity}
-          ></input>
-          <input
+          ></Inputwidth>
+          <Inputwidth
             className="form-control control"
             placeholder="Price"
             onChange={changePrice}
             value={price}
-          ></input>
-        </div>
-        <button
+          ></Inputwidth>
+        </Controls>
+        <Button
           className="btn btn-primary control"
           type="button"
           onClick={() => logPurchase()}
         >
           Log purchase
-        </button>
-      </div>
+        </Button>
+      </Div>
     </>
   );
 }
 
 export default Restock;
+
+const Div = styled.div`
+  margin-right: auto;
+  margin-left: auto;
+  width: 50%;
+  height: 100%;
+  text-align: center;
+`;
+const Controls = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+const Input = styled.input`
+  width: 100%;
+`;
+const Inputwidth = styled.input`
+  width: 50%;
+`;
+const Button = styled.button`
+  width: 100%;
+`;

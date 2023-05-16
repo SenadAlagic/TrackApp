@@ -6,6 +6,7 @@ namespace TrackApp.Service.ViewModels
 		public int Quantity { get; set; }
 		public int ItemId { get; set; }
 		public int ListId { get; set; }
+		public bool CrossedOff { get; set; }
 
 		public AddToListVM()
 		{
