@@ -9,7 +9,7 @@ export interface Items {
   categoryId: number;
 }
 
-const AddNewItem = () => {
+const AddNewItem = ({ callback }: any) => {
   const [items, setItems] = useState<Items[]>([]);
   const [selectedItem, setSelected] = useState<Items>();
   const [quantity, setQuantity] = useState("");
@@ -24,7 +24,9 @@ const AddNewItem = () => {
 
   function AddToList() {
     if (!selectedItem) return;
-    ItemService.addToList(parseInt(quantity), selectedItem.id, 1);
+    ItemService.addToList(parseInt(quantity), selectedItem.id, 1).then(() => {
+      callback();
+    });
   }
 
   useEffect(() => {

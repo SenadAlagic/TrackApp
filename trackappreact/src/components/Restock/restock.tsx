@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { StyledTitle } from "../../styles/title.styled";
 import styled from "styled-components";
 import "./restock.css";
+import { appSettings } from "../../site";
 
 function Restock() {
   const { productId } = useParams();
@@ -24,7 +25,7 @@ function Restock() {
   const fetchItem = async () => {
     try {
       const res = await fetch(
-        `https://localhost:7280/Item/GetById?id=${productId}`,
+        `${appSettings.apiUrl}/Item/GetById?id=${productId}`,
         {
           method: "GET",
           headers: {

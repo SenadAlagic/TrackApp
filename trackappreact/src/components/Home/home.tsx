@@ -1,24 +1,47 @@
 import AddNewItem from "../AddNewItem/AddNewItem";
-import CurrentList from "../CurrentList/curentlist";
+import CurrentList, { ItemsList } from "../CurrentList/curentlist";
 import Modal from "../Modal/modal";
 import { StyledTitle } from "../../styles/title.styled";
 import { A } from "../../styles/a.styled";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import { fetchData } from "../../services/itemListService";
+import {
+  fetchCurrentWorkingList,
+  fetchTotalPrice,
+} from "../../services/listService";
 
 function Home() {
+  const [items, setItems] = useState<ItemsList[]>([]);
+  const [currentListId, setCurrentList] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    fetchCurrentWorkingList(setCurrentList);
+  }, []);
+
+  useEffect(() => {
+    fetchData(currentListId, setItems);
+    fetchTotalPrice(currentListId, setTotalPrice);
+  }, [currentListId]);
+
+  const addItem = () => {
+    fetchData(currentListId, setItems);
+  };
+
   return (
     <>
       <div className="dashboard">
         <StyledTitle>Dashboard</StyledTitle>
         <A href="/details">
-          <CurrentList details={false} />
+          <CurrentList items={items} details={false} totalPrice={totalPrice} />
         </A>
         <StyledDiv>
           <Modal
             modalTitle="Add to list"
             modalButtonTitle="Add a new item to list"
           >
-            <AddNewItem />
+            <AddNewItem callback={addItem} />
           </Modal>
         </StyledDiv>
         <br />

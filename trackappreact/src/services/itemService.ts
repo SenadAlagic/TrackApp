@@ -1,5 +1,6 @@
 import { Dispatch } from "react";
 import { Items } from "../components/AddNewItem/AddNewItem";
+import { appSettings } from "../site";
 
 export default class ItemService {
   static getAllItems = async (
@@ -22,7 +23,7 @@ export default class ItemService {
   static addToList = async (qty: number, itemId: number, listId: number) => {
     try {
       const res = await fetch(
-        `https://localhost:7280/ItemList/AddItemToList?Quantity=${qty}&ItemId=${itemId}&ListId=${listId}`,
+        `${appSettings.apiUrl}/ItemList/AddItemToList?Quantity=${qty}&ItemId=${itemId}&ListId=${listId}`,
         {
           method: "POST",
           headers: {
@@ -39,7 +40,7 @@ export default class ItemService {
 
   static restock = async (reqBody: any) => {
     try {
-      const res = await fetch(`https://localhost:7280/ItemList/Restock`, {
+      const res = await fetch(`${appSettings.apiUrl}/ItemList/Restock`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",

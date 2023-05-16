@@ -8,7 +8,7 @@ namespace TrackApp.Service
 		public ItemList GetItemList(int id);
 		public ItemList AddItemToList(AddToListVM newEntry);
 		public ItemList RemoveFromList(int id);
-		public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults, bool filterByQuantity);
+		public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults);
 		public ItemList? RestockItems(RestockVM restock);
 	}
 	public class ItemListService : IItemListService
@@ -47,11 +47,9 @@ namespace TrackApp.Service
 			return existing;
         }
 
-        public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults=100, bool filterByQuantity=true)
+        public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults=100)
         {
 			var itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id).ToList();
-			if (filterByQuantity)
-				itemsFromDesiredList = itemsFromDesiredList.Where(il => il.Quantity > 0).ToList();
 			var items = itemService.GetItems();
 			var categories = categoryService.GetAll();
             var query2 = from item in items
