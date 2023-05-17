@@ -7,6 +7,7 @@ namespace TrackApp.Core
 		public static List<List> Lists = GenerateLists(); 
 		public static List<ItemList> ItemsLists = GenerateItemLists();
 		public static List<Category> Categories = GenerateCategories();
+        public static List<Purchase> Purchases;
 
         public static List<Category>GenerateCategories()
 		{
@@ -39,7 +40,7 @@ namespace TrackApp.Core
             return new List<List>()
             {
                 new List { Id=1, TotalPrice=0, MonthOfYear=DateOnly.FromDateTime(DateTime.Now), DateModified=DateTime.Now, IsVisible=true, CurrentWorkingList=true},
-                new List { Id=2, TotalPrice=100, MonthOfYear=DateOnly.FromDateTime(DateTime.Now), DateModified=DateTime.Now, IsVisible=false}
+                new List { Id=2, TotalPrice=100, MonthOfYear=DateOnly.FromDateTime(DateTime.Now), DateModified=DateTime.Now, IsVisible=true, CurrentWorkingList=false}
             };
         }
     }

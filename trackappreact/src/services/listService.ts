@@ -23,7 +23,6 @@ export async function fetchTotalPrice(
     const res = await fetch(`${appSettings.apiUrl}/List/GetList?id=${listId}`);
     if (!res.ok) return;
     const data = await res.json();
-    console.log(data, "data");
     set(data.totalPrice);
     return data.totalPrice;
   } catch (error) {

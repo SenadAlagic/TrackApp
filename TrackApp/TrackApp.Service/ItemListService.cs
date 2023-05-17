@@ -8,25 +8,29 @@ namespace TrackApp.Service
 		public ItemList GetItemList(int id);
 		public ItemList AddItemToList(AddToListVM newEntry);
 		public ItemList RemoveFromList(int id);
-		public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults);
+		public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults, int itemId);
 		public ItemList? RestockItems(RestockVM restock);
-	}
+		public List<ItemHistoryVM> GetItemHistory(int id);
+		public List<ItemList> GetAllItemList();
+    }
 	public class ItemListService : IItemListService
 	{
 		IListService listService;
 		IItemService itemService;
 		ICategoryService categoryService;
-		public ItemListService(IListService listService, IItemService itemService, ICategoryService categoryService)
+		IPurhcaseService purchaseService;
+		public ItemListService(IListService listService, IItemService itemService, ICategoryService categoryService, IPurhcaseService purchaseService)
 		{
 			this.listService = listService;
 			this.itemService = itemService;
 			this.categoryService = categoryService;
+			this.purchaseService = purchaseService;
 		}
 
         public ItemList AddItemToList(AddToListVM newEntry)
         {
 			//check if the item already exists, if so, add quantity
-			var existing = InMemoryDb.ItemsLists.Where(il => il.ItemId == newEntry.ItemId && il.CrossedOff==newEntry.CrossedOff).FirstOrDefault();
+			var existing = InMemoryDb.ItemsLists.Where(il => il.ItemId == newEntry.ItemId && il.ListId==newEntry.ListId && il.CrossedOff==newEntry.CrossedOff).FirstOrDefault();
 			if (existing == null)
 			{
 				var newItemList = new ItemList()
@@ -47,10 +51,20 @@ namespace TrackApp.Service
 			return existing;
         }
 
-        public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults=100)
+        public List<ItemList> GetAllItemList()
         {
-			var itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id).ToList();
-			var items = itemService.GetItems();
+			return InMemoryDb.ItemsLists.ToList();
+        }
+
+        public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults=100, int itemId=0)
+        {
+			var itemsFromDesiredList = new List<ItemList>();
+			if(itemId==0)
+				itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id).ToList();
+			else
+                itemsFromDesiredList = InMemoryDb.ItemsLists.Where(il => il.ListId == id && il.ItemId==itemId).ToList();
+
+            var items = itemService.GetItems();
 			var categories = categoryService.GetAll();
             var query2 = from item in items
                         join ItemList in itemsFromDesiredList on item.Id equals ItemList.ItemId
@@ -123,8 +137,36 @@ namespace TrackApp.Service
 				CrossedOff=true,
 			};
 			AddItemToList(newItem);
+			var newPurchase = new AddPurchaseVM() { ItemId = restock.ItemId, Quantity = restock.Quantity };
+			purchaseService.AddPurchase(newPurchase);
 			listService.UpdatePrice(restock.ListId, restock.TotalPrice);
 			return itemToRestock;
+        }
+
+        public List<ItemHistoryVM> GetItemHistory(int id)
+        {
+            var allLists = listService.GetAllLists();
+            var allItemLists = GetAllItemList();
+            var allItems = itemService.GetItems();
+            var itemHistory = allLists
+                .Join(allItemLists,
+                    list => list.Id,
+                    itemList => itemList.ListId,
+                    (list, itemList) => new { List = list, ItemList = itemList })
+                .Join(allItems,
+                    joined => joined.ItemList.ItemId,
+                    item => item.Id,
+                    (joined, item) => new { List = joined.List, ItemList = joined.ItemList, Item = item })
+                .Where(joined => joined.Item.Id == id)
+                .Select(joined => joined.List).Distinct().ToList();
+
+			var returnList = new List<ItemHistoryVM>();
+			foreach (var element in itemHistory)
+			{
+				var newEntry = new ItemHistoryVM() { Items = GetByListId(element.Id, 0, id), MonthOfYear = element.MonthOfYear };
+				returnList.Add(newEntry);
+			}
+            return returnList;
         }
     }
 }

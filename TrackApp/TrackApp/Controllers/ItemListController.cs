@@ -30,12 +30,21 @@ namespace TrackApp.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<ItemList>> GetByList(int id, int numberOfResults)
+        public ActionResult<List<ItemList>> GetByList(int id, int numberOfResults, int itemId)
         {
-            var itemsToReturn = itemListService.GetByListId(id, numberOfResults);
+            var itemsToReturn = itemListService.GetByListId(id, numberOfResults, itemId);
             if (itemsToReturn == null)
                 return BadRequest("Nonexistant id");
             return Ok(itemsToReturn);
+        }
+
+        [HttpGet]
+        public ActionResult<List<List>> GetItemHistory(int itemId)
+        {
+            var listToReturn = itemListService.GetItemHistory(itemId);
+            if (listToReturn == null)
+                return BadRequest("Something unexpected happened");
+            return Ok(listToReturn);
         }
 
         [HttpPost]

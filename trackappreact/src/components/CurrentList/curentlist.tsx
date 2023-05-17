@@ -23,6 +23,9 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
   function toRestock(id: number) {
     navigate(`/restock/${id}`);
   }
+  function toHistory(id: number) {
+    navigate(`/history/${id}`);
+  }
 
   return (
     <>
@@ -38,13 +41,15 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
                   <th></th>
                 </tr>
                 {item.items.map((rows: any) => (
-                  <Tr
-                    $crossedOff={rows.crossedOff}
-                    onClick={() => toRestock(rows.itemId)}
-                  >
-                    <IndentTd>{rows.name}</IndentTd>
+                  <Tr $crossedOff={rows.crossedOff}>
+                    <IndentTd onClick={() => toHistory(rows.itemId)}>
+                      {rows.name}
+                    </IndentTd>
                     <SWR>{rows.quantity}</SWR>
                     <SWL>{rows.unit}</SWL>
+                    {rows.crossedOff ? null : (
+                      <SWR onClick={() => toRestock(rows.itemId)}>Restock</SWR>
+                    )}
                   </Tr>
                 ))}
               </>
@@ -65,21 +70,21 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
 
 export default CurrentList;
 
-const Tr = styled.tr<{ $crossedOff: boolean }>`
+export const Tr = styled.tr<{ $crossedOff: boolean }>`
   &:hover {
-    background-color: rgb(232, 237, 234);
+    background-color: rgb(238, 238, 243);
   }
   text-decoration: ${(props) =>
     props.$crossedOff ? `line-through 2px solid black;` : `none;`};
 `;
-const IndentTd = styled.td`
+export const IndentTd = styled.td`
   padding-left: 2.5em !important;
 `;
-const SWR = styled.td`
+export const SWR = styled.td`
   width: 5%;
   text-align: right;
 `;
-const SWL = styled.td`
+export const SWL = styled.td`
   width: 5%;
   text-align: left;
 `;

@@ -13,6 +13,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IItemListService, ItemListService>();
+builder.Services.AddScoped<IPurhcaseService, PurchaseService>();
 
 var app = builder.Build();
 
