@@ -41,7 +41,8 @@ namespace TrackApp.Service
 
         public List<Purchase> GetByItemID(int itemId)
         {
-            return InMemoryDb.Purchases.Where(p => p.Id == itemId).ToList();
+            var purchasesToGet= InMemoryDb.Purchases.Where(p => p.ItemId == itemId).ToList();
+            return purchasesToGet;
         }
     }
 }

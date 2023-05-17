@@ -7,7 +7,7 @@ namespace TrackApp.Core
 		public static List<List> Lists = GenerateLists(); 
 		public static List<ItemList> ItemsLists = GenerateItemLists();
 		public static List<Category> Categories = GenerateCategories();
-        public static List<Purchase> Purchases;
+        public static List<Purchase> Purchases=new List<Purchase>();
 
         public static List<Category>GenerateCategories()
 		{
