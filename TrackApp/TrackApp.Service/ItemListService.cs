@@ -31,7 +31,7 @@ namespace TrackApp.Service
 			{
 				var newItemList = new ItemList()
 				{
-					Id=InMemoryDb.ItemsLists.Count,
+					Id=InMemoryDb.ItemsLists.Count+1,
 					Quantity = newEntry.Quantity,
 					ItemId = newEntry.ItemId,
 					ListId = newEntry.ListId,
