@@ -1,5 +1,6 @@
 ﻿using System;
 using TrackApp.Core;
+using TrackApp.Repository;
 using TrackApp.Service.ViewModels;
 namespace TrackApp.Service
 {
@@ -15,12 +16,14 @@ namespace TrackApp.Service
     }
 	public class ItemListService : IItemListService
 	{
+		IRepository<ItemList> itemListRepository;
 		IListService listService;
 		IItemService itemService;
 		ICategoryService categoryService;
 		IPurhcaseService purchaseService;
-		public ItemListService(IListService listService, IItemService itemService, ICategoryService categoryService, IPurhcaseService purchaseService)
+		public ItemListService(IRepository<ItemList> itemListRepository, IListService listService, IItemService itemService, ICategoryService categoryService, IPurhcaseService purchaseService)
 		{
+			this.itemListRepository = itemListRepository;
 			this.listService = listService;
 			this.itemService = itemService;
 			this.categoryService = categoryService;
@@ -30,12 +33,11 @@ namespace TrackApp.Service
         public ItemList AddItemToList(AddToListVM newEntry)
         {
 			//check if the item already exists, if so, add quantity
-			var existing = InMemoryDb.ItemsLists.Where(il => il.ItemId == newEntry.ItemId && il.ListId==newEntry.ListId && il.CrossedOff==newEntry.CrossedOff).FirstOrDefault();
+			var existing = itemListRepository.GetAll().Where(il => il.ItemId == newEntry.ItemId && il.ListId==newEntry.ListId && il.CrossedOff==newEntry.CrossedOff).FirstOrDefault();
 			if (existing == null)
 			{
 				var newItemList = new ItemList()
 				{
-					Id=InMemoryDb.ItemsLists.Count+1,
 					Quantity = newEntry.Quantity,
 					ItemId = newEntry.ItemId,
 					ListId = newEntry.ListId,
@@ -43,26 +45,27 @@ namespace TrackApp.Service
 					DateModified = DateTime.Now,
 					CrossedOff = newEntry.CrossedOff,
 				};
-				InMemoryDb.ItemsLists.Add(newItemList);
+				itemListRepository.Add(newItemList);
 				return newItemList;
 			}
 			existing.Quantity += newEntry.Quantity;
 			existing.DateModified = DateTime.Now;
+			itemListRepository.Update(existing);
 			return existing;
         }
 
         public List<ItemList> GetAllItemList()
         {
-			return InMemoryDb.ItemsLists.ToList();
+			return itemListRepository.GetAll().ToList();
         }
 
 		public List<GetItemsGroupedVM> GetByListId(int id, int itemId = 0, bool filter = false)
         {
 			var itemsFromDesiredList = new List<ItemList>();
 			if(itemId==0)
-				itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id).ToList();
+				itemsFromDesiredList= itemListRepository.GetAll().Where(il => il.ListId == id).ToList();
 			else
-                itemsFromDesiredList = InMemoryDb.ItemsLists.Where(il => il.ListId == id && il.ItemId==itemId).ToList();
+                itemsFromDesiredList = itemListRepository.GetAll().Where(il => il.ListId == id && il.ItemId==itemId).ToList();
 
 			if (filter)
 				itemsFromDesiredList = itemsFromDesiredList.Where(il => il.CrossedOff == false).ToList();
@@ -112,26 +115,27 @@ namespace TrackApp.Service
 
         public ItemList GetItemList(int id)
         {
-			return InMemoryDb.ItemsLists.Where(il => il.Id == id).FirstOrDefault();
+			return itemListRepository.GetAll().Where(il => il.Id == id).FirstOrDefault();
         }
 
         public ItemList RemoveFromList(int id)
         {
-			var itemToRemove = InMemoryDb.ItemsLists.Where(il => il.Id == id).FirstOrDefault();
+			var itemToRemove = itemListRepository.GetAll().Where(il => il.Id == id).FirstOrDefault();
 			if (itemToRemove != null)
-				InMemoryDb.ItemsLists.Remove(itemToRemove);
+				itemListRepository.Remove(itemToRemove);
             return itemToRemove;
         }
 
         public ItemList? RestockItems(RestockVM restock)
         {
-			var itemToRestock = InMemoryDb.ItemsLists.Where(il => il.ItemId == restock.ItemId && il.ListId==restock.ListId && il.CrossedOff==false).FirstOrDefault();
+			var itemToRestock = itemListRepository.GetAll().Where(il => il.ItemId == restock.ItemId && il.ListId==restock.ListId && il.CrossedOff==false).FirstOrDefault();
 			if (itemToRestock == null)
 				return null;
 
 			itemToRestock.Quantity -= restock.Quantity;
 			if (itemToRestock.Quantity <= 0)
 				RemoveFromList(itemToRestock.Id);
+			itemListRepository.Update(itemToRestock);
 			var newItem = new AddToListVM()
 			{
 				ItemId = itemToRestock.ItemId,

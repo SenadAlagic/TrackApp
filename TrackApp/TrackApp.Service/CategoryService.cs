@@ -1,5 +1,6 @@
 ﻿using System;
 using TrackApp.Core;
+using TrackApp.Repository;
 
 namespace TrackApp.Service
 {
@@ -13,37 +14,38 @@ namespace TrackApp.Service
 
 	public class CategoryService:ICategoryService
 	{
-		public CategoryService()
+		IRepository<Category> categoryRepository;
+		public CategoryService(IRepository<Category> repository)
 		{
+			categoryRepository = repository;
 		}
 
         public Category Add(string name)
         {
 			var newCategory = new Category()
 			{
-				Id = InMemoryDb.Categories.Count + 1,
 				Name = name
 			};
-			InMemoryDb.Categories.Add(newCategory);
+			categoryRepository.Add(newCategory);
 			return newCategory;
 		}
 
         public List<Category> GetAll()
 		{
-			return InMemoryDb.Categories;
+			return categoryRepository.GetAll().ToList();
 		}
 
         public Category GetById(int id)
         {
-			return InMemoryDb.Categories.Where(c => c.Id == id).FirstOrDefault();
+			return categoryRepository.GetAll().Where(c => c.Id == id).FirstOrDefault();
 			
         }
 
         public Category Remove(int id)
         {
-			var categoryToRemove = InMemoryDb.Categories.Where(c => c.Id == id).FirstOrDefault();
+			var categoryToRemove = categoryRepository.GetAll().Where(c => c.Id == id).FirstOrDefault();
 			if (categoryToRemove != null)
-				InMemoryDb.Categories.Remove(categoryToRemove);
+				categoryRepository.Remove(categoryToRemove);
 			return categoryToRemove;
         }
     }

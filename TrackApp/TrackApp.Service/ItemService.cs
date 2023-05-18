@@ -1,5 +1,6 @@
 ﻿using System;
 using TrackApp.Core;
+using TrackApp.Repository;
 using TrackApp.Service.ViewModels;
 
 namespace TrackApp.Service
@@ -13,39 +14,40 @@ namespace TrackApp.Service
 	}
 	public class ItemService : IItemService
 	{
-		public ItemService()
+		IRepository<Item> itemRepository;
+		public ItemService(IRepository<Item> itemRepository)
 		{
+			this.itemRepository = itemRepository;
 		}
 
         public Item AddItem(AddItemVM item)
         {
 			var newItem = new Item()
 			{
-				Id = InMemoryDb.Items.Count+1,
 				Name = item.Name,
 				Unit = item.Unit,
 				CategoryId=item.CategoryId
 			};
-			InMemoryDb.Items.Add(newItem);
+			itemRepository.Add(newItem);
 			return newItem;
         }
 
         public Item RemoveItem(int id)
 		{
-			var itemToDelete=InMemoryDb.Items.Where(i => i.Id == id).FirstOrDefault();
+			var itemToDelete=itemRepository.GetAll().Where(i => i.Id == id).FirstOrDefault();
 			if(itemToDelete!=null)
-				InMemoryDb.Items.Remove(itemToDelete);
+				itemRepository.Remove(itemToDelete);
 			return itemToDelete;
 		}
 
         public List<Item> GetItems()
         {
-			return InMemoryDb.Items;
+			return itemRepository.GetAll().ToList();
         }
 
         public Item GetById(int id)
         {
-			return InMemoryDb.Items.Where(i => i.Id == id).FirstOrDefault();
+			return itemRepository.GetAll().Where(i => i.Id == id).FirstOrDefault();
         }
     }
 }

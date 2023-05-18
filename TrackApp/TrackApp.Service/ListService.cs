@@ -1,5 +1,6 @@
 ﻿using System;
 using TrackApp.Core;
+using TrackApp.Repository;
 
 namespace TrackApp.Service
 {
@@ -14,34 +15,42 @@ namespace TrackApp.Service
         public bool CheckIfExisting(int id);
 	}
 	public class ListService : IListService
-    { 
-		public ListService()
+    {
+        IRepository<List> listRepository;
+		public ListService(IRepository<List> listRepository)
 		{
+            this.listRepository = listRepository;
 		}
 
         public List CreateList()
         {
+            var currentList = GetCurrentWorkingList();
+            currentList.CurrentWorkingList = false;
+            listRepository.Update(currentList);
             var newList = new List()
             {
-                Id = InMemoryDb.Lists.Count + 1,
+                TotalPrice = 0,
                 MonthOfYear = DateOnly.FromDateTime(DateTime.Now),
-                TotalPrice = 0
+                DateModified = DateTime.Now,
+                IsVisible = true,
+                CurrentWorkingList = true
             };
-            InMemoryDb.Lists.Add(newList);
+            this.listRepository.Add(newList);
             return newList;
         }
 
         public List DeleteList(int id)
         {
-            var listToDelete=InMemoryDb.Lists.Where(l => l.Id == id).FirstOrDefault();
+            var listToDelete=listRepository.GetAll().Where(l => l.Id == id).FirstOrDefault();
             if (listToDelete != null)
                 listToDelete.IsVisible=false;
+            listRepository.Update(listToDelete);
             return listToDelete;
         }
 
         public List GetList(int id)
         {
-            var listToReturn = InMemoryDb.Lists.Where(l => l.Id == id && l.IsVisible == true).FirstOrDefault();
+            var listToReturn = listRepository.GetAll().Where(l => l.Id == id && l.IsVisible == true).FirstOrDefault();
             if (listToReturn?.IsVisible == false || listToReturn == null)
                 return null;
             return listToReturn;
@@ -49,20 +58,21 @@ namespace TrackApp.Service
 
         public List<List> GetAllLists()
         {
-            return InMemoryDb.Lists.ToList();
+            return listRepository.GetAll().ToList();
         }
 
         public void UpdatePrice(int id, double price)
         {
-            var listToReturn = InMemoryDb.Lists.Where(l => l.Id == id && l.CurrentWorkingList == true).FirstOrDefault();
+            var listToReturn = listRepository.GetAll().Where(l => l.Id == id && l.CurrentWorkingList == true).FirstOrDefault();
             if (listToReturn == null)
                 return;
             listToReturn.TotalPrice += price;
+            listRepository.Update(listToReturn);
         }
 
         public bool CheckIfExisting(int id)
         {
-            var listToReturn = InMemoryDb.Lists.Where(l => l.Id == id).FirstOrDefault();
+            var listToReturn = listRepository.GetAll().Where(l => l.Id == id).FirstOrDefault();
             if (listToReturn == null)
                 return false;
             return true;
@@ -70,7 +80,7 @@ namespace TrackApp.Service
 
         public List GetCurrentWorkingList()
         {
-            var listToReturn = InMemoryDb.Lists.Where(l => l.CurrentWorkingList == true).FirstOrDefault();
+            var listToReturn = listRepository.GetAll().Where(l => l.CurrentWorkingList == true).FirstOrDefault();
             if (listToReturn == null)
                 return null;
             return listToReturn;

@@ -1,5 +1,6 @@
 ﻿using System;
 using TrackApp.Core;
+using TrackApp.Repository;
 using TrackApp.Service.ViewModels;
 
 namespace TrackApp.Service
@@ -13,9 +14,11 @@ namespace TrackApp.Service
 	}
 	public class PurchaseService : IPurhcaseService
 	{
+        IRepository<Purchase> purchaseRepository;
         IItemService itemService;
-        public PurchaseService(IItemService itemService)
+        public PurchaseService(IRepository<Purchase> purchaseRepository, IItemService itemService)
 		{
+            this.purchaseRepository = purchaseRepository;
             this.itemService = itemService;
 		}
 
@@ -23,28 +26,30 @@ namespace TrackApp.Service
         {
             var newPurchase = new Purchase()
             {
-                Id = InMemoryDb.Purchases.Count + 1,
                 ItemId = purchase.ItemId,
                 Quantity = purchase.Quantity,
                 Price=purchase.Price,
                 DateOfPurchase = DateTime.Now,
                 IsVisible=true,
             };
-            InMemoryDb.Purchases.Add(newPurchase);
+            purchaseRepository.Add(newPurchase);
             return newPurchase;
         }
 
         public Purchase DeletePurchase(int id)
         {
-            var purchaseToDelete = InMemoryDb.Purchases.Where(p => p.Id == id).FirstOrDefault();
+            var purchaseToDelete = purchaseRepository.GetAll().Where(p => p.Id == id).FirstOrDefault();
             if(purchaseToDelete!=null)
+            {
                 purchaseToDelete.IsVisible = false;
+                purchaseRepository.Update(purchaseToDelete);
+            }
             return purchaseToDelete;
         }
 
         public List<GetPurchasesVM> GetByItemID(int itemId)
         {
-            var purchasesToGet= InMemoryDb.Purchases.Where(p => p.ItemId == itemId && p.IsVisible==true).ToList();
+            var purchasesToGet= purchaseRepository.GetAll().Where(p => p.ItemId == itemId && p.IsVisible==true).ToList();
             var allItems = itemService.GetItems();
             var query = from purchase in purchasesToGet
                         join item in allItems on purchase.ItemId equals item.Id

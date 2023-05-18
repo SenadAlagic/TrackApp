@@ -1,8 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace TrackApp.Core
 {
 	public class ItemList
 	{
+		[Key]
 		public int Id { get; set; }
 		public int Quantity { get; set; }
 		public DateTime DateCreated { get; set; }
