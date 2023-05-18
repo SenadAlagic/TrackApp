@@ -137,7 +137,7 @@ namespace TrackApp.Service
 				CrossedOff=true,
 			};
 			AddItemToList(newItem);
-			var newPurchase = new AddPurchaseVM() { ItemId = restock.ItemId, Quantity = restock.Quantity };
+			var newPurchase = new AddPurchaseVM() { ItemId = restock.ItemId, Quantity = restock.Quantity, Price=restock.TotalPrice };
 			purchaseService.AddPurchase(newPurchase);
 			listService.UpdatePrice(restock.ListId, restock.TotalPrice);
 			return itemToRestock;

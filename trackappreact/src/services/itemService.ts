@@ -1,6 +1,7 @@
 import { Dispatch } from "react";
 import { Items } from "../components/AddNewItem/AddNewItem";
 import { appSettings } from "../site";
+import { Purchase } from "../components/History/history";
 
 export default class ItemService {
   static getAllItems = async (
@@ -47,8 +48,25 @@ export default class ItemService {
         },
         body: JSON.stringify(reqBody),
       });
+      if (!res) return;
     } catch (error) {
       console.log(error);
     }
   };
+
+  static async fetchPurchases(
+    itemId: number,
+    set: React.Dispatch<React.SetStateAction<Purchase[]>>
+  ) {
+    try {
+      const res = await fetch(
+        `${appSettings.apiUrl}/Purchase/GetByItemId?itemId=${itemId}`
+      );
+      if (!res) return;
+      const data = await res.json();
+      set(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
