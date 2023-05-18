@@ -21,12 +21,12 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    fetchData(currentListId, setItems);
+    fetchData(currentListId, true, setItems);
     fetchTotalPrice(currentListId, setTotalPrice);
   }, [currentListId]);
 
   const addItem = () => {
-    fetchData(currentListId, setItems);
+    fetchData(currentListId, true, setItems);
   };
 
   return (

@@ -30,9 +30,9 @@ namespace TrackApp.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<ItemList>> GetByList(int id, int numberOfResults, int itemId)
+        public ActionResult<List<ItemList>> GetByList(int id, int itemId, bool filter)
         {
-            var itemsToReturn = itemListService.GetByListId(id, numberOfResults, itemId);
+            var itemsToReturn = itemListService.GetByListId(id, itemId, filter);
             if (itemsToReturn == null)
                 return BadRequest("Nonexistant id");
             return Ok(itemsToReturn);

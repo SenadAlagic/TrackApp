@@ -35,10 +35,11 @@ function History() {
   return (
     <StyledWrapper>
       <StyledTitle>Item history</StyledTitle>
+      <br />
       {lists.map((rows: any) => {
         return (
           <>
-            <h5>List of {rows.monthOfYear}</h5>
+            <h5>List of {FormatDateMonth(rows.monthOfYear)}</h5>
             <table className="table table-borderless table-sm">
               {rows.items.map((object: any) => (
                 <tbody>
@@ -56,7 +57,8 @@ function History() {
         );
       })}
       <br></br>
-      <h3>druga metoda</h3>
+      <StyledTitle>Purchase history</StyledTitle>
+      <br />
       <>
         <table className="table table-borderless table-sm">
           <thead>
@@ -74,6 +76,11 @@ function History() {
                 <Date>{FormatDate(purchase.dateOfPurchase)}</Date>
               </tr>
             ))}
+            <tr>
+              <td></td>
+              <th>Total price:</th>
+              <td>{TotalPrice(purchases)} KM</td>
+            </tr>
           </tbody>
         </table>
       </>
@@ -85,6 +92,15 @@ export default History;
 
 function FormatDate(date: string): ReactNode {
   return date.slice(0, 10);
+}
+function FormatDateMonth(date: string): ReactNode {
+  return date.slice(0, 7);
+}
+
+function TotalPrice(purchases: Purchase[]): ReactNode {
+  let sum = 0.0;
+  for (let purchase of purchases) sum = sum + purchase.price;
+  return sum;
 }
 
 const Quantity = styled(IndentTd)`

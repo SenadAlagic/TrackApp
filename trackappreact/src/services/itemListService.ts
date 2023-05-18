@@ -3,12 +3,13 @@ import { appSettings } from "../site";
 
 export async function fetchData(
   listId: number,
+  filter: boolean,
   set: React.Dispatch<React.SetStateAction<ItemsList[]>>
 ) {
   if (!listId) return;
   try {
     const res = await fetch(
-      `${appSettings.apiUrl}/ItemList/GetByList?id=${listId}`
+      `${appSettings.apiUrl}/ItemList/GetByList?id=${listId}&filter=${filter}`
     );
     if (!res.ok) return;
     const data = await res.json();

@@ -14,7 +14,8 @@ namespace TrackApp.Core
 			return new List<Category>()
 			{
 				new Category() { Id = 1, Name = "Produce" },
-				new Category() { Id = 2, Name = "Hygiene" }
+				new Category() { Id = 2, Name = "Sweets" },
+                new Category() { Id = 3, Name = "Hygiene" }
 			};
         }
         public static List<Item> GenerateItems()
@@ -23,7 +24,7 @@ namespace TrackApp.Core
             {
                 new Item() { Id=1, Name="Water", Unit="l", CategoryId=1},
                 new Item() { Id=2, Name="Eggs", Unit="carton(s)", CategoryId=1},
-                new Item() { Id=3, Name="Tissues", Unit="box(es)", CategoryId=2}
+                new Item() { Id=3, Name="Tissues", Unit="box(es)", CategoryId=2},
             };
         }
         public static List<ItemList> GenerateItemLists()

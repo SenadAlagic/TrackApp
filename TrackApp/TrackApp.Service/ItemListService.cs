@@ -8,7 +8,7 @@ namespace TrackApp.Service
 		public ItemList GetItemList(int id);
 		public ItemList AddItemToList(AddToListVM newEntry);
 		public ItemList RemoveFromList(int id);
-		public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults, int itemId);
+		public List<GetItemsGroupedVM> GetByListId(int id, int itemId,bool filter);
 		public ItemList? RestockItems(RestockVM restock);
 		public List<ItemHistoryVM> GetItemHistory(int id);
 		public List<ItemList> GetAllItemList();
@@ -56,13 +56,16 @@ namespace TrackApp.Service
 			return InMemoryDb.ItemsLists.ToList();
         }
 
-        public List<GetItemsGroupedVM> GetByListId(int id, int numberOfResults=100, int itemId=0)
+		public List<GetItemsGroupedVM> GetByListId(int id, int itemId = 0, bool filter = false)
         {
 			var itemsFromDesiredList = new List<ItemList>();
 			if(itemId==0)
 				itemsFromDesiredList= InMemoryDb.ItemsLists.Where(il => il.ListId == id).ToList();
 			else
                 itemsFromDesiredList = InMemoryDb.ItemsLists.Where(il => il.ListId == id && il.ItemId==itemId).ToList();
+
+			if (filter)
+				itemsFromDesiredList = itemsFromDesiredList.Where(il => il.CrossedOff == false).ToList();
 
             var items = itemService.GetItems();
 			var categories = categoryService.GetAll();
@@ -163,7 +166,7 @@ namespace TrackApp.Service
 			var returnList = new List<ItemHistoryVM>();
 			foreach (var element in itemHistory)
 			{
-				var newEntry = new ItemHistoryVM() { Items = GetByListId(element.Id, 0, id), MonthOfYear = element.MonthOfYear };
+				var newEntry = new ItemHistoryVM() { Items = GetByListId(element.Id, id,false), MonthOfYear = element.MonthOfYear };
 				returnList.Add(newEntry);
 			}
             return returnList;

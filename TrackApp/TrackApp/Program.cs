@@ -1,4 +1,5 @@
-﻿using TrackApp.Service;
+﻿using TrackApp.Repository;
+using TrackApp.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IItemListService, ItemListService>();
 builder.Services.AddScoped<IPurhcaseService, PurchaseService>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
 
