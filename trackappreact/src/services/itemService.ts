@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import { Items } from "../components/AddNewItem/AddNewItem";
+import { Items, ItemsByCategory } from "../components/AddNewItem/AddNewItem";
 import { appSettings } from "../site";
 import { Purchase } from "../components/History/history";
 
@@ -8,7 +8,7 @@ export default class ItemService {
     setItems: Dispatch<React.SetStateAction<Items[]>>
   ) => {
     try {
-      const res = await fetch("https://localhost:7280/Item/GetItems", {
+      const res = await fetch(`${appSettings.apiUrl}/Item/GetItems`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -16,6 +16,18 @@ export default class ItemService {
       });
       const data = await res.json();
       setItems(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  static getItemsByCategories = async (
+    set: React.Dispatch<React.SetStateAction<ItemsByCategory[]>>
+  ) => {
+    try {
+      const res = await fetch(`${appSettings.apiUrl}/Item/GetItemsByCategory`);
+      const data = await res.json();
+      set(data);
     } catch (error) {
       console.log(error);
     }

@@ -29,7 +29,7 @@ namespace TrackApp.Service
                 ItemId = purchase.ItemId,
                 Quantity = purchase.Quantity,
                 Price=purchase.Price,
-                DateOfPurchase = DateTime.Now,
+                DateOfPurchase = DateTime.Now.ToUniversalTime(),
                 IsVisible=true,
             };
             purchaseRepository.Add(newPurchase);

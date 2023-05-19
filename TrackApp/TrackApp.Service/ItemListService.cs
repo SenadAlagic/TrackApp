@@ -41,15 +41,15 @@ namespace TrackApp.Service
 					Quantity = newEntry.Quantity,
 					ItemId = newEntry.ItemId,
 					ListId = newEntry.ListId,
-					DateCreated = DateTime.Now,
-					DateModified = DateTime.Now,
+					DateCreated = DateTime.Now.ToUniversalTime(),
+					DateModified = DateTime.Now.ToUniversalTime(),
 					CrossedOff = newEntry.CrossedOff,
 				};
 				itemListRepository.Add(newItemList);
 				return newItemList;
 			}
 			existing.Quantity += newEntry.Quantity;
-			existing.DateModified = DateTime.Now;
+			existing.DateModified = DateTime.Now.ToUniversalTime();
 			itemListRepository.Update(existing);
 			return existing;
         }

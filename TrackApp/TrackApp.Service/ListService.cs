@@ -25,17 +25,20 @@ namespace TrackApp.Service
         public List CreateList()
         {
             var currentList = GetCurrentWorkingList();
-            currentList.CurrentWorkingList = false;
-            listRepository.Update(currentList);
+            if(currentList!=null)
+            {
+                currentList.CurrentWorkingList = false;
+                listRepository.Update(currentList);
+            }
             var newList = new List()
             {
                 TotalPrice = 0,
                 MonthOfYear = DateOnly.FromDateTime(DateTime.Now),
-                DateModified = DateTime.Now,
+                DateModified = DateTime.Now.ToUniversalTime(),
                 IsVisible = true,
                 CurrentWorkingList = true
             };
-            this.listRepository.Add(newList);
+            listRepository.Add(newList);
             return newList;
         }
 

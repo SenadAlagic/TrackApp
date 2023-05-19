@@ -33,6 +33,12 @@ namespace TrackApp.Controllers
             return itemToGet;
         }
 
+        [HttpGet]
+        public ActionResult<Dictionary<string, List<Item>>> GetItemsByCategory()
+        {
+            return Ok(itemService.GetItemsByCategory());
+        }
+
         [HttpPost]
         public ActionResult<Item> AddItem([FromBody] AddItemVM newItem)
         {

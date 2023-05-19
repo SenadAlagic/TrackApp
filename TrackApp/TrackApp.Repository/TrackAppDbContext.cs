@@ -9,7 +9,7 @@ namespace TrackApp.Repository
 		public TrackAppDbContext()
 		{
 		}
-		public TrackAppDbContext(DbContextOptions<TrackAppDbContext> options) :base(options)
+		public TrackAppDbContext(DbContextOptions<TrackAppDbContext> options) : base(options)
 		{
 
 		}
@@ -21,7 +21,7 @@ namespace TrackApp.Repository
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-			optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=TrackApp;User Id=admin;Password=valens;\n");
+            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=TrackApp;User Id=admin;Password=valens;\n");
         }
     }
 }

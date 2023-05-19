@@ -9,10 +9,15 @@ export interface Items {
   categoryId: number;
 }
 
+export interface ItemsByCategory {
+  key: string;
+  items: Items[];
+}
 const AddNewItem = ({ callback }: any) => {
   const [items, setItems] = useState<Items[]>([]);
   const [selectedItem, setSelected] = useState<Items>();
   const [quantity, setQuantity] = useState("");
+  const [items2, setItems2] = useState<ItemsByCategory[]>([]);
 
   function handleClick(item: Items) {
     setSelected(item);
@@ -31,8 +36,10 @@ const AddNewItem = ({ callback }: any) => {
 
   useEffect(() => {
     ItemService.getAllItems(setItems);
+    ItemService.getItemsByCategories(setItems2);
   }, []);
 
+  console.log(items2);
   return (
     <>
       <Wrapper id="wrapperAddNewItem" className="dropdown">

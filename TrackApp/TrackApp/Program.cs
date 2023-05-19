@@ -1,4 +1,5 @@
-﻿using TrackApp.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using TrackApp.Repository;
 using TrackApp.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var config = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", false)
+    .Build();
+builder.Services.AddDbContext<TrackAppDbContext>(option => option.UseNpgsql(config.GetConnectionString("TrackAppDB")));
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IItemService, ItemService>();

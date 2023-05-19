@@ -36,7 +36,7 @@ namespace TrackApp.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("TrackApp.Core.Item", b =>
@@ -60,7 +60,7 @@ namespace TrackApp.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Items");
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("TrackApp.Core.ItemList", b =>
@@ -91,7 +91,7 @@ namespace TrackApp.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ItemLists");
+                    b.ToTable("ItemLists", (string)null);
                 });
 
             modelBuilder.Entity("TrackApp.Core.List", b =>
@@ -119,7 +119,7 @@ namespace TrackApp.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Lists");
+                    b.ToTable("Lists", (string)null);
                 });
 
             modelBuilder.Entity("TrackApp.Core.Purchase", b =>
@@ -147,7 +147,7 @@ namespace TrackApp.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Purchases");
+                    b.ToTable("Purchases", (string)null);
                 });
 #pragma warning restore 612, 618
         }
