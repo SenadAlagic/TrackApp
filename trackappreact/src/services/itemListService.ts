@@ -34,3 +34,30 @@ export async function fetchItemHistory(
     console.log(error);
   }
 }
+
+export async function deleteFromList(itemId: number) {
+  try {
+    const res = await fetch(
+      `${appSettings.apiUrl}/ItemList/RemoveFromListByItemId?itemId=${itemId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (!res.ok) return;
+  } catch (error) {}
+}
+
+export async function addItemToDb(reqBody: any) {
+  try {
+    const res = await fetch(`${appSettings.apiUrl}/Item/AddItem`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+    });
+    if (!res.ok) return;
+  } catch (error) {
+    console.log(error);
+  }
+}

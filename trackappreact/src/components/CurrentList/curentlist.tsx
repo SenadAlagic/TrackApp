@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { StyledWrapper } from "../../styles/wrapper.styled";
 import styled from "styled-components";
+import { deleteFromList, fetchData } from "../../services/itemListService";
 
 export interface ItemsList {
   id: number;
@@ -26,6 +27,11 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
   function toHistory(id: number) {
     navigate(`/history/${id}`);
   }
+  function toDelete(id: number) {
+    if (window.confirm("Are you sure you want to delete this item?") === true) {
+      deleteFromList(id);
+    }
+  }
 
   return (
     <>
@@ -48,7 +54,12 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
                     <SWR>{rows.quantity}</SWR>
                     <SWL>{rows.unit}</SWL>
                     {rows.crossedOff ? null : (
-                      <SWR onClick={() => toRestock(rows.itemId)}>Restock</SWR>
+                      <>
+                        <SWR onClick={() => toRestock(rows.itemId)}>$</SWR>
+                        <SWR onClick={() => toDelete(rows.itemId)}>
+                          {String.fromCharCode(0xd83d, 0xddd1)}
+                        </SWR>
+                      </>
                     )}
                   </Tr>
                 ))}

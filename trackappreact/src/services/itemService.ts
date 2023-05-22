@@ -33,10 +33,10 @@ export default class ItemService {
     }
   };
 
-  static addToList = async (qty: number, itemId: number, listId: number) => {
+  static addToList = async (qty: number, itemId: number) => {
     try {
       const res = await fetch(
-        `${appSettings.apiUrl}/ItemList/AddItemToList?Quantity=${qty}&ItemId=${itemId}&ListId=${listId}`,
+        `${appSettings.apiUrl}/ItemList/AddItemToList?Quantity=${qty}&ItemId=${itemId}`,
         {
           method: "POST",
           headers: {

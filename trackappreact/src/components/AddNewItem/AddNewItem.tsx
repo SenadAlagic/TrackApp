@@ -10,13 +10,14 @@ export interface Items {
 }
 
 export interface ItemsByCategory {
-  key: string;
+  categoryName: string;
   items: Items[];
 }
 const AddNewItem = ({ callback }: any) => {
-  const [items, setItems] = useState<Items[]>([]);
+  //const [items, setItems] = useState<Items[]>([]);
   const [selectedItem, setSelected] = useState<Items>();
   const [quantity, setQuantity] = useState("");
+
   const [items2, setItems2] = useState<ItemsByCategory[]>([]);
 
   function handleClick(item: Items) {
@@ -29,17 +30,16 @@ const AddNewItem = ({ callback }: any) => {
 
   function AddToList() {
     if (!selectedItem) return;
-    ItemService.addToList(parseInt(quantity), selectedItem.id, 1).then(() => {
+    ItemService.addToList(parseInt(quantity), selectedItem.id).then(() => {
       callback();
     });
   }
 
   useEffect(() => {
-    ItemService.getAllItems(setItems);
+    //ItemService.getAllItems(setItems);
     ItemService.getItemsByCategories(setItems2);
   }, []);
 
-  console.log(items2);
   return (
     <>
       <Wrapper id="wrapperAddNewItem" className="dropdown">
@@ -55,15 +55,20 @@ const AddNewItem = ({ callback }: any) => {
           {!selectedItem?.name ? "Select an item" : selectedItem.name}
         </Button>
         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          {items.map((item: Items) => (
-            <div key={item.id}>
-              <button
-                className="dropdown-item"
-                onClick={() => handleClick(item)}
-              >
-                {item.name}
-              </button>
-            </div>
+          {items2.map((itemByCategory: ItemsByCategory) => (
+            <>
+              <Category className="dropdown-item">
+                {itemByCategory.categoryName}
+              </Category>
+              {itemByCategory.items.map((item: Items) => (
+                <button
+                  className="dropdown-item"
+                  onClick={() => handleClick(item)}
+                >
+                  {item.name}
+                </button>
+              ))}
+            </>
           ))}
         </div>
         <Controls id="controls">
@@ -89,24 +94,29 @@ const AddNewItem = ({ callback }: any) => {
 
 export default AddNewItem;
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   #wrapperAddNewItem {
     width: 100%;
     margin: auto;
   }
 `;
-const Button = styled.button`
+export const Button = styled.button`
   width: 100%;
 `;
-const Controls = styled.div`
+export const Controls = styled.div`
   margin-top: 1em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
-const Input = styled.input`
+export const Input = styled.input`
   width: 30%;
 `;
-const SmallButton = styled(Button)`
+export const SmallButton = styled(Button)`
   width: 30%;
+`;
+
+export const Category = styled.button`
+  font-weight: bold;
+  pointer-events: none;
 `;

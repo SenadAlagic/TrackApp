@@ -1,6 +1,6 @@
 import AddNewItem from "../AddNewItem/AddNewItem";
 import CurrentList, { ItemsList } from "../CurrentList/curentlist";
-import Modal from "../Modal/modal";
+import CustomModal from "../Modal/modal";
 import { StyledTitle } from "../../styles/title.styled";
 import { A } from "../../styles/a.styled";
 import styled from "styled-components";
@@ -10,6 +10,7 @@ import {
   fetchCurrentWorkingList,
   fetchTotalPrice,
 } from "../../services/listService";
+import NewItem from "../NewItem/newitem";
 
 function Home() {
   const [items, setItems] = useState<ItemsList[]>([]);
@@ -36,16 +37,27 @@ function Home() {
         <A href="/details">
           <CurrentList items={items} details={false} totalPrice={totalPrice} />
         </A>
+
         <StyledDiv>
-          <Modal
+          <CustomModal
             modalTitle="Add to list"
             modalButtonTitle="Add a new item to list"
           >
             <AddNewItem callback={addItem} />
-          </Modal>
+          </CustomModal>
         </StyledDiv>
         <br />
-        <StyledTitle>Previous months</StyledTitle>
+
+        <StyledDiv>
+          <CustomModal
+            modalTitle="Add a new item to database"
+            modalButtonTitle="Add a new item to database"
+          >
+            <NewItem />
+          </CustomModal>
+        </StyledDiv>
+
+        {/* <StyledTitle>Previous months</StyledTitle> */}
         {/* <PreviousLists /> */}
       </div>
     </>
@@ -58,4 +70,8 @@ export const StyledDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const HalvedModal = styled(CustomModal)`
+  width: 50%;
 `;

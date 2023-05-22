@@ -13,6 +13,7 @@ namespace TrackApp.Service
 		public ItemList? RestockItems(RestockVM restock);
 		public List<ItemHistoryVM> GetItemHistory(int id);
 		public List<ItemList> GetAllItemList();
+		public ItemList RemoveByItemId(int itemId);
     }
 	public class ItemListService : IItemListService
 	{
@@ -32,15 +33,16 @@ namespace TrackApp.Service
 
         public ItemList AddItemToList(AddToListVM newEntry)
         {
+			var currentWorkingList = listService.GetCurrentWorkingList();
 			//check if the item already exists, if so, add quantity
-			var existing = itemListRepository.GetAll().Where(il => il.ItemId == newEntry.ItemId && il.ListId==newEntry.ListId && il.CrossedOff==newEntry.CrossedOff).FirstOrDefault();
+			var existing = itemListRepository.GetAll().Where(il => il.ItemId == newEntry.ItemId && il.ListId==currentWorkingList.Id && il.CrossedOff==newEntry.CrossedOff).FirstOrDefault();
 			if (existing == null)
 			{
 				var newItemList = new ItemList()
 				{
 					Quantity = newEntry.Quantity,
 					ItemId = newEntry.ItemId,
-					ListId = newEntry.ListId,
+					ListId = currentWorkingList.Id,
 					DateCreated = DateTime.Now.ToUniversalTime(),
 					DateModified = DateTime.Now.ToUniversalTime(),
 					CrossedOff = newEntry.CrossedOff,
@@ -120,7 +122,8 @@ namespace TrackApp.Service
 
         public ItemList RemoveFromList(int id)
         {
-			var itemToRemove = itemListRepository.GetAll().Where(il => il.Id == id).FirstOrDefault();
+			var currentList = listService.GetCurrentWorkingList();
+			var itemToRemove = itemListRepository.GetAll().Where(il => il.Id == id && il.ListId==currentList.Id).FirstOrDefault();
 			if (itemToRemove != null)
 				itemListRepository.Remove(itemToRemove);
             return itemToRemove;
@@ -128,25 +131,29 @@ namespace TrackApp.Service
 
         public ItemList? RestockItems(RestockVM restock)
         {
-			var itemToRestock = itemListRepository.GetAll().Where(il => il.ItemId == restock.ItemId && il.ListId==restock.ListId && il.CrossedOff==false).FirstOrDefault();
+			if (restock == null)
+				return null;
+			var currentList = listService.GetCurrentWorkingList();
+			var itemToRestock = itemListRepository.GetAll().Where(il => il.ItemId == restock.ItemId && il.ListId==currentList.Id && il.CrossedOff==false).FirstOrDefault();
 			if (itemToRestock == null)
 				return null;
 
 			itemToRestock.Quantity -= restock.Quantity;
 			if (itemToRestock.Quantity <= 0)
 				RemoveFromList(itemToRestock.Id);
-			itemListRepository.Update(itemToRestock);
+			else
+				itemListRepository.Update(itemToRestock);
 			var newItem = new AddToListVM()
 			{
 				ItemId = itemToRestock.ItemId,
 				Quantity = restock.Quantity,
-				ListId = restock.ListId,
+				//ListId = restock.ListId,
 				CrossedOff=true,
 			};
 			AddItemToList(newItem);
 			var newPurchase = new AddPurchaseVM() { ItemId = restock.ItemId, Quantity = restock.Quantity, Price=restock.TotalPrice };
 			purchaseService.AddPurchase(newPurchase);
-			listService.UpdatePrice(restock.ListId, restock.TotalPrice);
+			listService.UpdatePrice(currentList.Id, restock.TotalPrice);
 			return itemToRestock;
         }
 
@@ -175,6 +182,15 @@ namespace TrackApp.Service
 			}
             return returnList;
         }
+
+		public ItemList RemoveByItemId(int itemId)
+		{
+			var currentList = listService.GetCurrentWorkingList();
+			var itemListToRemove = GetAllItemList().Where(il => il.ItemId == itemId && il.ListId == currentList.Id && il.CrossedOff==false).FirstOrDefault();
+			if(itemListToRemove!=null)
+				itemListRepository.Remove(itemListToRemove);
+			return itemListToRemove;
+		}
     }
 }
 

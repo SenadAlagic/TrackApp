@@ -1,4 +1,6 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
+import { ModalTitle } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
 import styled from "styled-components";
 
 interface IModal {
@@ -7,53 +9,37 @@ interface IModal {
   modalButtonTitle: string;
 }
 
-function Modal({ children, modalTitle, modalButtonTitle }: IModal) {
+function CustomModal({ children, modalTitle, modalButtonTitle }: IModal) {
+  const [show, setShow] = useState(false);
+
+  const openModal = () => {
+    setShow(true);
+  };
+  const closeModal = () => {
+    setShow(false);
+  };
+
   return (
     <>
-      <Button
-        type="button"
-        className="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-      >
+      <Button className="btn btn-primary" onClick={openModal}>
         {modalButtonTitle}
       </Button>
-
-      <div
-        className="modal fade"
-        id="exampleModal"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">
-                {modalTitle}
-              </h5>
-            </div>
-            <div className="modal-body">{children}</div>
-            <div className="modal-footer">
-              <Close
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </Close>
-              {/* <button type="button" className="btn btn-primary">
-                Save changes
-              </button> */}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Modal show={show} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <ModalTitle>{modalTitle}</ModalTitle>
+        </Modal.Header>
+        <Modal.Body>{children}</Modal.Body>
+        <Modal.Footer>
+          <Close className="btn btn-primary" onClick={closeModal}>
+            Close
+          </Close>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
 
-export default Modal;
+export default CustomModal;
 
 const Button = styled.button`
   width: 40%;

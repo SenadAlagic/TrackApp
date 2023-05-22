@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { StyledTitle } from "../../styles/title.styled";
 import AddNewItem from "../AddNewItem/AddNewItem";
 import CurrentList, { ItemsList } from "../CurrentList/curentlist";
-import Modal from "../Modal/modal";
+import CustomModal from "../Modal/modal";
 import { fetchData } from "../../services/itemListService";
 import {
   fetchCurrentWorkingList,
@@ -34,12 +34,12 @@ function Details() {
         <StyledTitle>Details</StyledTitle>
         <CurrentList items={items} details={true} totalPrice={totalPrice} />
         <StyledDiv>
-          <Modal
+          <CustomModal
             modalTitle="Add to list"
             modalButtonTitle="Add a new item to list"
           >
             <AddNewItem callback={addItem} />
-          </Modal>
+          </CustomModal>
         </StyledDiv>
       </div>
     </>

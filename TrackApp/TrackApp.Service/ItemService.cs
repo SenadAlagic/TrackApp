@@ -10,7 +10,7 @@ namespace TrackApp.Service
 		public Item AddItem(AddItemVM item);
 		public Item RemoveItem(int id);
 		public List<Item> GetItems();
-		public Dictionary<string, List<Item>> GetItemsByCategory();
+		public List<ItemsByCategoryVM> GetItemsByCategory();
 		public Item GetById(int id);
 	}
 	public class ItemService : IItemService
@@ -53,7 +53,7 @@ namespace TrackApp.Service
 			return itemRepository.GetAll().Where(i => i.Id == id).FirstOrDefault();
         }
 
-        public Dictionary<string, List<Item>> GetItemsByCategory()
+        public List<ItemsByCategoryVM> GetItemsByCategory()
         {
 			var categories = categoryService.GetAll();
 			var items = GetItems();
@@ -61,10 +61,13 @@ namespace TrackApp.Service
 						join item in items on category.Id equals item.CategoryId
 						group item by category.Name;
 
-			var result = new Dictionary<string, List<Item>>();
+			var result = new List<ItemsByCategoryVM>();
 			foreach(var group in query)
 			{
-				result[group.Key] = group.ToList();
+				var newEntry = new ItemsByCategoryVM();
+				newEntry.CategoryName = group.Key;
+				newEntry.Items = group.ToList();
+				result.Add(newEntry);
 			}
 			return result;
         }

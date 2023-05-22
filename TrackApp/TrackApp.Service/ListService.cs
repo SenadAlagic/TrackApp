@@ -46,7 +46,10 @@ namespace TrackApp.Service
         {
             var listToDelete=listRepository.GetAll().Where(l => l.Id == id).FirstOrDefault();
             if (listToDelete != null)
-                listToDelete.IsVisible=false;
+            {
+                listToDelete.IsVisible = false;
+                listToDelete.CurrentWorkingList = false;
+            }
             listRepository.Update(listToDelete);
             return listToDelete;
         }

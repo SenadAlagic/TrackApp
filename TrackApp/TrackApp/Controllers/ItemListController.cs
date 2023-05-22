@@ -73,6 +73,15 @@ namespace TrackApp.Controllers
                 return BadRequest("Error while deleting");
             return Ok(itemToRemove);
         }
+
+        [HttpDelete]
+        public ActionResult<ItemList> RemoveFromListByItemId(int itemId)
+        {
+            var itemListToRemove = itemListService.RemoveByItemId(itemId);
+            if (itemListToRemove == null)
+                return BadRequest("Error while removing");
+            return Ok(itemListToRemove);
+        }
     }
 }
 
