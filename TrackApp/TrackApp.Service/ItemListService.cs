@@ -35,14 +35,14 @@ namespace TrackApp.Service
         {
 			var currentWorkingList = listService.GetCurrentWorkingList();
 			//check if the item already exists, if so, add quantity
-			var existing = itemListRepository.GetAll().Where(il => il.ItemId == newEntry.ItemId && il.ListId==currentWorkingList.Id && il.CrossedOff==newEntry.CrossedOff).FirstOrDefault();
+			var existing = itemListRepository.GetAll().Where(il => il.ItemId == newEntry.ItemId && il.ListId==currentWorkingList.ListId && il.CrossedOff==newEntry.CrossedOff).FirstOrDefault();
 			if (existing == null)
 			{
 				var newItemList = new ItemList()
 				{
 					Quantity = newEntry.Quantity,
 					ItemId = newEntry.ItemId,
-					ListId = currentWorkingList.Id,
+					ListId = currentWorkingList.ListId,
 					DateCreated = DateTime.Now.ToUniversalTime(),
 					DateModified = DateTime.Now.ToUniversalTime(),
 					CrossedOff = newEntry.CrossedOff,
@@ -75,8 +75,8 @@ namespace TrackApp.Service
             var items = itemService.GetItems();
 			var categories = categoryService.GetAll();
             var query2 = from item in items
-                        join ItemList in itemsFromDesiredList on item.Id equals ItemList.ItemId
-                        join category in categories on item.CategoryId equals category.Id
+                        join ItemList in itemsFromDesiredList on item.ItemId equals ItemList.ItemId
+                        join category in categories on item.CategoryId equals category.CategoryId
                         group new { item, ItemList } by category.Name into grouped
                         select new
                         {
@@ -84,7 +84,7 @@ namespace TrackApp.Service
                             Items = from g in grouped
                                     select new
                                     {
-                                        g.item.Id,
+                                        g.item.ItemId,
                                         g.ItemList.Quantity,
                                         g.item.Name,
                                         g.item.Unit,
@@ -105,7 +105,7 @@ namespace TrackApp.Service
 						Quantity = item.Quantity,
 						Unit = item.Unit,
 						Name = item.Name,
-						ItemId = item.Id,
+						ItemId = item.ItemId,
 						CrossedOff=item.CrossedOff
 					};
 					newCategory.Items.Add(newItem);
@@ -117,13 +117,13 @@ namespace TrackApp.Service
 
         public ItemList GetItemList(int id)
         {
-			return itemListRepository.GetAll().Where(il => il.Id == id).FirstOrDefault();
+			return itemListRepository.GetAll().Where(il => il.ItemListId == id).FirstOrDefault();
         }
 
         public ItemList RemoveFromList(int id)
         {
 			var currentList = listService.GetCurrentWorkingList();
-			var itemToRemove = itemListRepository.GetAll().Where(il => il.Id == id && il.ListId==currentList.Id).FirstOrDefault();
+			var itemToRemove = itemListRepository.GetAll().Where(il => il.ItemListId == id && il.ListId==currentList.ListId).FirstOrDefault();
 			if (itemToRemove != null)
 				itemListRepository.Remove(itemToRemove);
             return itemToRemove;
@@ -134,13 +134,13 @@ namespace TrackApp.Service
 			if (restock == null)
 				return null;
 			var currentList = listService.GetCurrentWorkingList();
-			var itemToRestock = itemListRepository.GetAll().Where(il => il.ItemId == restock.ItemId && il.ListId==currentList.Id && il.CrossedOff==false).FirstOrDefault();
+			var itemToRestock = itemListRepository.GetAll().Where(il => il.ItemId == restock.ItemId && il.ListId==currentList.ListId && il.CrossedOff==false).FirstOrDefault();
 			if (itemToRestock == null)
 				return null;
 
 			itemToRestock.Quantity -= restock.Quantity;
 			if (itemToRestock.Quantity <= 0)
-				RemoveFromList(itemToRestock.Id);
+				RemoveFromList(itemToRestock.ItemListId);
 			else
 				itemListRepository.Update(itemToRestock);
 			var newItem = new AddToListVM()
@@ -153,7 +153,7 @@ namespace TrackApp.Service
 			AddItemToList(newItem);
 			var newPurchase = new AddPurchaseVM() { ItemId = restock.ItemId, Quantity = restock.Quantity, Price=restock.TotalPrice };
 			purchaseService.AddPurchase(newPurchase);
-			listService.UpdatePrice(currentList.Id, restock.TotalPrice);
+			listService.UpdatePrice(currentList.ListId, restock.TotalPrice);
 			return itemToRestock;
         }
 
@@ -164,20 +164,20 @@ namespace TrackApp.Service
             var allItems = itemService.GetItems();
             var itemHistory = allLists
                 .Join(allItemLists,
-                    list => list.Id,
+                    list => list.ListId,
                     itemList => itemList.ListId,
                     (list, itemList) => new { List = list, ItemList = itemList })
                 .Join(allItems,
                     joined => joined.ItemList.ItemId,
-                    item => item.Id,
+                    item => item.ItemId,
                     (joined, item) => new { List = joined.List, ItemList = joined.ItemList, Item = item })
-                .Where(joined => joined.Item.Id == id)
+                .Where(joined => joined.Item.ItemId == id)
                 .Select(joined => joined.List).Distinct().ToList();
 
 			var returnList = new List<ItemHistoryVM>();
 			foreach (var element in itemHistory)
 			{
-				var newEntry = new ItemHistoryVM() { Items = GetByListId(element.Id, id,false), MonthOfYear = element.MonthOfYear };
+				var newEntry = new ItemHistoryVM() { Items = GetByListId(element.ListId, id,false), MonthOfYear = element.MonthOfYear };
 				returnList.Add(newEntry);
 			}
             return returnList;
@@ -186,7 +186,7 @@ namespace TrackApp.Service
 		public ItemList RemoveByItemId(int itemId)
 		{
 			var currentList = listService.GetCurrentWorkingList();
-			var itemListToRemove = GetAllItemList().Where(il => il.ItemId == itemId && il.ListId == currentList.Id && il.CrossedOff==false).FirstOrDefault();
+			var itemListToRemove = GetAllItemList().Where(il => il.ItemId == itemId && il.ListId == currentList.ListId && il.CrossedOff==false).FirstOrDefault();
 			if(itemListToRemove!=null)
 				itemListRepository.Remove(itemListToRemove);
 			return itemListToRemove;

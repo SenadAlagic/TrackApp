@@ -6,7 +6,7 @@ namespace TrackApp.Core
 	public class List
 	{
 		[Key]
-		public int Id { get; set; }
+		public int ListId { get; set; }
 		public double TotalPrice { get; set; }
 		public DateOnly MonthOfYear { get; set; }
 		public DateTime DateModified { get; set; }

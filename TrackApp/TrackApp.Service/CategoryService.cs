@@ -37,13 +37,13 @@ namespace TrackApp.Service
 
         public Category GetById(int id)
         {
-			return categoryRepository.GetAll().Where(c => c.Id == id).FirstOrDefault();
+			return categoryRepository.GetAll().Where(c => c.CategoryId == id).FirstOrDefault();
 			
         }
 
         public Category Remove(int id)
         {
-			var categoryToRemove = categoryRepository.GetAll().Where(c => c.Id == id).FirstOrDefault();
+			var categoryToRemove = categoryRepository.GetAll().Where(c => c.CategoryId == id).FirstOrDefault();
 			if (categoryToRemove != null)
 				categoryRepository.Remove(categoryToRemove);
 			return categoryToRemove;

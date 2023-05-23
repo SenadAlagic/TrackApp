@@ -37,7 +37,7 @@ namespace TrackApp.Service
 
         public Item RemoveItem(int id)
 		{
-			var itemToDelete=itemRepository.GetAll().Where(i => i.Id == id).FirstOrDefault();
+			var itemToDelete=itemRepository.GetAll().Where(i => i.ItemId == id).FirstOrDefault();
 			if(itemToDelete!=null)
 				itemRepository.Remove(itemToDelete);
 			return itemToDelete;
@@ -50,7 +50,7 @@ namespace TrackApp.Service
 
         public Item GetById(int id)
         {
-			return itemRepository.GetAll().Where(i => i.Id == id).FirstOrDefault();
+			return itemRepository.GetAll().Where(i => i.ItemId == id).FirstOrDefault();
         }
 
         public List<ItemsByCategoryVM> GetItemsByCategory()
@@ -58,7 +58,7 @@ namespace TrackApp.Service
 			var categories = categoryService.GetAll();
 			var items = GetItems();
 			var query = from category in categories
-						join item in items on category.Id equals item.CategoryId
+						join item in items on category.CategoryId equals item.CategoryId
 						group item by category.Name;
 
 			var result = new List<ItemsByCategoryVM>();

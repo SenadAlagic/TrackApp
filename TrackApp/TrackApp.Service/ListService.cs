@@ -44,7 +44,7 @@ namespace TrackApp.Service
 
         public List DeleteList(int id)
         {
-            var listToDelete=listRepository.GetAll().Where(l => l.Id == id).FirstOrDefault();
+            var listToDelete=listRepository.GetAll().Where(l => l.ListId == id).FirstOrDefault();
             if (listToDelete != null)
             {
                 listToDelete.IsVisible = false;
@@ -56,7 +56,7 @@ namespace TrackApp.Service
 
         public List GetList(int id)
         {
-            var listToReturn = listRepository.GetAll().Where(l => l.Id == id && l.IsVisible == true).FirstOrDefault();
+            var listToReturn = listRepository.GetAll().Where(l => l.ListId == id && l.IsVisible == true).FirstOrDefault();
             if (listToReturn?.IsVisible == false || listToReturn == null)
                 return null;
             return listToReturn;
@@ -69,7 +69,7 @@ namespace TrackApp.Service
 
         public void UpdatePrice(int id, double price)
         {
-            var listToReturn = listRepository.GetAll().Where(l => l.Id == id && l.CurrentWorkingList == true).FirstOrDefault();
+            var listToReturn = listRepository.GetAll().Where(l => l.ListId == id && l.CurrentWorkingList == true).FirstOrDefault();
             if (listToReturn == null)
                 return;
             listToReturn.TotalPrice += price;
@@ -78,7 +78,7 @@ namespace TrackApp.Service
 
         public bool CheckIfExisting(int id)
         {
-            var listToReturn = listRepository.GetAll().Where(l => l.Id == id).FirstOrDefault();
+            var listToReturn = listRepository.GetAll().Where(l => l.ListId == id).FirstOrDefault();
             if (listToReturn == null)
                 return false;
             return true;

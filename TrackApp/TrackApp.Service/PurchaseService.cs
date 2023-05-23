@@ -38,7 +38,7 @@ namespace TrackApp.Service
 
         public Purchase DeletePurchase(int id)
         {
-            var purchaseToDelete = purchaseRepository.GetAll().Where(p => p.Id == id).FirstOrDefault();
+            var purchaseToDelete = purchaseRepository.GetAll().Where(p => p.PurchaseId == id).FirstOrDefault();
             if(purchaseToDelete!=null)
             {
                 purchaseToDelete.IsVisible = false;
@@ -52,7 +52,7 @@ namespace TrackApp.Service
             var purchasesToGet= purchaseRepository.GetAll().Where(p => p.ItemId == itemId && p.IsVisible==true).ToList();
             var allItems = itemService.GetItems();
             var query = from purchase in purchasesToGet
-                        join item in allItems on purchase.ItemId equals item.Id
+                        join item in allItems on purchase.ItemId equals item.ItemId
                         select new { purchase, item.Name, item.Unit };
 
             var returnList = new List<GetPurchasesVM>();
@@ -60,7 +60,7 @@ namespace TrackApp.Service
             {
                 var newPurchase = new GetPurchasesVM()
                 {
-                    Id = item.purchase.Id,
+                    Id = item.purchase.PurchaseId,
                     ItemId = item.purchase.ItemId,
                     DateOfPurchase = item.purchase.DateOfPurchase,
                     Quantity = item.purchase.Quantity,
