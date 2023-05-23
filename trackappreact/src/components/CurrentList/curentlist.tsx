@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { StyledWrapper } from "../../styles/wrapper.styled";
 import styled from "styled-components";
-import { deleteFromList, fetchData } from "../../services/itemListService";
+import { deleteFromList } from "../../services/itemListService";
+import { ReactComponent as IconDelete } from "../../assets/icon_delete.svg";
+import { ReactComponent as IconBuy } from "../../assets/icon_buy.svg";
 
 export interface ItemsList {
   id: number;
@@ -55,9 +57,11 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
                     <SWL>{rows.unit}</SWL>
                     {rows.crossedOff ? null : (
                       <>
-                        <SWR onClick={() => toRestock(rows.itemId)}>$</SWR>
+                        <SWR onClick={() => toRestock(rows.itemId)}>
+                          <IconBuy />
+                        </SWR>
                         <SWR onClick={() => toDelete(rows.itemId)}>
-                          {String.fromCharCode(0xd83d, 0xddd1)}
+                          <IconDelete />
                         </SWR>
                       </>
                     )}
