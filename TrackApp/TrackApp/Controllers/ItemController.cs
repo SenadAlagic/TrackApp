@@ -42,6 +42,12 @@ namespace TrackApp.Controllers
         [HttpPost]
         public ActionResult<Item> AddItem([FromBody] AddItemVM newItem)
         {
+            if (string.IsNullOrWhiteSpace(newItem.Name))
+                return BadRequest("Invalid name");
+            if (string.IsNullOrWhiteSpace(newItem.Unit))
+                return BadRequest("Invalid unit");
+            if (newItem.CategoryId == 0)
+                return BadRequest("Invalid category");
             return Ok(itemService.AddItem(newItem));
         }
 

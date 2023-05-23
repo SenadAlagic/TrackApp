@@ -7,7 +7,7 @@ export async function fetchCurrentWorkingList(
     const res = await fetch(`${appSettings.apiUrl}/List/GetCurrentWorkingList`);
     if (!res.ok) return;
     const data = await res.json();
-    set(data.id);
+    set(data.listId);
     return data.id;
   } catch (error) {
     console.log(error);

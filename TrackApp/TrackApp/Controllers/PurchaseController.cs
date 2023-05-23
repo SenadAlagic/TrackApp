@@ -32,6 +32,8 @@ namespace TrackApp.Controllers
         [HttpPost]
         public ActionResult<Purchase> AddPurchase([FromBody] AddPurchaseVM purchase)
         {
+            if (purchase.ItemId == 0 || purchase.Quantity == 0 || purchase.Price == 0)
+                return BadRequest();
             var purchaseToAdd = purchaseService.AddPurchase(purchase);
             if (purchaseToAdd == null)
                 return BadRequest("Something went wrong while adding");

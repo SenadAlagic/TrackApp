@@ -36,7 +36,10 @@ namespace TrackApp.Controllers
         [HttpPost]
         public ActionResult<Category> Add(string name)
         {
-            return Ok(categoryService.Add(name));
+            var category=categoryService.Add(name);
+            if (category == null)
+                return BadRequest("Empty string sent");
+            return Ok(category);
         }
 
         [HttpDelete]

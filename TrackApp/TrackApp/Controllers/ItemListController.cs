@@ -32,6 +32,8 @@ namespace TrackApp.Controllers
         [HttpGet]
         public ActionResult<List<ItemList>> GetByList(int id, int itemId, bool filter)
         {
+            if (id == 0)
+                return BadRequest();
             var itemsToReturn = itemListService.GetByListId(id, itemId, filter);
             if (itemsToReturn == null)
                 return BadRequest("Nonexistant id");
@@ -50,6 +52,8 @@ namespace TrackApp.Controllers
         [HttpPost]
         public ActionResult<ItemList> AddItemToList(AddToListVM newEntry)
         {
+            if (newEntry.ItemId == 0 || newEntry.Quantity == 0)
+                return BadRequest();
             var itemToAdd = itemListService.AddItemToList(newEntry);
             if (itemToAdd == null)
                 return BadRequest("Error while adding");
@@ -59,6 +63,8 @@ namespace TrackApp.Controllers
         [HttpPost]
         public ActionResult<ItemList> Restock([FromBody] RestockVM restock)
         {
+            if (restock.ItemId == 0 || restock.Quantity == 0 || restock.TotalPrice == 0)
+                return BadRequest();
             var itemToRestock = itemListService.RestockItems(restock);
             if (itemToRestock == null)
                 return BadRequest("Nonexistant id");

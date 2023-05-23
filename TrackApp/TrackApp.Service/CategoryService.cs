@@ -22,6 +22,8 @@ namespace TrackApp.Service
 
         public Category Add(string name)
         {
+			if (String.IsNullOrWhiteSpace(name))
+				return null;
 			var newCategory = new Category()
 			{
 				Name = name
