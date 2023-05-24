@@ -22,7 +22,6 @@ function NewItem() {
 
   useEffect(() => {
     GetCategories(setCategories);
-    console.log(categories);
   }, []);
 
   function handleNameChange(event: any) {
@@ -35,14 +34,13 @@ function NewItem() {
     setSelected(cat);
   }
   function AddToDatabase() {
-    if (name === "" || selectedCategory?.id === 0) return;
+    if (!name || !selectedCategory?.id) return;
     console.log(unit, name, selectedCategory?.id);
-    let body = {
+    const body = {
       name,
       unit,
       categoryId: selectedCategory?.id,
     };
-    console.log(body);
     addItemToDb(body);
   }
 
@@ -58,9 +56,7 @@ function NewItem() {
           aria-expanded="false"
           data-bs-toggle="dropdown"
         >
-          {!selectedCategory?.name
-            ? "Select a category"
-            : selectedCategory?.name}
+          {selectedCategory?.name || "Select a category"}
         </Button>
         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
           {categories.map((category: Category) => (

@@ -38,7 +38,7 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
   return (
     <>
       <StyledWrapper id="wrapper" className="CurrentList">
-        <h1>{items.length === 0 && <p>No items found</p>}</h1>
+        <h1>{!items.length && <p>No items found</p>}</h1>
         <table className="table table-borderless table-sm">
           <tbody>
             {items.map((item: any) => (
@@ -69,13 +69,13 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
                 ))}
               </>
             ))}
-            {details ? (
+            {details && (
               <tr>
                 <th>Total price:</th>
                 <th>{totalPrice}</th>
                 <th>KM</th>
               </tr>
-            ) : null}
+            )}
           </tbody>
         </table>
       </StyledWrapper>

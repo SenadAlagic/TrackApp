@@ -12,7 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var config = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json", false)
+    .AddJsonFile("appsettings.json",
+        false)
     .Build();
 builder.Services.AddDbContext<TrackAppDbContext>(option => option.UseNpgsql(config.GetConnectionString("TrackAppDB")));
 
@@ -21,7 +22,8 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IItemListService, ItemListService>();
 builder.Services.AddScoped<IPurhcaseService, PurchaseService>();
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IRepository<>),
+    typeof(Repository<>));
 
 var app = builder.Build();
 
@@ -47,4 +49,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

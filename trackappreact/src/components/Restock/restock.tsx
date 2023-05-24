@@ -11,7 +11,7 @@ import { appSettings } from "../../site";
 function Restock() {
   const { productId } = useParams();
   const [item, setItem] = useState<Items>();
-  const [quantity, setQuantity] = useState();
+  const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState();
   const navigate = useNavigate();
 
@@ -45,10 +45,10 @@ function Restock() {
   }, []);
 
   const logPurchase = () => {
-    let body = {
+    const body = {
       itemId: item?.id,
       listId: 1,
-      quantity: parseInt(quantity || ""),
+      quantity: quantity,
       totalPrice: parseInt(price || ""),
     };
     ItemService.restock(body);
@@ -68,6 +68,7 @@ function Restock() {
           <Inputwidth
             className="form-control control"
             placeholder="Quantity"
+            type="number"
             onChange={changeQuantity}
             value={quantity}
           ></Inputwidth>

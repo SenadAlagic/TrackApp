@@ -6,6 +6,7 @@ import NotFound from "./components/NotFound/notfound";
 import Restock from "./components/Restock/restock";
 import Details from "./components/Details/details";
 import History from "./components/History/history";
+import Sidenav from "./components/Sidenav/sidenav";
 
 function App() {
   return (

@@ -54,7 +54,10 @@ const AddNewItem = ({ callback }: any) => {
         >
           {!selectedItem?.name ? "Select an item" : selectedItem.name}
         </Button>
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <DropDown
+          className="dropdown-menu"
+          aria-labelledby="dropdownMenuButton"
+        >
           {items2.map((itemByCategory: ItemsByCategory) => (
             <>
               <Category className="dropdown-item">
@@ -70,7 +73,7 @@ const AddNewItem = ({ callback }: any) => {
               ))}
             </>
           ))}
-        </div>
+        </DropDown>
         <Controls id="controls">
           <Input
             type="email"
@@ -119,4 +122,10 @@ export const SmallButton = styled(Button)`
 export const Category = styled.button`
   font-weight: bold;
   pointer-events: none;
+`;
+
+export const DropDown = styled.div`
+  overflow: scroll;
+  height: 30vh;
+  width: 100%;
 `;
