@@ -1,6 +1,12 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IndentTd, ItemsList, SWL, SWR, Tr } from "../CurrentList/curentlist";
+import {
+  IndentTd,
+  ItemsList,
+  SmallWidthLeft,
+  SmallWidthRight,
+  Tr,
+} from "../CurrentList/curentlist";
 import { StyledTitle } from "../../styles/title.styled";
 import { fetchItemHistory } from "../../services/itemListService";
 import { StyledWrapper } from "../../styles/wrapper.styled";
@@ -46,8 +52,8 @@ function History() {
                   {object.items.map((row: any) => (
                     <Tr $crossedOff={row.crossedOff}>
                       <IndentTd>{row.name}</IndentTd>
-                      <SWR>{row.quantity}</SWR>
-                      <SWL>{row.unit}</SWL>
+                      <SmallWidthRight>{row.quantity}</SmallWidthRight>
+                      <SmallWidthLeft>{row.unit}</SmallWidthLeft>
                     </Tr>
                   ))}
                 </tbody>
@@ -106,10 +112,10 @@ function TotalPrice(purchases: Purchase[]): ReactNode {
 const Quantity = styled(IndentTd)`
   width: 5%;
 `;
-const Unit = styled(SWL)`
+const Unit = styled(SmallWidthLeft)`
   width: 30%;
 `;
-const Price = styled(SWL)`
+const Price = styled(SmallWidthLeft)`
   width: 30%;
 `;
 

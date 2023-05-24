@@ -53,16 +53,16 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
                     <IndentTd onClick={() => toHistory(rows.itemId)}>
                       {rows.name}
                     </IndentTd>
-                    <SWR>{rows.quantity}</SWR>
-                    <SWL>{rows.unit}</SWL>
+                    <SmallWidthRight>{rows.quantity}</SmallWidthRight>
+                    <SmallWidthLeft>{rows.unit}</SmallWidthLeft>
                     {rows.crossedOff ? null : (
                       <>
-                        <SWR onClick={() => toRestock(rows.itemId)}>
+                        <SmallWidthRight onClick={() => toRestock(rows.itemId)}>
                           <IconBuy />
-                        </SWR>
-                        <SWR onClick={() => toDelete(rows.itemId)}>
+                        </SmallWidthRight>
+                        <SmallWidthRight onClick={() => toDelete(rows.itemId)}>
                           <IconDelete />
-                        </SWR>
+                        </SmallWidthRight>
                       </>
                     )}
                   </Tr>
@@ -95,11 +95,11 @@ export const Tr = styled.tr<{ $crossedOff: boolean }>`
 export const IndentTd = styled.td`
   padding-left: 2.5em !important;
 `;
-export const SWR = styled.td`
+export const SmallWidthRight = styled.td`
   width: 5%;
   text-align: right;
 `;
-export const SWL = styled.td`
+export const SmallWidthLeft = styled.td`
   width: 5%;
   text-align: left;
 `;

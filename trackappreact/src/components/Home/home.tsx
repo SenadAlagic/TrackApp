@@ -34,9 +34,7 @@ function Home() {
     <>
       <div className="dashboard">
         <StyledTitle>Dashboard</StyledTitle>
-        <A href="/details">
-          <CurrentList items={items} details={false} totalPrice={totalPrice} />
-        </A>
+        <CurrentList items={items} details={false} totalPrice={totalPrice} />
 
         <StyledDiv>
           <CustomModal

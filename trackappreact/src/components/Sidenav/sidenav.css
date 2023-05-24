@@ -1,0 +1,17 @@
+.sidenav{
+    border:1px gray solid;
+}
+.nav-link:hover{
+    background-color: rgb(202, 202, 202);
+}
+.nav-link{
+    text-decoration: none;
+    color:black;
+}
+.toggle-button{
+    font-size: 5vh;
+}
+#navWrapper{
+    padding-top: 20px;
+    padding-left: 10px;
+}

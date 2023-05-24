@@ -1,4 +1,17 @@
-CurrentList{
-    margin-left: auto;
-    margin-right: auto;
+.sidenav{
+    position: absolute;
+    width: 250px;
+    height: 100vh;
+    background-color: #f8f9fa;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-250px);
+}
+.sidenav.open{
+    transform: translateX(0);
+}
+.toggle-button{
+    position:absolute;
+    top:10px;
+    left:280px;
+    cursor: pointer;
 }

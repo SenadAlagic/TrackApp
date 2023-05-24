@@ -14,7 +14,8 @@ namespace TrackApp.Controllers
     [Route("[controller]/[action]")]
     public class ItemListController : ControllerBase
     {
-        IItemListService itemListService;
+        private IItemListService itemListService;
+
         public ItemListController(IItemListService itemListService)
         {
             this.itemListService = itemListService;
@@ -25,7 +26,7 @@ namespace TrackApp.Controllers
         {
             var itemToReturn = itemListService.GetItemList(id);
             if (itemToReturn == null)
-                return BadRequest("Nonexistant Id");
+                return BadRequest("Nonexistent Id");
             return Ok(itemToReturn);
         }
 
@@ -36,7 +37,7 @@ namespace TrackApp.Controllers
                 return BadRequest();
             var itemsToReturn = itemListService.GetByListId(id, itemId, filter);
             if (itemsToReturn == null)
-                return BadRequest("Nonexistant id");
+                return BadRequest("Nonexistent id");
             return Ok(itemsToReturn);
         }
 
@@ -61,13 +62,21 @@ namespace TrackApp.Controllers
         }
 
         [HttpPost]
+        public ActionResult<List<ItemList>> AddItemsInBulk(List<AddToListVM> entries)
+        {
+            if (entries.Count == 0)
+                return BadRequest();
+            return itemListService.AddInBulk(entries);
+        }
+
+        [HttpPost]
         public ActionResult<ItemList> Restock([FromBody] RestockVM restock)
         {
             if (restock.ItemId == 0 || restock.Quantity == 0 || restock.TotalPrice == 0)
                 return BadRequest();
             var itemToRestock = itemListService.RestockItems(restock);
             if (itemToRestock == null)
-                return BadRequest("Nonexistant id");
+                return BadRequest("Nonexistent id");
             return Ok(itemToRestock);
         }
 
@@ -90,4 +99,3 @@ namespace TrackApp.Controllers
         }
     }
 }
-

@@ -1,4 +1,3 @@
-import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Home from "./components/Home/home";
@@ -10,13 +9,16 @@ import Sidenav from "./components/Sidenav/sidenav";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/details" element={<Details />} />
-      <Route path="/restock/:productId" element={<Restock />}></Route>
-      <Route path="history/:productId" element={<History />}></Route>
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <>
+      <Sidenav />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/details" element={<Details />} />
+        <Route path="/restock/:productId" element={<Restock />}></Route>
+        <Route path="history/:productId" element={<History />}></Route>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
 
