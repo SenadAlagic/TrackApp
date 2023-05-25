@@ -21,13 +21,11 @@ export default class ItemService {
     }
   };
 
-  static getItemsByCategories = async (
-    set: React.Dispatch<React.SetStateAction<ItemsByCategory[]>>
-  ) => {
+  static getItemsByCategories = async () => {
     try {
       const res = await fetch(`${appSettings.apiUrl}/Item/GetItemsByCategory`);
       const data = await res.json();
-      set(data);
+      return data;
     } catch (error) {
       console.log(error);
     }

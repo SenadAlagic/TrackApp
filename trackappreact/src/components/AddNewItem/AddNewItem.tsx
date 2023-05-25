@@ -38,7 +38,7 @@ const AddNewItem = ({ callback }: { callback: () => void }) => {
 
   useEffect(() => {
     //ItemService.getAllItems(setItems);
-    ItemService.getItemsByCategories(setItems2);
+    ItemService.getItemsByCategories().then(setItems2);
   }, []);
 
   return (

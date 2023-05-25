@@ -1,0 +1,13 @@
+#buttons{
+    width: 20%;
+}
+#dropdownMenuButton{
+    width:100%;
+}
+#controls{
+    display: flex;
+    flex-wrap: wrap;
+}
+#currencySpan{
+    transform: translateX(-5px);
+}
