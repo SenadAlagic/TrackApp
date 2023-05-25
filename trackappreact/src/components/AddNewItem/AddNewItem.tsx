@@ -126,6 +126,6 @@ export const Category = styled.button`
 
 export const DropDown = styled.div`
   overflow: scroll;
-  height: 30vh;
+  height: 25vh;
   width: 100%;
 `;

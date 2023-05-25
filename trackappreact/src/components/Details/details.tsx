@@ -16,16 +16,17 @@ function Details() {
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-    fetchCurrentWorkingList(setCurrentList);
+    fetchCurrentWorkingList().then(setCurrentList);
   }, []);
 
   useEffect(() => {
-    fetchData(currentListId, false, setItems);
-    fetchTotalPrice(currentListId, setTotalPrice);
+    if (!currentListId) return;
+    fetchData(currentListId, false).then(setItems);
+    fetchTotalPrice(currentListId).then(setTotalPrice);
   }, [currentListId]);
 
   const addItem = () => {
-    fetchData(currentListId, false, setItems);
+    fetchData(currentListId, false).then(setItems);
   };
 
   return (

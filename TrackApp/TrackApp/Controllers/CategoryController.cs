@@ -12,31 +12,31 @@ namespace TrackApp.Controllers
     [Route("[controller]/[action]")]
     public class CategoryController : ControllerBase
     {
-        ICategoryService categoryService;
+        private readonly ICategoryService _categoryService;
         public CategoryController(ICategoryService categoryService)
         {
-            this.categoryService = categoryService;
+            this._categoryService = categoryService;
         }
 
         [HttpGet]
         public ActionResult<List<Category>> GetCategories()
         {
-            return Ok(categoryService.GetAll());
+            return Ok(_categoryService.GetAll());
         }
 
         [HttpGet]
         public ActionResult<Category> GetCategoryById(int id)
         {
-            var category = categoryService.GetById(id);
+            var category = _categoryService.GetById(id);
             if (category == null)
-                return BadRequest("Nonexistant id");
+                return BadRequest("Nonexistent id");
             return Ok(category);
         }
 
         [HttpPost]
         public ActionResult<Category> Add(string name)
         {
-            var category=categoryService.Add(name);
+            var category=_categoryService.Add(name);
             if (category == null)
                 return BadRequest("Empty string sent");
             return Ok(category);
@@ -45,9 +45,9 @@ namespace TrackApp.Controllers
         [HttpDelete]
         public ActionResult<Category> Remove(int id)
         {
-            var category = categoryService.Remove(id);
+            var category = _categoryService.Remove(id);
             if (category == null)
-                return BadRequest("Nonexistant id");
+                return BadRequest("Nonexistent id");
             return Ok(category);
         }
     }

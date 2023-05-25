@@ -34,7 +34,6 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
       deleteFromList(id);
     }
   }
-
   return (
     <>
       <StyledWrapper id="wrapper" className="CurrentList">

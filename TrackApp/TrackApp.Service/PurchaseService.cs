@@ -5,22 +5,23 @@ using TrackApp.Service.ViewModels;
 
 namespace TrackApp.Service
 {
-	public interface IPurhcaseService
-	{
-		public Purchase AddPurchase(AddPurchaseVM purchase);
-		public Purchase DeletePurchase(int id);
-		public List<GetPurchasesVM> GetByItemID(int itemId);
+    public interface IPurchaseService
+    {
+        public Purchase AddPurchase(AddPurchaseVM purchase);
+        public Purchase DeletePurchase(int id);
+        public List<GetPurchasesVM> GetByItemId(int itemId);
+    }
 
-	}
-	public class PurchaseService : IPurhcaseService
-	{
-        IRepository<Purchase> purchaseRepository;
-        IItemService itemService;
+    public class PurchaseService : IPurchaseService
+    {
+        private readonly IRepository<Purchase> _purchaseRepository;
+        private readonly IItemService _itemService;
+
         public PurchaseService(IRepository<Purchase> purchaseRepository, IItemService itemService)
-		{
-            this.purchaseRepository = purchaseRepository;
-            this.itemService = itemService;
-		}
+        {
+            this._purchaseRepository = purchaseRepository;
+            this._itemService = itemService;
+        }
 
         public Purchase AddPurchase(AddPurchaseVM purchase)
         {
@@ -28,32 +29,34 @@ namespace TrackApp.Service
             {
                 ItemId = purchase.ItemId,
                 Quantity = purchase.Quantity,
-                Price=purchase.Price,
+                Price = purchase.Price,
                 DateOfPurchase = DateTime.Now.ToUniversalTime(),
-                IsVisible=true,
+                IsVisible = true,
             };
-            purchaseRepository.Add(newPurchase);
+            _purchaseRepository.Add(newPurchase);
             return newPurchase;
         }
 
         public Purchase DeletePurchase(int id)
         {
-            var purchaseToDelete = purchaseRepository.GetAll().Where(p => p.PurchaseId == id).FirstOrDefault();
-            if(purchaseToDelete!=null)
+            var purchaseToDelete = _purchaseRepository.GetAll().FirstOrDefault(p => p.PurchaseId == id);
+            if (purchaseToDelete != null)
             {
                 purchaseToDelete.IsVisible = false;
-                purchaseRepository.Update(purchaseToDelete);
+                _purchaseRepository.Update(purchaseToDelete);
             }
+
             return purchaseToDelete;
         }
 
-        public List<GetPurchasesVM> GetByItemID(int itemId)
+        public List<GetPurchasesVM> GetByItemId(int itemId)
         {
-            var purchasesToGet= purchaseRepository.GetAll().Where(p => p.ItemId == itemId && p.IsVisible==true).ToList();
-            var allItems = itemService.GetItems();
+            var purchasesToGet = _purchaseRepository.GetAll().Where(p => p.ItemId == itemId && p.IsVisible == true)
+                .ToList();
+            var allItems = _itemService.GetItems();
             var query = from purchase in purchasesToGet
-                        join item in allItems on purchase.ItemId equals item.ItemId
-                        select new { purchase, item.Name, item.Unit };
+                join item in allItems on purchase.ItemId equals item.ItemId
+                select new { purchase, item.Name, item.Unit };
 
             var returnList = new List<GetPurchasesVM>();
             foreach (var item in query)
@@ -64,15 +67,15 @@ namespace TrackApp.Service
                     ItemId = item.purchase.ItemId,
                     DateOfPurchase = item.purchase.DateOfPurchase,
                     Quantity = item.purchase.Quantity,
-                    Price=item.purchase.Price,
+                    Price = item.purchase.Price,
                     IsVisible = item.purchase.IsVisible,
                     ItemName = item.Name,
-                    Unit=item.Unit
+                    Unit = item.Unit
                 };
                 returnList.Add(newPurchase);
             }
+
             return returnList;
         }
     }
 }
-

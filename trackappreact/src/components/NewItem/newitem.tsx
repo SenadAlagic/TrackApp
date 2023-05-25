@@ -5,6 +5,7 @@ import {
   Controls,
   Input,
   SmallButton,
+  DropDown,
 } from "../AddNewItem/AddNewItem";
 import { GetCategories } from "../../services/categoryService";
 import { addItemToDb } from "../../services/itemListService";
@@ -21,7 +22,7 @@ function NewItem() {
   const [name, setName] = useState();
 
   useEffect(() => {
-    GetCategories(setCategories);
+    GetCategories().then(setCategories);
   }, []);
 
   function handleNameChange(event: any) {
@@ -35,7 +36,6 @@ function NewItem() {
   }
   function AddToDatabase() {
     if (!name || !selectedCategory?.id) return;
-    console.log(unit, name, selectedCategory?.id);
     const body = {
       name,
       unit,
@@ -58,7 +58,10 @@ function NewItem() {
         >
           {selectedCategory?.name || "Select a category"}
         </Button>
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <DropDown
+          className="dropdown-menu"
+          aria-labelledby="dropdownMenuButton"
+        >
           {categories.map((category: Category) => (
             <button
               className="dropdown-item"
@@ -67,7 +70,7 @@ function NewItem() {
               {category.name}
             </button>
           ))}
-        </div>
+        </DropDown>
         <Controls id="controls">
           <Input
             className="form-control control"

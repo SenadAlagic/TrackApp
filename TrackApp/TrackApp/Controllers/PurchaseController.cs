@@ -14,18 +14,18 @@ namespace TrackApp.Controllers
     [Route("[controller]/[action]")]
     public class PurchaseController : ControllerBase
     {
-        IPurhcaseService purchaseService;
-        public PurchaseController(IPurhcaseService purchaseService)
+        private readonly IPurchaseService _purchaseService;
+        public PurchaseController(IPurchaseService purchaseService)
         {
-            this.purchaseService = purchaseService;
+            this._purchaseService = purchaseService;
         }
 
         [HttpGet]
         public ActionResult<List<Purchase>> GetByItemId(int itemId)
         {
-            var purchaseToGet=purchaseService.GetByItemID(itemId);
+            var purchaseToGet=_purchaseService.GetByItemId(itemId);
             if (purchaseToGet == null)
-                return BadRequest("Probably a nonexistant item ID");
+                return BadRequest("Probably a nonexistent item ID");
             return Ok(purchaseToGet);
         }
 
@@ -34,7 +34,7 @@ namespace TrackApp.Controllers
         {
             if (purchase.ItemId == 0 || purchase.Quantity == 0 || purchase.Price == 0)
                 return BadRequest();
-            var purchaseToAdd = purchaseService.AddPurchase(purchase);
+            var purchaseToAdd = _purchaseService.AddPurchase(purchase);
             if (purchaseToAdd == null)
                 return BadRequest("Something went wrong while adding");
             return Ok(purchaseToAdd);
@@ -43,7 +43,7 @@ namespace TrackApp.Controllers
         [HttpDelete]
         public ActionResult<Purchase> DeletePurchase(int id)
         {
-            var purchaseToDelete = purchaseService.DeletePurchase(id);
+            var purchaseToDelete = _purchaseService.DeletePurchase(id);
             if (purchaseToDelete == null)
                 return BadRequest("Something went wrong while deleting");
             return purchaseToDelete;

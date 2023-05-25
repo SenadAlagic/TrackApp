@@ -34,7 +34,7 @@ function History() {
 
   useEffect(() => {
     if (!productId) return;
-    fetchItemHistory(parseInt(productId), setLists);
+    fetchItemHistory(parseInt(productId)).then(setLists);
     ItemService.fetchPurchases(parseInt(productId), setPurchases);
   }, [productId]);
 

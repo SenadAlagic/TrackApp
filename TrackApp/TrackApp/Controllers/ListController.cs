@@ -13,48 +13,48 @@ namespace TrackApp.Controllers
     [Route("[controller]/[action]")]
     public class ListController : ControllerBase
     {
-        IListService listService;
+        private readonly IListService _listService;
         public ListController(IListService listService)
         {
-            this.listService = listService;
+            this._listService = listService;
         }
 
         [HttpGet]
         public ActionResult<List> GetCurrentWorkingList()
         {
-            var listToGet = listService.GetCurrentWorkingList();
+            var listToGet = _listService.GetCurrentWorkingList();
             if (listToGet == null)
-                return StatusCode(500,"Current working list not existant, server error");
+                return StatusCode(500,"Current working list not existent, server error");
             return Ok(listToGet);
         }
 
         [HttpGet]
         public ActionResult<List> GetList(int id)
         {
-            var listToGet=listService.GetList(id);
+            var listToGet=_listService.GetList(id);
             if (listToGet == null)
-                return BadRequest("Nonexistant id");
+                return BadRequest("Nonexistent id");
             return Ok(listToGet);
         }
 
         [HttpGet]
         public List<List> GetAllLists()
         {
-            return listService.GetAllLists();
+            return _listService.GetAllLists();
         }
 
         [HttpPost]
         public ActionResult<List> CreateList()
         {
-            return Ok(listService.CreateList());
+            return Ok(_listService.CreateList());
         }
 
         [HttpDelete]
         public ActionResult<List> DeleteList(int id)
         {
-            var listToDelete=listService.DeleteList(id);
+            var listToDelete=_listService.DeleteList(id);
             if (listToDelete == null)
-                return BadRequest("Nonexistant id");
+                return BadRequest("Nonexistent id");
             return Ok(listToDelete);
         }
     }

@@ -20,28 +20,28 @@ public interface IItemListService
 public class ItemListService : IItemListService
 {
     private readonly IRepository<ItemList> _itemListRepository;
-    private readonly IListService listService;
-    private readonly IItemService itemService;
-    private readonly ICategoryService categoryService;
-    private readonly IPurhcaseService purchaseService;
+    private readonly IListService _listService;
+    private readonly IItemService _itemService;
+    private readonly ICategoryService _categoryService;
+    private readonly IPurchaseService _purchaseService;
 
     public ItemListService(IRepository<ItemList> itemListRepository, IListService listService, IItemService itemService,
-        ICategoryService categoryService, IPurhcaseService purchaseService)
+        ICategoryService categoryService, IPurchaseService purchaseService)
     {
         _itemListRepository = itemListRepository;
-        this.listService = listService;
-        this.itemService = itemService;
-        this.categoryService = categoryService;
-        this.purchaseService = purchaseService;
+        this._listService = listService;
+        this._itemService = itemService;
+        this._categoryService = categoryService;
+        this._purchaseService = purchaseService;
     }
 
     public ItemList AddItemToList(AddToListVM newEntry)
     {
-        var currentWorkingList = listService.GetCurrentWorkingList();
+        var currentWorkingList = _listService.GetCurrentWorkingList();
         //check if the item already exists, if so, add quantity
-        var existing = _itemListRepository.GetAll().Where(il =>
+        var existing = _itemListRepository.GetAll().FirstOrDefault(il =>
             il.ItemId == newEntry.ItemId && il.ListId == currentWorkingList.ListId &&
-            il.CrossedOff == newEntry.CrossedOff).FirstOrDefault();
+            il.CrossedOff == newEntry.CrossedOff);
         if (existing == null)
         {
             var newItemList = new ItemList
@@ -81,8 +81,8 @@ public class ItemListService : IItemListService
         if (filter)
             itemsFromDesiredList = itemsFromDesiredList.Where(il => il.CrossedOff == false).ToList();
 
-        var items = itemService.GetItems();
-        var categories = categoryService.GetAll();
+        var items = _itemService.GetItems();
+        var categories = _categoryService.GetAll();
         var query2 = from item in items
             join ItemList in itemsFromDesiredList on item.ItemId equals ItemList.ItemId
             join category in categories on item.CategoryId equals category.CategoryId
@@ -134,7 +134,7 @@ public class ItemListService : IItemListService
 
     public ItemList RemoveFromList(int id)
     {
-        var currentList = listService.GetCurrentWorkingList();
+        var currentList = _listService.GetCurrentWorkingList();
         var itemToRemove = _itemListRepository.GetAll()
             .Where(il => il.ItemListId == id && il.ListId == currentList.ListId).FirstOrDefault();
         if (itemToRemove != null)
@@ -146,7 +146,7 @@ public class ItemListService : IItemListService
     {
         if (restock == null)
             return null;
-        var currentList = listService.GetCurrentWorkingList();
+        var currentList = _listService.GetCurrentWorkingList();
         var itemToRestock = _itemListRepository.GetAll()
             .Where(il => il.ItemId == restock.ItemId && il.ListId == currentList.ListId && il.CrossedOff == false)
             .FirstOrDefault();
@@ -168,16 +168,16 @@ public class ItemListService : IItemListService
         AddItemToList(newItem);
         var newPurchase = new AddPurchaseVM
             { ItemId = restock.ItemId, Quantity = restock.Quantity, Price = restock.TotalPrice };
-        purchaseService.AddPurchase(newPurchase);
-        listService.UpdatePrice(currentList.ListId, restock.TotalPrice);
+        _purchaseService.AddPurchase(newPurchase);
+        _listService.UpdatePrice(currentList.ListId, restock.TotalPrice);
         return itemToRestock;
     }
 
     public List<ItemHistoryVM> GetItemHistory(int id)
     {
-        var allLists = listService.GetAllLists();
+        var allLists = _listService.GetAllLists();
         var allItemLists = GetAllItemList();
-        var allItems = itemService.GetItems();
+        var allItems = _itemService.GetItems();
         var itemHistory = allLists
             .Join(allItemLists,
                 list => list.ListId,
@@ -203,7 +203,7 @@ public class ItemListService : IItemListService
 
     public ItemList RemoveByItemId(int itemId)
     {
-        var currentList = listService.GetCurrentWorkingList();
+        var currentList = _listService.GetCurrentWorkingList();
         var itemListToRemove = GetAllItemList()
             .Where(il => il.ItemId == itemId && il.ListId == currentList.ListId && il.CrossedOff == false)
             .FirstOrDefault();

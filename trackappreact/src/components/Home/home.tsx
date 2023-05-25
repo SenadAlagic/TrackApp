@@ -2,7 +2,6 @@ import AddNewItem from "../AddNewItem/AddNewItem";
 import CurrentList, { ItemsList } from "../CurrentList/curentlist";
 import CustomModal from "../Modal/modal";
 import { StyledTitle } from "../../styles/title.styled";
-import { A } from "../../styles/a.styled";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { fetchData } from "../../services/itemListService";
@@ -18,16 +17,17 @@ function Home() {
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-    fetchCurrentWorkingList(setCurrentList);
+    fetchCurrentWorkingList().then(setCurrentList);
   }, []);
 
   useEffect(() => {
-    fetchData(currentListId, true, setItems);
-    fetchTotalPrice(currentListId, setTotalPrice);
+    if (!currentListId) return;
+    fetchData(currentListId, true).then(setItems);
+    fetchTotalPrice(currentListId).then(setTotalPrice);
   }, [currentListId]);
 
   const addItem = () => {
-    fetchData(currentListId, true, setItems);
+    fetchData(currentListId, true).then(setItems);
   };
 
   return (

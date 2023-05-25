@@ -1,11 +1,6 @@
-import { ItemsList } from "../components/CurrentList/curentlist";
 import { appSettings } from "../site";
 
-export async function fetchData(
-  listId: number,
-  filter: boolean,
-  set: React.Dispatch<React.SetStateAction<ItemsList[]>>
-) {
+export async function fetchData(listId: number, filter: boolean) {
   if (!listId) return;
   try {
     const res = await fetch(
@@ -13,23 +8,20 @@ export async function fetchData(
     );
     if (!res.ok) return;
     const data = await res.json();
-    set(data);
+    return data;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function fetchItemHistory(
-  itemId: number,
-  set: React.Dispatch<React.SetStateAction<ItemsList[]>>
-) {
+export async function fetchItemHistory(itemId: number) {
   try {
     const res = await fetch(
       `${appSettings.apiUrl}/ItemList/GetItemHistory?itemId=${itemId}`
     );
     if (!res.ok) return;
     const data = await res.json();
-    set(data);
+    return data;
   } catch (error) {
     console.log(error);
   }

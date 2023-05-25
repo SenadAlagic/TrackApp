@@ -14,17 +14,17 @@ namespace TrackApp.Controllers
     [Route("[controller]/[action]")]
     public class ItemListController : ControllerBase
     {
-        private IItemListService itemListService;
+        private readonly IItemListService _itemListService;
 
         public ItemListController(IItemListService itemListService)
         {
-            this.itemListService = itemListService;
+            this._itemListService = itemListService;
         }
 
         [HttpGet]
         public ActionResult<GetItemsVM> GetItemList(int id)
         {
-            var itemToReturn = itemListService.GetItemList(id);
+            var itemToReturn = _itemListService.GetItemList(id);
             if (itemToReturn == null)
                 return BadRequest("Nonexistent Id");
             return Ok(itemToReturn);
@@ -35,7 +35,7 @@ namespace TrackApp.Controllers
         {
             if (id == 0)
                 return BadRequest();
-            var itemsToReturn = itemListService.GetByListId(id, itemId, filter);
+            var itemsToReturn = _itemListService.GetByListId(id, itemId, filter);
             if (itemsToReturn == null)
                 return BadRequest("Nonexistent id");
             return Ok(itemsToReturn);
@@ -44,7 +44,7 @@ namespace TrackApp.Controllers
         [HttpGet]
         public ActionResult<List<List>> GetItemHistory(int itemId)
         {
-            var listToReturn = itemListService.GetItemHistory(itemId);
+            var listToReturn = _itemListService.GetItemHistory(itemId);
             if (listToReturn == null)
                 return BadRequest("Something unexpected happened");
             return Ok(listToReturn);
@@ -55,7 +55,7 @@ namespace TrackApp.Controllers
         {
             if (newEntry.ItemId == 0 || newEntry.Quantity == 0)
                 return BadRequest();
-            var itemToAdd = itemListService.AddItemToList(newEntry);
+            var itemToAdd = _itemListService.AddItemToList(newEntry);
             if (itemToAdd == null)
                 return BadRequest("Error while adding");
             return Ok(itemToAdd);
@@ -66,7 +66,7 @@ namespace TrackApp.Controllers
         {
             if (entries.Count == 0)
                 return BadRequest();
-            return itemListService.AddInBulk(entries);
+            return _itemListService.AddInBulk(entries);
         }
 
         [HttpPost]
@@ -74,7 +74,7 @@ namespace TrackApp.Controllers
         {
             if (restock.ItemId == 0 || restock.Quantity == 0 || restock.TotalPrice == 0)
                 return BadRequest();
-            var itemToRestock = itemListService.RestockItems(restock);
+            var itemToRestock = _itemListService.RestockItems(restock);
             if (itemToRestock == null)
                 return BadRequest("Nonexistent id");
             return Ok(itemToRestock);
@@ -83,7 +83,7 @@ namespace TrackApp.Controllers
         [HttpDelete]
         public ActionResult<ItemList> RemoveItemFromList(int id)
         {
-            var itemToRemove = itemListService.RemoveFromList(id);
+            var itemToRemove = _itemListService.RemoveFromList(id);
             if (itemToRemove == null)
                 return BadRequest("Error while deleting");
             return Ok(itemToRemove);
@@ -92,7 +92,7 @@ namespace TrackApp.Controllers
         [HttpDelete]
         public ActionResult<ItemList> RemoveFromListByItemId(int itemId)
         {
-            var itemListToRemove = itemListService.RemoveByItemId(itemId);
+            var itemListToRemove = _itemListService.RemoveByItemId(itemId);
             if (itemListToRemove == null)
                 return BadRequest("Error while removing");
             return Ok(itemListToRemove);

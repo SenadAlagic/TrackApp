@@ -1,13 +1,10 @@
-import { Category } from "../components/NewItem/newitem";
 import { appSettings } from "../site";
 
-export async function GetCategories(
-  set: React.Dispatch<React.SetStateAction<Category[]>>
-) {
+export async function GetCategories() {
   try {
     const res = await fetch(`${appSettings.apiUrl}/Category/GetCategories`);
     const data = await res.json();
-    set(data);
+    return data;
   } catch (error) {
     console.log(error);
   }
