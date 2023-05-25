@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   Wrapper,
   Button,
@@ -19,16 +19,16 @@ function NewItem() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelected] = useState<Category>();
   const [unit, setUnit] = useState("");
-  const [name, setName] = useState();
+  const [name, setName] = useState("");
 
   useEffect(() => {
     GetCategories().then(setCategories);
   }, []);
 
-  function handleNameChange(event: any) {
+  function handleNameChange(event: ChangeEvent<HTMLInputElement>) {
     setName(event.target.value);
   }
-  function handleUnitChange(event: any) {
+  function handleUnitChange(event: ChangeEvent<HTMLInputElement>) {
     setUnit(event.target.value);
   }
   function handleClick(cat: Category) {

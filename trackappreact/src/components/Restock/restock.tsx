@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Items } from "../AddNewItem/AddNewItem";
 import ItemService from "../../services/itemService";
@@ -12,14 +12,14 @@ function Restock() {
   const { productId } = useParams();
   const [item, setItem] = useState<Items>();
   const [quantity, setQuantity] = useState(1);
-  const [price, setPrice] = useState();
+  const [price, setPrice] = useState(0);
   const navigate = useNavigate();
 
-  function changeQuantity(event: any) {
-    setQuantity(event.target.value);
+  function changeQuantity(event: ChangeEvent<HTMLInputElement>) {
+    setQuantity(parseInt(event.target.value));
   }
-  function changePrice(event: any) {
-    setPrice(event.target.value);
+  function changePrice(event: ChangeEvent<HTMLInputElement>) {
+    setPrice(parseInt(event.target.value));
   }
 
   const fetchItem = async () => {
@@ -46,10 +46,10 @@ function Restock() {
 
   const logPurchase = () => {
     const body = {
-      itemId: item?.id,
+      itemId: item?.itemId,
       listId: 1,
       quantity: quantity,
-      totalPrice: parseInt(price || ""),
+      totalPrice: price,
     };
     ItemService.restock(body);
     navigate("/details");

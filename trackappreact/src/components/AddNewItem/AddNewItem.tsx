@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import ItemService from "../../services/itemService";
 import styled from "styled-components";
 
 export interface Items {
-  id: number;
+  itemId: number;
   name: string;
   unit: string;
   categoryId: number;
@@ -13,7 +13,7 @@ export interface ItemsByCategory {
   categoryName: string;
   items: Items[];
 }
-const AddNewItem = ({ callback }: any) => {
+const AddNewItem = ({ callback }: { callback: () => void }) => {
   //const [items, setItems] = useState<Items[]>([]);
   const [selectedItem, setSelected] = useState<Items>();
   const [quantity, setQuantity] = useState("");
@@ -24,13 +24,14 @@ const AddNewItem = ({ callback }: any) => {
     setSelected(item);
   }
 
-  function handleChange(event: any) {
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
     setQuantity(event.target.value);
   }
 
   function AddToList() {
     if (!selectedItem) return;
-    ItemService.addToList(parseInt(quantity), selectedItem.id).then(() => {
+    console.log(selectedItem);
+    ItemService.addToList(parseInt(quantity), selectedItem.itemId).then(() => {
       callback();
     });
   }
@@ -98,10 +99,8 @@ const AddNewItem = ({ callback }: any) => {
 export default AddNewItem;
 
 export const Wrapper = styled.div`
-  #wrapperAddNewItem {
-    width: 100%;
-    margin: auto;
-  }
+  width: 100%;
+  margin: auto;
 `;
 export const Button = styled.button`
   width: 100%;
