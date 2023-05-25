@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Nav } from "react-bootstrap";
 import "../Sidenav/sidenav.css";
+import { Link } from "react-router-dom";
 
 function Sidenav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,32 +14,19 @@ function Sidenav() {
         <Nav className="flex-column" id="navWrapper">
           <ul className="nav nav-pills flex-column mb-auto">
             <li className="nav-item">
-              <Nav.Link href="/" className="nav-link" aria-current="page">
+              <Link to="/" className="nav-link" aria-current="page">
                 Home
-              </Nav.Link>
+              </Link>
             </li>
             <li className="nav-item">
-              <Nav.Link href="details" className="nav-link" aria-current="page">
+              <Link to="details" className="nav-link" aria-current="page">
                 Details
-              </Nav.Link>
+              </Link>
             </li>
             <li className="nav-item">
-              <Nav.Link
-                href="/addBulk"
-                className="nav-link"
-                aria-current="page"
-              >
+              <Link to="/addBulk" className="nav-link" aria-current="page">
                 Add in bulk
-              </Nav.Link>
-            </li>
-            <li className="nav-item">
-              <Nav.Link
-                href="/addBulk"
-                className="nav-link"
-                aria-current="page"
-              >
-                Add a new item to database
-              </Nav.Link>
+              </Link>
             </li>
           </ul>
         </Nav>
