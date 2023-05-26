@@ -30,7 +30,6 @@ const AddNewItem = ({ callback }: { callback: () => void }) => {
 
   function AddToList() {
     if (!selectedItem) return;
-    console.log(selectedItem);
     ItemService.addToList(parseInt(quantity), selectedItem.itemId).then(() => {
       callback();
     });

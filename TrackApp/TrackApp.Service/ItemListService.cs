@@ -14,7 +14,7 @@ public interface IItemListService
     public List<ItemHistoryVM> GetItemHistory(int id);
     public List<ItemList> GetAllItemList();
     public ItemList RemoveByItemId(int itemId);
-    public List<ItemList> AddInBulk(List<AddToListVM> entries);
+    public List<ItemList> RestockInBulk(List<RestockVM> entries);
 }
 
 public class ItemListService : IItemListService
@@ -147,9 +147,10 @@ public class ItemListService : IItemListService
         if (restock == null)
             return null;
         var currentList = _listService.GetCurrentWorkingList();
-        var itemToRestock = _itemListRepository.GetAll()
-            .Where(il => il.ItemId == restock.ItemId && il.ListId == currentList.ListId && il.CrossedOff == false)
-            .FirstOrDefault();
+        var itemToRestock = _itemListRepository
+            .GetAll()
+            .FirstOrDefault(il =>
+                il.ItemId == restock.ItemId && il.ListId == currentList.ListId && il.CrossedOff == false);
         if (itemToRestock == null)
             return null;
 
@@ -212,12 +213,12 @@ public class ItemListService : IItemListService
         return itemListToRemove;
     }
 
-    public List<ItemList> AddInBulk(List<AddToListVM> entries)
+    public List<ItemList> RestockInBulk(List<RestockVM> entries)
     {
         var returnList = new List<ItemList>();
         foreach (var entry in entries)
         {
-            returnList.Add(AddItemToList(entry));
+            returnList.Add(RestockItems(entry));
         }
 
         return returnList;

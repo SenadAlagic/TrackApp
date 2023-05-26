@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import AddBulkRow from "../AddBulkRow/addbulkrow";
 import styled from "styled-components";
 import { StyledTitle } from "../../styles/title.styled";
+import { restockInBulk } from "../../services/itemListService";
 
-interface Restock {
+export interface Restock {
   itemId: number;
   quantity: number;
   price: number;
@@ -25,6 +26,10 @@ function AddBulk() {
     addRows();
   }, []);
 
+  async function restock() {
+    await restockInBulk(rows);
+  }
+
   return (
     <Wrapper>
       <StyledTitle>Add in bulk</StyledTitle>
@@ -36,10 +41,13 @@ function AddBulk() {
       <ContentDiv id="contentDiv">
         {rows.map((item, index) => (
           <>
-            <AddBulkRow key={index}></AddBulkRow>
+            <AddBulkRow restock={item}></AddBulkRow>
             <br />
           </>
         ))}
+        <button className="btn btn-primary" onClick={restock}>
+          Restock
+        </button>
       </ContentDiv>
     </Wrapper>
   );

@@ -8,7 +8,7 @@ import {
   DropDown,
 } from "../AddNewItem/AddNewItem";
 import { GetCategories } from "../../services/categoryService";
-import { addItemToDb } from "../../services/itemListService";
+import ItemService from "../../services/itemService";
 
 export interface Category {
   id: number;
@@ -41,7 +41,7 @@ function NewItem() {
       unit,
       categoryId: selectedCategory?.id,
     };
-    addItemToDb(body);
+    ItemService.addItemToDb(body);
   }
 
   return (

@@ -62,11 +62,11 @@ namespace TrackApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult<List<ItemList>> AddItemsInBulk(List<AddToListVM> entries)
+        public ActionResult<List<ItemList>> RestockInBulk([FromBody] List<RestockVM> entries)
         {
             if (entries.Count == 0)
                 return BadRequest();
-            return _itemListService.AddInBulk(entries);
+            return _itemListService.RestockInBulk(entries);
         }
 
         [HttpPost]

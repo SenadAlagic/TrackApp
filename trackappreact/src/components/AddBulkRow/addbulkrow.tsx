@@ -11,21 +11,27 @@ import {
 import styled from "styled-components";
 import "./addbulkrow.css";
 import ItemService from "../../services/itemService";
+import { Restock } from "../AddBulkList/addbulklist";
 
-function AddBulkRow() {
+interface IAddBulkRow {
+  restock: Restock;
+}
+
+function AddBulkRow({ restock }: IAddBulkRow) {
   const [selectedItem, setSelected] = useState<Items>();
-  const [quantity, setQuantity] = useState("");
   const [items, setItems] = useState<ItemsByCategory[]>([]);
 
   useEffect(() => {
     ItemService.getItemsByCategories().then(setItems);
   }, []);
+
   function handleClick(item: Items) {
     setSelected(item);
+    restock.itemId = item.itemId;
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    setQuantity(event.target.value);
+    restock.quantity = parseInt(event.target.value);
   }
 
   return (
@@ -66,6 +72,7 @@ function AddBulkRow() {
           <Inputs id="inputs">
             <LocalInput
               type="number"
+              name="quantity"
               className="form-control control"
               placeholder="Quantity"
               onChange={handleChange}
@@ -74,7 +81,10 @@ function AddBulkRow() {
               <LocalInput
                 className="form-control control"
                 placeholder="Price"
-                onChange={handleChange}
+                name="price"
+                onChange={(e) =>
+                  (restock.price = parseInt(e?.target.value || ""))
+                }
               ></LocalInput>
               <span id="currencySpan" className="input-group-text">
                 BAM
@@ -130,7 +140,7 @@ const SmallButton = styled.button`
 `;
 
 const LocalDropDown = styled(Dropdown)`
-  width: 90%;
+  width: 80%;
   overflow: scroll;
   height: 30vh;
 `;

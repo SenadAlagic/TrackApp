@@ -1,3 +1,4 @@
+import { Restock } from "../components/AddBulkList/addbulklist";
 import { appSettings } from "../site";
 
 export async function fetchData(listId: number, filter: boolean) {
@@ -39,14 +40,14 @@ export async function deleteFromList(itemId: number) {
   } catch (error) {}
 }
 
-export async function addItemToDb(reqBody: any) {
+export async function restockInBulk(restockArray: Restock[]) {
   try {
-    const res = await fetch(`${appSettings.apiUrl}/Item/AddItem`, {
+    const res = await fetch(`${appSettings.apiUrl}/ItemList/RestockInBulk`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(reqBody),
+      body: JSON.stringify(restockArray),
     });
     if (!res.ok) return;
   } catch (error) {
