@@ -7,6 +7,7 @@ import { StyledTitle } from "../../styles/title.styled";
 import styled from "styled-components";
 import "./restock.css";
 import { appSettings } from "../../site";
+import { restock } from "../../services/itemListService";
 
 function Restock() {
   const { productId } = useParams();
@@ -51,7 +52,7 @@ function Restock() {
       quantity: quantity,
       totalPrice: price,
     };
-    ItemService.restock(body);
+    restock(body);
     navigate("/details");
   };
 

@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import ItemService from "../../services/itemService";
 import styled from "styled-components";
+import { addToList } from "../../services/itemListService";
 
 export interface Items {
   itemId: number;
@@ -30,7 +31,7 @@ const AddNewItem = ({ callback }: { callback: () => void }) => {
 
   function AddToList() {
     if (!selectedItem) return;
-    ItemService.addToList(parseInt(quantity), selectedItem.itemId).then(() => {
+    addToList(parseInt(quantity), selectedItem.itemId).then(() => {
       callback();
     });
   }

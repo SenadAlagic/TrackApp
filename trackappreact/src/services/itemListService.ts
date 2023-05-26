@@ -54,3 +54,35 @@ export async function restockInBulk(restockArray: Restock[]) {
     console.log(error);
   }
 }
+export async function addToList(qty: number, itemId: number) {
+  try {
+    const res = await fetch(
+      `${appSettings.apiUrl}/ItemList/AddItemToList?Quantity=${qty}&ItemId=${itemId}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    if (!data) alert("Nije uspjesno zavrseno slanje");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function restock(reqBody: any) {
+  try {
+    const res = await fetch(`${appSettings.apiUrl}/ItemList/Restock`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+    });
+    if (!res) return;
+  } catch (error) {
+    console.log(error);
+  }
+}
