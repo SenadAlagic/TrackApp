@@ -50,8 +50,16 @@ namespace TrackApp.Controllers
             return Ok(listToReturn);
         }
 
+        [HttpGet]
+        public ActionResult<List<DiagramVM>> GetForDiagram(int itemId, bool displayInWeeks)
+        {
+            var listToReturn = _itemListService.GetForDiagram(itemId, displayInWeeks);
+            if (listToReturn == null)
+                return BadRequest("An error occured, check the itemId");
+            return Ok(listToReturn);
+        }
         [HttpPost]
-        public ActionResult<ItemList> AddItemToList(AddToListVM newEntry)
+        public ActionResult<ItemList> AddItemToList([FromBody] AddToListVM newEntry)
         {
             if (newEntry.ItemId == 0 || newEntry.Quantity == 0)
                 return BadRequest();

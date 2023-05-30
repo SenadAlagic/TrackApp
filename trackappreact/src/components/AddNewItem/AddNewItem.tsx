@@ -18,6 +18,7 @@ const AddNewItem = ({ callback }: { callback: () => void }) => {
   //const [items, setItems] = useState<Items[]>([]);
   const [selectedItem, setSelected] = useState<Items>();
   const [quantity, setQuantity] = useState("");
+  const [name, setName] = useState("");
 
   const [items2, setItems2] = useState<ItemsByCategory[]>([]);
 
@@ -31,7 +32,7 @@ const AddNewItem = ({ callback }: { callback: () => void }) => {
 
   function AddToList() {
     if (!selectedItem) return;
-    addToList(parseInt(quantity), selectedItem.itemId).then(() => {
+    addToList(parseInt(quantity), selectedItem.itemId, name).then(() => {
       callback();
     });
   }
@@ -81,6 +82,14 @@ const AddNewItem = ({ callback }: { callback: () => void }) => {
             className="form-control control"
             placeholder="Quantity"
             onChange={handleChange}
+          ></Input>
+          <Input
+            type="text"
+            className="form-control control"
+            placeholder="Your name"
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
           ></Input>
           <SmallButton
             className="btn btn-primary control"

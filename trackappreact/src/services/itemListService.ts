@@ -54,17 +54,21 @@ export async function restockInBulk(restockArray: Restock[]) {
     console.log(error);
   }
 }
-export async function addToList(qty: number, itemId: number) {
+export async function addToList(qty: number, itemId: number, name: string) {
   try {
-    const res = await fetch(
-      `${appSettings.apiUrl}/ItemList/AddItemToList?Quantity=${qty}&ItemId=${itemId}`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
+    const reqbody = {
+      quantity: qty,
+      itemId: itemId,
+      crossedOff: false,
+      addedBy: name,
+    };
+    const res = await fetch(`${appSettings.apiUrl}/ItemList/AddItemToList`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(reqbody),
+    });
     const data = await res.json();
     if (!data) alert("Nije uspjesno zavrseno slanje");
   } catch (error) {
@@ -82,6 +86,22 @@ export async function restock(reqBody: any) {
       body: JSON.stringify(reqBody),
     });
     if (!res) return;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getDataForDiagrams(
+  itemId: number,
+  displayInWeeks: boolean
+) {
+  try {
+    const res = await fetch(
+      `${appSettings.apiUrl}/ItemList/GetForDiagram?itemId=${itemId}&displayInWeeks=${displayInWeeks}`
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+    return data;
   } catch (error) {
     console.log(error);
   }

@@ -1,4 +1,10 @@
-﻿using TrackApp.Core;
+﻿using System.Collections;
+using System.Globalization;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Query;
+using TrackApp.Core;
 using TrackApp.Repository;
 using TrackApp.Service.ViewModels;
 
@@ -15,6 +21,7 @@ public interface IItemListService
     public List<ItemList> GetAllItemList();
     public ItemList RemoveByItemId(int itemId);
     public List<ItemList> RestockInBulk(List<RestockVM> entries);
+    public List<DiagramVM> GetForDiagram(int itemId, bool displayInWeeks = false);
 }
 
 public class ItemListService : IItemListService
@@ -51,7 +58,8 @@ public class ItemListService : IItemListService
                 ListId = currentWorkingList.ListId,
                 DateCreated = DateTime.Now.ToUniversalTime(),
                 DateModified = DateTime.Now.ToUniversalTime(),
-                CrossedOff = newEntry.CrossedOff
+                CrossedOff = newEntry.CrossedOff,
+                AddedBy = newEntry.AddedBy
             };
             _itemListRepository.Add(newItemList);
             return newItemList;
@@ -206,8 +214,7 @@ public class ItemListService : IItemListService
     {
         var currentList = _listService.GetCurrentWorkingList();
         var itemListToRemove = GetAllItemList()
-            .Where(il => il.ItemId == itemId && il.ListId == currentList.ListId && il.CrossedOff == false)
-            .FirstOrDefault();
+            .FirstOrDefault(il => il.ItemId == itemId && il.ListId == currentList.ListId && il.CrossedOff == false);
         if (itemListToRemove != null)
             _itemListRepository.Remove(itemListToRemove);
         return itemListToRemove;
@@ -222,5 +229,43 @@ public class ItemListService : IItemListService
         }
 
         return returnList;
+    }
+
+    public string DetermineGroupBy(Purchase purchase, bool filter)
+    {
+        if (filter)
+            return (purchase.DateOfPurchase.DayOfYear / 7).ToString();
+        return DateTimeFormatInfo.CurrentInfo.GetAbbreviatedMonthName(purchase.DateOfPurchase.Month);
+    }
+    public List<DiagramVM> GetForDiagram(int itemId, bool displayInWeeks = false)
+    {
+        var purchases = _purchaseService.GetByItemIdNoVM(itemId);
+        purchases.Sort((x, y) => x.DateOfPurchase.CompareTo(y.DateOfPurchase));
+        var pairs = new List<DiagramVM>();
+
+        var query = from purchase in purchases
+            group purchase by DetermineGroupBy(purchase,displayInWeeks)
+            into groupedPurchases
+            select groupedPurchases;
+
+        //to display "Week x" instead of x and to display "March" instead of "Week March" for e.g
+        var labelPrefix = "";
+        if (displayInWeeks)
+            labelPrefix = "Week ";
+        
+        foreach (var item in query)
+        {
+            var sum = 0;
+            foreach (var entry in item)
+                sum += entry.Quantity;
+            var newPair = new DiagramVM()
+            {
+                Label = labelPrefix + item.Key,
+                Value = sum
+            };
+            pairs.Add(newPair);
+        }
+
+        return pairs;
     }
 }

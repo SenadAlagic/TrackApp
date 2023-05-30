@@ -14,6 +14,7 @@ namespace TrackApp.Core
 		[Required]
 		public int ListId { get; set; }
 		public bool CrossedOff { get; set; } = false;
+		public string? AddedBy { get; set; }
 
 		public ItemList()
 		{

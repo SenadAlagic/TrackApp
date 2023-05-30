@@ -10,6 +10,7 @@ namespace TrackApp.Service
         public Purchase AddPurchase(AddPurchaseVM purchase);
         public Purchase DeletePurchase(int id);
         public List<GetPurchasesVM> GetByItemId(int itemId);
+        public List<Purchase> GetByItemIdNoVM(int itemId);
     }
 
     public class PurchaseService : IPurchaseService
@@ -76,6 +77,11 @@ namespace TrackApp.Service
             }
 
             return returnList;
+        }
+
+        public List<Purchase> GetByItemIdNoVM(int itemId)
+        {
+            return _purchaseRepository.GetAll().Where(p => p.ItemId == itemId).ToList();
         }
     }
 }

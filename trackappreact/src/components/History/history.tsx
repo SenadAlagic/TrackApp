@@ -13,6 +13,12 @@ import { StyledWrapper } from "../../styles/wrapper.styled";
 import "./history.css";
 import ItemService from "../../services/itemService";
 import styled from "styled-components";
+import ReactFC from "react-fusioncharts";
+import FusionCharts from "fusioncharts";
+import Charts from "fusioncharts/fusioncharts.charts";
+import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
+import Graph from "../Graph/graph";
+ReactFC.fcRoot(FusionCharts, Charts, FusionTheme);
 
 export interface Purchase {
   id: number;
@@ -63,6 +69,7 @@ function History() {
         );
       })}
       <br></br>
+      <Graph ReactFC={ReactFC} itemId={parseInt(productId || "")} />
       <StyledTitle>Purchase history</StyledTitle>
       <br />
       <>
