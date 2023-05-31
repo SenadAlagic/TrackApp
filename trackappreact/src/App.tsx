@@ -7,6 +7,7 @@ import Details from "./components/Details/details";
 import History from "./components/History/history";
 import Sidenav from "./components/Sidenav/sidenav";
 import AddBulk from "./components/AddBulkList/addbulklist";
+import ItemGraphs from "./components/ItemGraphs/itemGraphs";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/restock/:productId" element={<Restock />}></Route>
           <Route path="/addBulk" element={<AddBulk />}></Route>
           <Route path="history/:productId" element={<History />}></Route>
+          <Route path="/graphs" element={<ItemGraphs />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

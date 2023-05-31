@@ -1,7 +1,6 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Items } from "../AddNewItem/AddNewItem";
-import ItemService from "../../services/itemService";
 import { useNavigate } from "react-router-dom";
 import { StyledTitle } from "../../styles/title.styled";
 import styled from "styled-components";
@@ -13,6 +12,7 @@ function Restock() {
   const { productId } = useParams();
   const [item, setItem] = useState<Items>();
   const [quantity, setQuantity] = useState(1);
+  const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const navigate = useNavigate();
 
@@ -21,6 +21,9 @@ function Restock() {
   }
   function changePrice(event: ChangeEvent<HTMLInputElement>) {
     setPrice(parseInt(event.target.value));
+  }
+  function changeName(event: ChangeEvent<HTMLInputElement>) {
+    setName(event.target.value);
   }
 
   const fetchItem = async () => {
@@ -48,9 +51,9 @@ function Restock() {
   const logPurchase = () => {
     const body = {
       itemId: item?.itemId,
-      listId: 1,
       quantity: quantity,
       totalPrice: price,
+      purchasedBy: name,
     };
     restock(body);
     navigate("/details");
@@ -78,6 +81,13 @@ function Restock() {
             placeholder="Price"
             onChange={changePrice}
             value={price}
+          ></Inputwidth>
+          <Inputwidth
+            className="form-control control"
+            placeholder="Name"
+            type="text"
+            onChange={changeName}
+            value={name}
           ></Inputwidth>
         </Controls>
         <Button
@@ -109,7 +119,7 @@ const Input = styled.input`
   width: 100%;
 `;
 const Inputwidth = styled.input`
-  width: 50%;
+  width: 33%;
 `;
 const Button = styled.button`
   width: 100%;

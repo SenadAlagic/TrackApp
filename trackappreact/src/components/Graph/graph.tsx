@@ -9,6 +9,7 @@ interface GraphProps {
 
 function Graph({ ReactFC, itemId }: GraphProps) {
   const [checked, setChecked] = useState(false);
+  let dataSource: any = [];
   //const[data,setData]=useState();
   const { status, error, data } = useCache(
     `${appSettings.apiUrl}/ItemList/GetForDiagram?itemId=${itemId}&displayInWeeks=${checked}`
@@ -17,7 +18,7 @@ function Graph({ ReactFC, itemId }: GraphProps) {
   function changeChecked(state: boolean) {
     setChecked(state);
   }
-
+  if (data.length > 3) dataSource = data;
   var myDataSource = {
     chart: {
       caption: "Consumation through time",
@@ -46,7 +47,7 @@ function Graph({ ReactFC, itemId }: GraphProps) {
       plotFillAlpha: "90",
       theme: "ocean",
     },
-    data: data,
+    data: dataSource,
   };
 
   var barChartConfigs = {

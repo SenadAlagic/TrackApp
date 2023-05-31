@@ -20,7 +20,7 @@ const AddNewItem = ({ callback }: { callback: () => void }) => {
   const [quantity, setQuantity] = useState("");
   const [name, setName] = useState("");
 
-  const [items2, setItems2] = useState<ItemsByCategory[]>([]);
+  const [items, setItems] = useState<ItemsByCategory[]>([]);
 
   function handleClick(item: Items) {
     setSelected(item);
@@ -39,7 +39,7 @@ const AddNewItem = ({ callback }: { callback: () => void }) => {
 
   useEffect(() => {
     //ItemService.getAllItems(setItems);
-    ItemService.getItemsByCategories().then(setItems2);
+    ItemService.getItemsByCategories().then(setItems);
   }, []);
 
   return (
@@ -60,7 +60,7 @@ const AddNewItem = ({ callback }: { callback: () => void }) => {
           className="dropdown-menu"
           aria-labelledby="dropdownMenuButton"
         >
-          {items2.map((itemByCategory: ItemsByCategory) => (
+          {items.map((itemByCategory: ItemsByCategory) => (
             <>
               <Category className="dropdown-item">
                 {itemByCategory.categoryName}

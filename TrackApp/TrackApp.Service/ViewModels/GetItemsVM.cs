@@ -7,7 +7,7 @@ namespace TrackApp.Service.ViewModels
 		public string Unit { get; set; }
 		public string Name { get; set; }
 		public int ItemId { get; set; }
-		public string CategoryName { get; set; }
+		public string PurchasedBy { get; set; }
 		public bool CrossedOff { get; set; }
         public GetItemsVM()
 		{

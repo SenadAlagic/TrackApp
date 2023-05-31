@@ -29,6 +29,7 @@ export interface Purchase {
   isVisible: boolean;
   unit: string;
   price: number;
+  purchasedBy: string;
 }
 
 function History() {
@@ -48,54 +49,57 @@ function History() {
     <StyledWrapper>
       <StyledTitle>Item history</StyledTitle>
       <br />
-      {lists.map((rows: any) => {
-        return (
-          <>
-            <h5>List of {FormatDateMonth(rows.monthOfYear)}</h5>
-            <table className="table table-borderless table-sm">
-              {rows.items.map((object: any) => (
-                <tbody>
-                  {object.items.map((row: any) => (
-                    <Tr $crossedOff={row.crossedOff}>
-                      <IndentTd>{row.name}</IndentTd>
-                      <SmallWidthRight>{row.quantity}</SmallWidthRight>
-                      <SmallWidthLeft>{row.unit}</SmallWidthLeft>
-                    </Tr>
-                  ))}
-                </tbody>
-              ))}
-            </table>
-          </>
-        );
-      })}
+
+      <table className="table table-borderless table-sm">
+        <thead>
+          <th>Quantity</th>
+          <th></th>
+          <th>Price</th>
+          <th>Purchased by</th>
+          <th>Date of purchase</th>
+        </thead>
+        <tbody>
+          {purchases.map((purchase: Purchase) => (
+            <tr>
+              <Quantity>{purchase.quantity}</Quantity>
+              <Unit>{purchase.unit}</Unit>
+              <Price>{purchase.price} KM</Price>
+              <td>{purchase.purchasedBy}</td>
+              <Date>{FormatDate(purchase.dateOfPurchase)}</Date>
+            </tr>
+          ))}
+          <tr>
+            <td></td>
+            <th>Total price:</th>
+            <td>{TotalPrice(purchases)} KM</td>
+          </tr>
+        </tbody>
+      </table>
       <br></br>
       <Graph ReactFC={ReactFC} itemId={parseInt(productId || "")} />
       <StyledTitle>Purchase history</StyledTitle>
       <br />
       <>
-        <table className="table table-borderless table-sm">
-          <thead>
-            <th>Quantity</th>
-            <th></th>
-            <th>Price</th>
-            <th>Date of purchase</th>
-          </thead>
-          <tbody>
-            {purchases.map((purchase: Purchase) => (
-              <tr>
-                <Quantity>{purchase.quantity}</Quantity>
-                <Unit>{purchase.unit}</Unit>
-                <Price>{purchase.price} KM</Price>
-                <Date>{FormatDate(purchase.dateOfPurchase)}</Date>
-              </tr>
-            ))}
-            <tr>
-              <td></td>
-              <th>Total price:</th>
-              <td>{TotalPrice(purchases)} KM</td>
-            </tr>
-          </tbody>
-        </table>
+        {lists.map((rows: any) => {
+          return (
+            <>
+              <h5>List of {FormatDateMonth(rows.monthOfYear)}</h5>
+              <table className="table table-borderless table-sm">
+                {rows.items.map((object: any) => (
+                  <tbody>
+                    {object.items.map((row: any) => (
+                      <Tr $crossedOff={row.crossedOff}>
+                        <IndentTd>{row.name}</IndentTd>
+                        <SmallWidthRight>{row.quantity}</SmallWidthRight>
+                        <SmallWidthLeft>{row.unit}</SmallWidthLeft>
+                      </Tr>
+                    ))}
+                  </tbody>
+                ))}
+              </table>
+            </>
+          );
+        })}
       </>
     </StyledWrapper>
   );

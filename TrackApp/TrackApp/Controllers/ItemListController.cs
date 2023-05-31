@@ -58,6 +58,12 @@ namespace TrackApp.Controllers
                 return BadRequest("An error occured, check the itemId");
             return Ok(listToReturn);
         }
+
+        [HttpGet]
+        public ActionResult<List<MultipleDiagramVM>> GetForDiagramMultiple(int itemId)
+        {
+            return Ok(_itemListService.GetForDiagramMultiple(itemId));
+        }
         [HttpPost]
         public ActionResult<ItemList> AddItemToList([FromBody] AddToListVM newEntry)
         {

@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Query;
 using TrackApp.Core;
@@ -22,6 +24,8 @@ public interface IItemListService
     public ItemList RemoveByItemId(int itemId);
     public List<ItemList> RestockInBulk(List<RestockVM> entries);
     public List<DiagramVM> GetForDiagram(int itemId, bool displayInWeeks = false);
+    public MultipleDiagramVM GetForDiagramMultiple(int itemId);
+
 }
 
 public class ItemListService : IItemListService
@@ -106,7 +110,7 @@ public class ItemListService : IItemListService
                         g.ItemList.Quantity,
                         g.item.Name,
                         g.item.Unit,
-                        g.ItemList.CrossedOff
+                        g.ItemList.CrossedOff,
                     }
             };
 
@@ -124,7 +128,7 @@ public class ItemListService : IItemListService
                     Unit = item.Unit,
                     Name = item.Name,
                     ItemId = item.ItemId,
-                    CrossedOff = item.CrossedOff
+                    CrossedOff = item.CrossedOff,
                 };
                 newCategory.Items.Add(newItem);
             }
@@ -172,11 +176,11 @@ public class ItemListService : IItemListService
             ItemId = itemToRestock.ItemId,
             Quantity = restock.Quantity,
             //ListId = restock.ListId,
-            CrossedOff = true
+            CrossedOff = true,
         };
         AddItemToList(newItem);
         var newPurchase = new AddPurchaseVM
-            { ItemId = restock.ItemId, Quantity = restock.Quantity, Price = restock.TotalPrice };
+            { ItemId = restock.ItemId, Quantity = restock.Quantity, Price = restock.TotalPrice, PurchasedBy = restock.PurchasedBy};
         _purchaseService.AddPurchase(newPurchase);
         _listService.UpdatePrice(currentList.ListId, restock.TotalPrice);
         return itemToRestock;
@@ -268,4 +272,84 @@ public class ItemListService : IItemListService
 
         return pairs;
     }
+
+    public MultipleDiagramVM GetForDiagramMultiple(int itemId)
+    {
+        // Step 1: Retrieve distinct months
+        var distinctMonths = _purchaseService.GetByItemId(itemId).Select(p => p.DateOfPurchase.Month).Distinct().OrderBy(m => m).ToList();
+
+        // Step 2: Create categories
+        var categories = new List<DiagramCategory>
+        {
+            new DiagramCategory
+            {
+                Category = distinctMonths.Select(m => new DiagramLabel { Label = DateTimeFormatInfo.CurrentInfo.GetAbbreviatedMonthName(m)}).ToList()
+            }
+        };
+
+        // Step 3: Group purchases by itemId and calculate sum of quantities
+        var groupedPurchases = _purchaseService.GetByItemId(itemId).GroupBy(p => p.ItemName)
+            .ToDictionary(g => g.Key, g => g.Sum(p => p.Quantity));
+
+        var dataset = new List<DiagramDataset>();
+        foreach (var item in groupedPurchases)
+        {
+            var itemData = new List<DiagramValue>();
+            foreach (var month in distinctMonths)
+            {
+                var sum = _purchaseService.GetByItemId(itemId).Where(p => p.ItemName == item.Key && p.DateOfPurchase.Month == month)
+                    .Sum(p => p.Quantity);
+                itemData.Add(new DiagramValue { Value = sum.ToString() });
+            }
+
+            dataset.Add(new DiagramDataset
+            {
+                SeriesName = item.Key.ToString(),
+                Data = itemData
+            });
+        }
+
+
+        // Step 5: Create MultipleDiagramVM object
+        var response = new MultipleDiagramVM
+        {
+            Categories = categories,
+            Dataset = dataset
+        };
+
+        return response;
+    }
 }
+
+public class DiagramCategory
+{
+    public List<DiagramLabel> Category { get; set; }
+}
+public class DiagramLabel
+{
+    public string Label { get; set; }
+}
+public class DiagramDataset
+{
+    public string SeriesName { get; set; }
+    public List<DiagramValue> Data { get; set; }
+}
+public class DiagramValue
+{
+    public string Value { get; set; }
+}
+public class MultipleDiagramVM
+{
+    public List<DiagramCategory> Categories { get; set; }
+    public List<DiagramDataset> Dataset { get; set; }
+}
+
+// var months = _purchaseService.GetByItemIdNoVM(itemId).Select(p=>p.DateOfPurchase.Month).Distinct();
+// var categories = new List<DiagramCategory>
+// {
+//     new DiagramCategory
+//     {
+//         category = months.Select(m => new DiagramLabel { label = m.ToString() }).ToList()
+//     }
+// };
+// return new MultipleDiagramVM();

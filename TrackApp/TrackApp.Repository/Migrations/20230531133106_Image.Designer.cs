@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TrackApp.Repository;
@@ -11,9 +12,11 @@ using TrackApp.Repository;
 namespace TrackApp.Repository.Migrations
 {
     [DbContext(typeof(TrackAppDbContext))]
-    partial class TrackAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230531133106_Image")]
+    partial class Image
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,10 +169,6 @@ namespace TrackApp.Repository.Migrations
 
                     b.Property<double>("Price")
                         .HasColumnType("double precision");
-
-                    b.Property<string>("PurchasedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");

@@ -32,6 +32,7 @@ namespace TrackApp.Service
                 Quantity = purchase.Quantity,
                 Price = purchase.Price,
                 DateOfPurchase = DateTime.Now.ToUniversalTime(),
+                PurchasedBy = purchase.PurchasedBy,
                 IsVisible = true,
             };
             _purchaseRepository.Add(newPurchase);
@@ -71,7 +72,8 @@ namespace TrackApp.Service
                     Price = item.purchase.Price,
                     IsVisible = item.purchase.IsVisible,
                     ItemName = item.Name,
-                    Unit = item.Unit
+                    Unit = item.Unit,
+                    PurchasedBy = item.purchase.PurchasedBy
                 };
                 returnList.Add(newPurchase);
             }

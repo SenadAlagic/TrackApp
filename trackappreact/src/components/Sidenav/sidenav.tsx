@@ -28,6 +28,11 @@ function Sidenav() {
                 Add in bulk
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/graphs" className="nav-link" aria-current="page">
+                View graphs
+              </Link>
+            </li>
           </ul>
         </Nav>
         <div className="toggle-button" onClick={toggle}>

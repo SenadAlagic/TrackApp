@@ -7,6 +7,7 @@ namespace TrackApp.Service.ViewModels
 		//public int ListId { get; set; }
 		public int  Quantity { get; set; }
 		public double  TotalPrice { get; set; }
+		public string PurchasedBy { get; set; }
         public RestockVM()
 		{
 		}
