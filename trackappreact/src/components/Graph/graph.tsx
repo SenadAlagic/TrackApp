@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { getDataForDiagrams } from "../../services/itemListService";
+import { useState } from "react";
+import { useCache } from "../../services/cacheService";
+import { appSettings } from "../../site";
 
 interface GraphProps {
   ReactFC: any;
@@ -8,22 +9,15 @@ interface GraphProps {
 
 function Graph({ ReactFC, itemId }: GraphProps) {
   const [checked, setChecked] = useState(false);
-  const [data, setData] = useState();
-  function fetchData() {
-    getDataForDiagrams(itemId, checked).then(setData);
-  }
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [checked]);
+  //const[data,setData]=useState();
+  const { status, error, data } = useCache(
+    `${appSettings.apiUrl}/ItemList/GetForDiagram?itemId=${itemId}&displayInWeeks=${checked}`
+  );
 
   function changeChecked(state: boolean) {
     setChecked(state);
-    console.log(checked);
   }
+
   var myDataSource = {
     chart: {
       caption: "Consumation through time",
