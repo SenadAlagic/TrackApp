@@ -13,7 +13,7 @@ namespace TrackApp.Core
 		public int Quantity { get; set; }
 		public double Price { get; set; }
 		public bool IsVisible { get; set; }
-		public int ImageId { get; set; }
+		public byte[] ImageBytes { get; set; }
 		public Purchase()
 		{
 		}

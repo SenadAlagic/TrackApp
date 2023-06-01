@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   IndentTd,
   ItemsList,
@@ -36,7 +36,7 @@ function History() {
   const { productId } = useParams();
   const [lists, setLists] = useState<ItemsList[]>([]);
   const [purchases, setPurchases] = useState<Purchase[]>([]);
-
+  const navigate = useNavigate();
   useEffect(() => {}, []);
 
   useEffect(() => {
@@ -45,6 +45,9 @@ function History() {
     ItemService.fetchPurchases(parseInt(productId), setPurchases);
   }, [productId]);
 
+  function goToPurchase(purchaseId: number) {
+    navigate(`/purchase/${purchaseId}`);
+  }
   return (
     <StyledWrapper>
       <StyledTitle>Item history</StyledTitle>
@@ -60,13 +63,13 @@ function History() {
         </thead>
         <tbody>
           {purchases.map((purchase: Purchase) => (
-            <tr>
+            <LocalTr onClick={() => goToPurchase(purchase.id)}>
               <Quantity>{purchase.quantity}</Quantity>
               <Unit>{purchase.unit}</Unit>
               <Price>{purchase.price} KM</Price>
               <td>{purchase.purchasedBy}</td>
               <Date>{FormatDate(purchase.dateOfPurchase)}</Date>
-            </tr>
+            </LocalTr>
           ))}
           <tr>
             <td></td>
@@ -120,6 +123,11 @@ function TotalPrice(purchases: Purchase[]): ReactNode {
   return sum;
 }
 
+const LocalTr = styled.tr`
+  &:hover {
+    background-color: rgb(238, 238, 243);
+  }
+`;
 const Quantity = styled(IndentTd)`
   width: 5%;
 `;

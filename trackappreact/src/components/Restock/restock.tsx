@@ -14,7 +14,16 @@ function Restock() {
   const [quantity, setQuantity] = useState(1);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
+  const [image, setImage] = useState("");
+  const [imageURL, setImageURL] = useState("");
+
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (!image) return;
+  //   const newImageURL = URL.createObjectURL(image);
+  //   setImageURL(newImageURL);
+  // });
 
   function changeQuantity(event: ChangeEvent<HTMLInputElement>) {
     setQuantity(parseInt(event.target.value));
@@ -24,6 +33,12 @@ function Restock() {
   }
   function changeName(event: ChangeEvent<HTMLInputElement>) {
     setName(event.target.value);
+  }
+  function changeImage(event: ChangeEvent<HTMLInputElement>) {
+    const data = new FileReader();
+    if (!event.target.files) return;
+    data.readAsDataURL(event.target.files[0]);
+    console.log(data);
   }
 
   const fetchItem = async () => {
@@ -89,6 +104,8 @@ function Restock() {
             onChange={changeName}
             value={name}
           ></Inputwidth>
+          <Input type="file" accept="image/*" onChange={changeImage}></Input>
+          <img src={imageURL} alt="meaningful text" />
         </Controls>
         <Button
           className="btn btn-primary control"

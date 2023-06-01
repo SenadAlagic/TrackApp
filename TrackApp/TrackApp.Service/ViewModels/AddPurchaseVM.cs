@@ -7,6 +7,7 @@ namespace TrackApp.Service.ViewModels
 		public int Quantity { get; set; }
 		public double Price { get; set; }
 		public string PurchasedBy { get; set; }
+		public byte[] ImageBase64 { get; set; }
 		public AddPurchaseVM()
 		{
 		}

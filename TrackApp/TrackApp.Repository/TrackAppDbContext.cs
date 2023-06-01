@@ -18,7 +18,6 @@ namespace TrackApp.Repository
 		public DbSet<ItemList> ItemLists { get; set; }
 		public DbSet<List> Lists { get; set; }
 		public DbSet<Purchase> Purchases { get; set; }
-		public DbSet<Image> Images { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -28,6 +28,24 @@ namespace TrackApp.Controllers
                 return BadRequest("Probably a nonexistent item ID");
             return Ok(purchaseToGet);
         }
+        
+        [HttpGet]
+        public ActionResult<List<Purchase>> GetByItemIdRaw(int itemId)
+        {
+            var purchaseToGet=_purchaseService.GetByItemIdNoVM(itemId);
+            if (purchaseToGet == null)
+                return BadRequest("Probably a nonexistent item ID");
+            return Ok(purchaseToGet);
+        }
+
+        [HttpGet]
+        public ActionResult<Purchase> GetPurchaseById(int purchaseId)
+        {
+            var purchaseToGet = _purchaseService.GetByPurchaseId(purchaseId);
+            if (purchaseToGet == null)
+                return BadRequest("Nonexistent ID, probably");
+            return Ok(purchaseToGet);
+        }
 
         [HttpPost]
         public ActionResult<Purchase> AddPurchase([FromBody] AddPurchaseVM purchase)

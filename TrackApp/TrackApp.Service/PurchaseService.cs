@@ -11,6 +11,7 @@ namespace TrackApp.Service
         public Purchase DeletePurchase(int id);
         public List<GetPurchasesVM> GetByItemId(int itemId);
         public List<Purchase> GetByItemIdNoVM(int itemId);
+        public Purchase GetByPurchaseId(int purchaseId);
     }
 
     public class PurchaseService : IPurchaseService
@@ -34,6 +35,7 @@ namespace TrackApp.Service
                 DateOfPurchase = DateTime.Now.ToUniversalTime(),
                 PurchasedBy = purchase.PurchasedBy,
                 IsVisible = true,
+                ImageBytes = purchase.ImageBase64
             };
             _purchaseRepository.Add(newPurchase);
             return newPurchase;
@@ -84,6 +86,11 @@ namespace TrackApp.Service
         public List<Purchase> GetByItemIdNoVM(int itemId)
         {
             return _purchaseRepository.GetAll().Where(p => p.ItemId == itemId).ToList();
+        }
+
+        public Purchase GetByPurchaseId(int purchaseId)
+        {
+            return _purchaseRepository.GetAll().FirstOrDefault(p => p.PurchaseId == purchaseId);
         }
     }
 }

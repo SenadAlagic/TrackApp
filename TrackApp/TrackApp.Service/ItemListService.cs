@@ -7,6 +7,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Query;
 using TrackApp.Core;
+using TrackApp.Helpers;
 using TrackApp.Repository;
 using TrackApp.Service.ViewModels;
 
@@ -180,7 +181,13 @@ public class ItemListService : IItemListService
         };
         AddItemToList(newItem);
         var newPurchase = new AddPurchaseVM
-            { ItemId = restock.ItemId, Quantity = restock.Quantity, Price = restock.TotalPrice, PurchasedBy = restock.PurchasedBy};
+        {
+            ItemId = restock.ItemId, 
+            Quantity = restock.Quantity, 
+            Price = restock.TotalPrice,
+            PurchasedBy = restock.PurchasedBy,
+            ImageBase64 = ImageHelper.ParseBase64(restock.ImageBase64)
+        };
         _purchaseService.AddPurchase(newPurchase);
         _listService.UpdatePrice(currentList.ListId, restock.TotalPrice);
         return itemToRestock;
