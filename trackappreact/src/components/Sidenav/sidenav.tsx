@@ -33,6 +33,16 @@ function Sidenav() {
                 View graphs
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/chat" className="nav-link" aria-current="page">
+                Chat
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/userStats" className="nav-link" aria-current="page">
+                Users & stats
+              </Link>
+            </li>
           </ul>
         </Nav>
         <div className="toggle-button" onClick={toggle}>

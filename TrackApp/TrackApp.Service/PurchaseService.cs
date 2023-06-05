@@ -1,6 +1,7 @@
 ﻿using System;
 using TrackApp.Core;
 using TrackApp.Repository;
+using TrackApp.Repository.Migrations;
 using TrackApp.Service.ViewModels;
 
 namespace TrackApp.Service
@@ -12,6 +13,7 @@ namespace TrackApp.Service
         public List<GetPurchasesVM> GetByItemId(int itemId);
         public List<Purchase> GetByItemIdNoVM(int itemId);
         public Purchase GetByPurchaseId(int purchaseId);
+        public IQueryable<Purchase> GetAll();
     }
 
     public class PurchaseService : IPurchaseService
@@ -91,6 +93,11 @@ namespace TrackApp.Service
         public Purchase GetByPurchaseId(int purchaseId)
         {
             return _purchaseRepository.GetAll().FirstOrDefault(p => p.PurchaseId == purchaseId);
+        }
+
+        public IQueryable<Purchase> GetAll()
+        {
+            return _purchaseRepository.GetAll().AsQueryable();
         }
     }
 }

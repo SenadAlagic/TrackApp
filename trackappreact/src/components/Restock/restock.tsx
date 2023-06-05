@@ -31,9 +31,6 @@ function Restock() {
   function changePrice(event: ChangeEvent<HTMLInputElement>) {
     setPrice(parseInt(event.target.value));
   }
-  function changeName(event: ChangeEvent<HTMLInputElement>) {
-    setName(event.target.value);
-  }
   function changeImage(event: ChangeEvent<HTMLInputElement>) {
     const data = new FileReader();
     if (!event.target.files) return;
@@ -61,6 +58,7 @@ function Restock() {
 
   useEffect(() => {
     fetchItem();
+    setName(localStorage.getItem("user") || "Anonymous");
   }, []);
 
   const logPurchase = () => {
@@ -97,13 +95,6 @@ function Restock() {
             onChange={changePrice}
             value={price}
           ></Inputwidth>
-          <Inputwidth
-            className="form-control control"
-            placeholder="Name"
-            type="text"
-            onChange={changeName}
-            value={name}
-          ></Inputwidth>
           <Input type="file" accept="image/*" onChange={changeImage}></Input>
           <img src={imageURL} alt="meaningful text" />
         </Controls>
@@ -136,7 +127,8 @@ const Input = styled.input`
   width: 100%;
 `;
 const Inputwidth = styled.input`
-  width: 33%;
+  width: 49%;
+  margin-right: 1%;
 `;
 const Button = styled.button`
   width: 100%;

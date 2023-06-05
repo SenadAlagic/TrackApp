@@ -40,6 +40,7 @@ const AddNewItem = ({ callback }: { callback: () => void }) => {
   useEffect(() => {
     //ItemService.getAllItems(setItems);
     ItemService.getItemsByCategories().then(setItems);
+    setName(localStorage.getItem("user") || "Anonymous");
   }, []);
 
   return (
@@ -83,14 +84,6 @@ const AddNewItem = ({ callback }: { callback: () => void }) => {
             placeholder="Quantity"
             onChange={handleChange}
           ></Input>
-          <Input
-            type="text"
-            className="form-control control"
-            placeholder="Your name"
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          ></Input>
           <SmallButton
             className="btn btn-primary control"
             type="button"
@@ -121,10 +114,11 @@ export const Controls = styled.div`
   justify-content: space-between;
 `;
 export const Input = styled.input`
-  width: 30%;
+  width: 50%;
 `;
 export const SmallButton = styled(Button)`
-  width: 30%;
+  width: 45%;
+  height: 5%;
 `;
 
 export const Category = styled.button`
