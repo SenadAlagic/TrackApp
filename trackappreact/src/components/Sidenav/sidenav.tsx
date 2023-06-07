@@ -43,6 +43,11 @@ function Sidenav() {
                 Users & stats
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/repairs" className="nav-link" aria-current="page">
+                Repairs
+              </Link>
+            </li>
           </ul>
         </Nav>
         <div className="toggle-button" onClick={toggle}>

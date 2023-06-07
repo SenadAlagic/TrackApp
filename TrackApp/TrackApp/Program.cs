@@ -26,6 +26,7 @@ builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IItemListService, ItemListService>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRepairService, RepairService>();
 builder.Services.AddScoped(typeof(IRepository<>),
     typeof(Repository<>));
 
