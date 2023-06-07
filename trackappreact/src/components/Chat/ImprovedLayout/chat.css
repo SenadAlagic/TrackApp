@@ -54,6 +54,8 @@
 }
 .chat-body {
     padding: 8px;
+    height: 33vh;
+    overflow: scroll;
 }
 .sender-other .other-message {
     background-color: #f1f0f0;
@@ -61,6 +63,7 @@
     padding: 8px 11px;
     font-size: 14px;
     width: fit-content;
+    margin-bottom: 5px;
 }
 .sender-name{
     font-size: 12px;
@@ -70,6 +73,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    margin-bottom: 2px;
 }
 .sender-me .my-message {
     background-color: #3578e5;

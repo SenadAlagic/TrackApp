@@ -13,7 +13,7 @@ import Login from "./components/Login/login";
 import UserStats from "./components/UsersStats/userstats";
 import Chat from "./components/Chat/chat";
 import Repair from "./components/Repair/repair";
-import ImprovedChatWindow from "./components/Chat/ImprovedLayout/improvedchatwindow";
+import ImprovedChatWindow from "./components/Chat/ImprovedLayout/chat";
 
 function App() {
   return (
