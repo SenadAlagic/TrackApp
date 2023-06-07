@@ -1,5 +1,4 @@
 import React from "react";
-
 import Message from "./message";
 
 function ChatWindow(props: any) {
@@ -11,7 +10,11 @@ function ChatWindow(props: any) {
     />
   ));
 
-  return <div>{chat}</div>;
+  return (
+    <>
+      <div className="chat-body">{chat}</div>
+    </>
+  );
 }
 
 export default ChatWindow;

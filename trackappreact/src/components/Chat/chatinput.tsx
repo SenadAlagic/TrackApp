@@ -1,6 +1,4 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import styled from "styled-components";
-import { ReactComponent as IconSend } from "../../assets/icon_send.svg";
 
 function ChatInput(props: any) {
   const [user, setUser] = useState("");
@@ -10,9 +8,7 @@ function ChatInput(props: any) {
     setUser(localStorage.getItem("user") || "Anonymous");
   }, []);
 
-  function onSubmit(e: any) {
-    e.preventDefault();
-
+  function onSubmit() {
     const isUserProvided = user && user !== "";
     const isMessageProvided = message && message !== "";
 
@@ -28,34 +24,21 @@ function ChatInput(props: any) {
     setMessage(e.target.value);
   };
 
+  function handleKeyDown(e: any) {
+    if (e.key === "Enter") {
+      onSubmit();
+    }
+  }
   return (
-    <LocalForm onSubmit={onSubmit} autoComplete="off">
-      {/* <label htmlFor="message">Message:</label> */}
-      <br />
-      <LocalInput
-        type="text"
-        id="message"
-        name="message"
-        placeholder="Message"
-        className="form-control"
-        value={message}
-        onChange={onMessageUpdate}
-      />
-      <button className="btn btn-primary">
-        <IconSend />
-      </button>
-    </LocalForm>
+    <input
+      type="textarea"
+      autoComplete="off"
+      onChange={onMessageUpdate}
+      onKeyDown={handleKeyDown}
+      value={message}
+      placeholder="Type a message..."
+    />
   );
 }
 
 export default ChatInput;
-
-export const LocalInput = styled.input`
-  width: 90%;
-  height: 10%;
-  margin-bottom: 0;
-`;
-const LocalForm = styled.form`
-  padding-top: 2vh;
-  display: flex;
-`;

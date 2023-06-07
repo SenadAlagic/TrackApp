@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 function Message(props: any) {
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    setUser(localStorage.getItem("user") || "");
+  }, []);
+
   return (
-    <div style={{ background: "#eee", borderRadius: "5px", padding: "0 10px" }}>
-      <p>
-        <strong>{props.user}</strong>:{" " + props.message}
-      </p>
-    </div>
+    <>
+      {props.user === user ? (
+        <div className="sender-me">
+          <div className="my-message">{props.message}</div>
+        </div>
+      ) : (
+        <div className="sender-other">
+          <div className="sender-name">{props.user}</div>
+          <div className="other-message">{props.message}</div>
+        </div>
+      )}
+    </>
   );
 }
 
