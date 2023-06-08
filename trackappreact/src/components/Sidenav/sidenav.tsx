@@ -19,7 +19,7 @@ function Sidenav() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="details" className="nav-link" aria-current="page">
+              <Link to="/details" className="nav-link" aria-current="page">
                 Details
               </Link>
             </li>
@@ -31,11 +31,6 @@ function Sidenav() {
             <li className="nav-item">
               <Link to="/graphs" className="nav-link" aria-current="page">
                 View graphs
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/chat" className="nav-link" aria-current="page">
-                Chat
               </Link>
             </li>
             <li className="nav-item">

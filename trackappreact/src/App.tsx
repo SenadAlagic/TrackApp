@@ -11,7 +11,6 @@ import ItemGraphs from "./components/ItemGraphs/itemGraphs";
 import ViewPurchase from "./components/ViewPurchase/viewpurchase";
 import Login from "./components/Login/login";
 import UserStats from "./components/UsersStats/userstats";
-import Chat from "./components/Chat/chat";
 import Repair from "./components/Repair/repair";
 import ImprovedChatWindow from "./components/Chat/chat";
 
@@ -32,7 +31,6 @@ function App() {
           <Route path="/graphs" element={<ItemGraphs />}></Route>
 
           <Route path="purchase/:purchaseId" element={<ViewPurchase />}></Route>
-          <Route path="chat" element={<Chat />}></Route>
           <Route path="userStats" element={<UserStats />}></Route>
           <Route path="repairs" element={<Repair />}></Route>
           <Route path="*" element={<NotFound />} />

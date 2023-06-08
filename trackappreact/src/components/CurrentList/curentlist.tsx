@@ -38,14 +38,20 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
     <>
       <StyledWrapper id="wrapper" className="CurrentList">
         <h1>{!items.length && <p>No items found</p>}</h1>
-        <table className="table table-borderless table-sm">
+        <table id="table" className="table table-borderless table-sm">
+          <Thead>
+            <th>Ime</th>
+            <th>Kolicina</th>
+            <th>Mjera</th>
+            <th></th>
+          </Thead>
           <tbody>
             {items.map((item: any) => (
               <>
                 <tr>
-                  <th>{item.categoryName}</th>
-                  <th></th>
-                  <th></th>
+                  <Td>{item.categoryName}</Td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 {item.items.map((rows: any) => (
                   <Tr $crossedOff={rows.crossedOff}>
@@ -101,4 +107,10 @@ export const SmallWidthRight = styled.td`
 export const SmallWidthLeft = styled.td`
   width: 5%;
   text-align: left;
+`;
+const Thead = styled.thead`
+  display: none;
+`;
+const Td = styled.td`
+  font-weight: bold;
 `;

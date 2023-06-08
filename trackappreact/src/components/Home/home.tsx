@@ -10,6 +10,8 @@ import {
   fetchTotalPrice,
 } from "../../services/listService";
 import NewItem from "../NewItem/newitem";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 function Home() {
   const [items, setItems] = useState<ItemsList[]>([]);
@@ -30,6 +32,36 @@ function Home() {
     fetchData(currentListId, true).then(setItems);
   };
 
+  function exportToPDF() {
+    const table = document.getElementById("table");
+    const doc = new jsPDF();
+    const columns: any = [];
+    const data: any = [];
+
+    if (!table) return;
+    const headers = table.querySelectorAll("thead th");
+    headers.forEach((header) => {
+      columns.push(header.innerHTML);
+    });
+
+    const rows = table.querySelectorAll("tbody tr");
+    rows.forEach((row) => {
+      const rowData: any = [];
+      const cells = row.querySelectorAll("td");
+      if (cells[1].innerText !== "") {
+        cells.forEach((cell) => {
+          rowData.push(cell.innerText);
+        });
+        data.push(rowData);
+      }
+    });
+    console.log(data);
+    // Generate the PDF
+    autoTable(doc, { head: [columns], body: data });
+
+    // Save the PDF file
+    doc.save("table.pdf");
+  }
   return (
     <>
       <div className="dashboard">
@@ -53,6 +85,13 @@ function Home() {
           >
             <NewItem />
           </CustomModal>
+        </StyledDiv>
+        <br />
+
+        <StyledDiv>
+          <button className="btn btn-secondary" onClick={exportToPDF}>
+            Export to PDF
+          </button>
         </StyledDiv>
 
         {/* <StyledTitle>Previous months</StyledTitle> */}
