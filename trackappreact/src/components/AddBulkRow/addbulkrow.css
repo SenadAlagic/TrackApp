@@ -8,7 +8,14 @@
     display: flex;
     flex-wrap: wrap;
 }
+#priceInput{
+    width: 50;
+}
 #currencySpan{
-    transform: translateX(-5px);
+    transform: translateX(-20px);
     height:90%;
+}
+#buttonsBulk
+{
+    transform: translateX(-12px);
 }

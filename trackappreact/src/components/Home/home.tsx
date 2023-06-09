@@ -12,11 +12,14 @@ import {
 import NewItem from "../NewItem/newitem";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { ReactComponent as IconPDF } from "../../assets/icon_pdf.svg";
+import { ReactComponent as IconCSV } from "../../assets/icon_csv.svg";
 
 function Home() {
   const [items, setItems] = useState<ItemsList[]>([]);
   const [currentListId, setCurrentList] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  let exportData: any[][] = [];
 
   useEffect(() => {
     fetchCurrentWorkingList().then(setCurrentList);
@@ -55,13 +58,51 @@ function Home() {
         data.push(rowData);
       }
     });
-    console.log(data);
     // Generate the PDF
     autoTable(doc, { head: [columns], body: data });
 
     // Save the PDF file
     doc.save("table.pdf");
   }
+
+  function exportToCSV() {
+    const table = document.getElementById("table");
+    const columns: any = [];
+    const data: any = [];
+
+    if (!table) return;
+    const headers = table.querySelectorAll("thead th");
+    headers.forEach((header) => {
+      columns.push(header.innerHTML);
+    });
+
+    const rows = table.querySelectorAll("tbody tr");
+    rows.forEach((row) => {
+      const rowData: any = [];
+      const cells = row.querySelectorAll("td");
+      cells.forEach((cell) => {
+        rowData.push(cell.innerText);
+      });
+      data.push(rowData);
+    });
+    exportData = [["Name", "Quantity", "Unit"], data];
+
+    let csvData = "";
+    for (const row of exportData) {
+      const csvRow = row.join(",");
+      csvData += csvRow + "\n";
+    }
+
+    const url = URL.createObjectURL(new Blob([csvData], { type: "text/csv" }));
+    const link = document.createElement("a");
+    link.style.display = "none";
+    link.href = url;
+    link.download = "table.csv";
+    document.body.appendChild(link);
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <>
       <div className="dashboard">
@@ -89,9 +130,14 @@ function Home() {
         <br />
 
         <StyledDiv>
-          <button className="btn btn-secondary" onClick={exportToPDF}>
-            Export to PDF
-          </button>
+          <div id="export-buttons">
+            <button className="btn btn-secondary" onClick={exportToPDF}>
+              <IconPDF />
+            </button>
+            <button className="btn btn-secondary" onClick={exportToCSV}>
+              <IconCSV />
+            </button>
+          </div>
         </StyledDiv>
 
         {/* <StyledTitle>Previous months</StyledTitle> */}

@@ -134,7 +134,7 @@ const LocalInput = styled(Input)`
 `;
 
 const SmallButton = styled.button`
-  height: 100%;
+  height: 90%;
   width: 100%;
   margin-left: 2px;
 `;
