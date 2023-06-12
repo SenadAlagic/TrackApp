@@ -1,6 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react";
 
-function ChatInput(props: any) {
+interface IChatInput {
+  sendMessage(user: string, message: string): void;
+}
+
+function ChatInput(props: IChatInput) {
   const [user, setUser] = useState("");
   const [message, setMessage] = useState("");
 
@@ -24,7 +28,7 @@ function ChatInput(props: any) {
     setMessage(e.target.value);
   };
 
-  function handleKeyDown(e: any) {
+  function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === "Enter") {
       onSubmit();
     }

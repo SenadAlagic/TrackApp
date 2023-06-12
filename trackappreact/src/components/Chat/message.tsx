@@ -1,4 +1,6 @@
-function Message(props: any) {
+import { IMessage } from "./chat";
+
+function Message(props: IMessage) {
   return (
     <>
       <div className="sender-other">

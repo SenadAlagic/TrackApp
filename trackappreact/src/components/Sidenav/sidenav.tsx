@@ -43,6 +43,11 @@ function Sidenav() {
                 Repairs
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/import" className="nav-link" aria-current="page">
+                Import
+              </Link>
+            </li>
           </ul>
         </Nav>
         <div className="toggle-button" onClick={toggle}>

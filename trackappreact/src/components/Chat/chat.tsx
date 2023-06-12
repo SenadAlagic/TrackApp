@@ -10,15 +10,15 @@ import { appSettings } from "../../site";
 import ChatInput from "./chatinput";
 import ChatWindow from "./chatwindow";
 
-interface Message {
-  User: string;
-  Message: string;
+export interface IMessage {
+  user: string;
+  message: string;
 }
 
 function Chat() {
   const [connection, setConnection] = useState<HubConnection>();
-  const [chat, setChat] = useState<Message[]>([]);
-  const latestChat = useRef<Message[]>();
+  const [chat, setChat] = useState<IMessage[]>([]);
+  const latestChat = useRef<IMessage[]>();
   const [visible, setVisible] = useState(true);
 
   latestChat.current = chat;

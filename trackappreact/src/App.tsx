@@ -13,6 +13,7 @@ import Login from "./components/Login/login";
 import UserStats from "./components/UsersStats/userstats";
 import Repair from "./components/Repair/repair";
 import ImprovedChatWindow from "./components/Chat/chat";
+import ImportCSV from "./components/ImportCSV/importCSV";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="purchase/:purchaseId" element={<ViewPurchase />}></Route>
           <Route path="userStats" element={<UserStats />}></Route>
           <Route path="repairs" element={<Repair />}></Route>
+          <Route path="import" element={<ImportCSV />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ImprovedChatWindow />

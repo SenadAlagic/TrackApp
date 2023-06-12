@@ -1,19 +1,21 @@
-import React from "react";
 import Message from "./message";
+import { IMessage } from "./chat";
 
-function ChatWindow(props: any) {
-  const chat = props.chat.map((m: any) => (
-    <Message
-      key={Date.now() * Math.random()}
-      user={m.user}
-      message={m.message}
-    />
-  ));
+interface IChatWindow {
+  chat: IMessage[];
+}
 
+function ChatWindow({ chat }: IChatWindow) {
   return (
-    <>
-      <div className="chat-body">{chat}</div>
-    </>
+    <div className="chat-body">
+      {chat.map(({ user, message }: IMessage) => (
+        <Message
+          key={Date.now() * Math.random()}
+          user={user}
+          message={message}
+        />
+      ))}
+    </div>
   );
 }
 

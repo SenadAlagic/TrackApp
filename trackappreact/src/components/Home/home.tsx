@@ -85,7 +85,7 @@ function Home() {
       });
       data.push(rowData);
     });
-    exportData = [["Name", "Quantity", "Unit"], data];
+    exportData = [["Name", "Quantity", "Unit"], ...data];
 
     let csvData = "";
     for (const row of exportData) {
