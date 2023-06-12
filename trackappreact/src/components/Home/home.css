@@ -6,3 +6,6 @@
     display:flex;
     justify-content: center;
 }
+.export{
+    margin: 4px;
+}

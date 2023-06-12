@@ -7,9 +7,10 @@ interface IModal {
   children: ReactNode;
   modalTitle: string;
   modalButtonTitle: string;
+  icon?: any;
 }
 
-function CustomModal({ children, modalTitle, modalButtonTitle }: IModal) {
+function CustomModal({ children, modalTitle, modalButtonTitle, icon }: IModal) {
   const [show, setShow] = useState(false);
 
   const openModal = () => {
@@ -23,6 +24,7 @@ function CustomModal({ children, modalTitle, modalButtonTitle }: IModal) {
     <>
       <Button className="btn btn-primary" onClick={openModal}>
         {modalButtonTitle}
+        {icon}
       </Button>
       <Modal show={show} onHide={closeModal}>
         <Modal.Header closeButton>

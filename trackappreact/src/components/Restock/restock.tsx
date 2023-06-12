@@ -95,8 +95,13 @@ function Restock() {
             onChange={changePrice}
             value={price}
           ></Inputwidth>
-          <Input type="file" accept="image/*" onChange={changeImage}></Input>
-          <img src={imageURL} alt="meaningful text" />
+          <Input
+            className="form-control"
+            type="file"
+            accept="image/*"
+            onChange={changeImage}
+          ></Input>
+          <img src={imageURL} alt=" " />
         </Controls>
         <Button
           className="btn btn-primary control"

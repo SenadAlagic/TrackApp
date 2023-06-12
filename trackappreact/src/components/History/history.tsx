@@ -49,17 +49,17 @@ function History() {
     navigate(`/purchase/${purchaseId}`);
   }
   return (
-    <StyledWrapper>
+    <LocalWrapper>
       <StyledTitle>Item history</StyledTitle>
       <br />
 
       <table className="table table-borderless table-sm">
         <thead>
-          <th>Quantity</th>
-          <th></th>
-          <th>Price</th>
-          <th>Purchased by</th>
-          <th>Date of purchase</th>
+          <LocalTh>Quantity</LocalTh>
+          <LocalTh>Unit</LocalTh>
+          <LocalTh>Price</LocalTh>
+          <LocalTh>Purchased by</LocalTh>
+          <LocalTh>Date of purchase</LocalTh>
         </thead>
         <tbody>
           {purchases.map((purchase: Purchase) => (
@@ -67,7 +67,7 @@ function History() {
               <Quantity>{purchase.quantity}</Quantity>
               <Unit>{purchase.unit}</Unit>
               <Price>{purchase.price} KM</Price>
-              <td>{purchase.purchasedBy}</td>
+              <PurchasedBy>{purchase.purchasedBy}</PurchasedBy>
               <Date>{FormatDate(purchase.dateOfPurchase)}</Date>
             </LocalTr>
           ))}
@@ -104,7 +104,7 @@ function History() {
           );
         })}
       </>
-    </StyledWrapper>
+    </LocalWrapper>
   );
 }
 
@@ -123,21 +123,33 @@ function TotalPrice(purchases: Purchase[]): ReactNode {
   return sum;
 }
 
+const LocalWrapper = styled(StyledWrapper)`
+  width: 50%;
+`;
 const LocalTr = styled.tr`
   &:hover {
     background-color: rgb(238, 238, 243);
   }
 `;
+
+const LocalTh = styled.th`
+  text-align: center;
+`;
+const LocalTd = styled(SmallWidthLeft)`
+  text-align: center;
+`;
 const Quantity = styled(IndentTd)`
   width: 5%;
 `;
-const Unit = styled(SmallWidthLeft)`
+const Unit = styled(LocalTd)`
+  width: 20%;
+`;
+const Price = styled(LocalTd)`
+  width: 20%;
+`;
+const PurchasedBy = styled(LocalTd)`
   width: 30%;
 `;
-const Price = styled(SmallWidthLeft)`
-  width: 30%;
-`;
-
 const Date = styled.td`
   width: 30%;
   text-align: center;

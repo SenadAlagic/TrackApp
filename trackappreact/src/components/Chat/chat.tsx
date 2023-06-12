@@ -89,7 +89,7 @@ function Chat() {
               </div>
               <div className="chat-comm">
                 <nav>
-                  <a href="#" onClick={() => closeChatBubble()}>
+                  <a href="#" onClick={() => openChatBubble()}>
                     <CloseIcon />
                   </a>
                 </nav>

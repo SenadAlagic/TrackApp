@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { deleteFromList } from "../../services/itemListService";
 import { ReactComponent as IconDelete } from "../../assets/icon_delete.svg";
 import { ReactComponent as IconBuy } from "../../assets/icon_buy.svg";
+import CustomModal from "../Modal/modal";
+import Confirm from "../Confirm/confirm";
 
 export interface ItemsList {
   id: number;
@@ -68,6 +70,16 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
                         <SmallWidthRight onClick={() => toDelete(rows.itemId)}>
                           <IconDelete />
                         </SmallWidthRight>
+
+                        {/* <SmallWidthLeft>
+                          <CustomModal
+                            modalButtonTitle=""
+                            modalTitle="Delete record?"
+                            icon={<IconDelete />}
+                          >
+                            <Confirm />
+                          </CustomModal>
+                        </SmallWidthLeft> */}
                       </>
                     )}
                   </Tr>
@@ -93,6 +105,7 @@ export default CurrentList;
 export const Tr = styled.tr<{ $crossedOff: boolean }>`
   &:hover {
     background-color: rgb(238, 238, 243);
+    cursor: pointer;
   }
   text-decoration: ${(props) =>
     props.$crossedOff ? `line-through 2px solid black;` : `none;`};

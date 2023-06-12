@@ -14,6 +14,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { ReactComponent as IconPDF } from "../../assets/icon_pdf.svg";
 import { ReactComponent as IconCSV } from "../../assets/icon_csv.svg";
+import "./home.css";
 
 function Home() {
   const [items, setItems] = useState<ItemsList[]>([]);
@@ -131,11 +132,11 @@ function Home() {
 
         <StyledDiv>
           <div id="export-buttons">
-            <button className="btn btn-secondary" onClick={exportToPDF}>
-              <IconPDF />
+            <button className="btn btn-secondary export" onClick={exportToPDF}>
+              Export to PDF <IconPDF />
             </button>
-            <button className="btn btn-secondary" onClick={exportToCSV}>
-              <IconCSV />
+            <button className="btn btn-secondary export" onClick={exportToCSV}>
+              Export as CSV <IconCSV />
             </button>
           </div>
         </StyledDiv>

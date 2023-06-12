@@ -1,13 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Nav } from "react-bootstrap";
 import "../Sidenav/sidenav.css";
 import { Link } from "react-router-dom";
+import { ReactComponent as MenuIcon } from "../../assets/burger_menu_icon.svg";
 
 function Sidenav() {
   const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    const currentState =
+      localStorage.getItem("sidebar") === "true" ? true : false;
+    setIsOpen(currentState);
+  }, []);
+
   const toggle = () => {
     setIsOpen(!isOpen);
+    const currentState = isOpen ? "false" : "true";
+    localStorage.setItem("sidebar", currentState);
   };
+
+  function openChat() {
+    console.log("open chat");
+  }
   return (
     <>
       <div className={`sidenav ${isOpen ? "open" : ""}`}>
@@ -25,7 +38,7 @@ function Sidenav() {
             </li>
             <li className="nav-item">
               <Link to="/addBulk" className="nav-link" aria-current="page">
-                Add in bulk
+                Restock in bulk
               </Link>
             </li>
             <li className="nav-item">
@@ -48,10 +61,15 @@ function Sidenav() {
                 Import
               </Link>
             </li>
+            {/* <li className="nav-item">
+              <div className="nav-link" onClick={openChat}>
+                Open chat
+              </div>
+            </li> */}
           </ul>
         </Nav>
         <div className="toggle-button" onClick={toggle}>
-          ≡
+          <MenuIcon />
         </div>
       </div>
     </>

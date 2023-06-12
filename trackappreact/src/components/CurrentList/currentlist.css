@@ -1,18 +1,4 @@
-.CurrentList{
-    width: 100%;
-    margin:auto;
-}
-a{
-    text-decoration: none;
-}
-.CurrentList>table>tbody>tr>.indent {
-    padding-left: 2.5em;
-}
-.CurrentList>table>tbody>tr>.smallWidth {
-    width: 5%;
-}
-.CurrentList>table>tbody>tr>.right {
-    text-align: right;
-}.CurrentList>table>tbody>tr>.left {
-    text-align: left;
+button{
+    height:17px;
+    width: 17px;
 }
