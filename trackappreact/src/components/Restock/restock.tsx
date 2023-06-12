@@ -122,6 +122,7 @@ const Div = styled.div`
 const Controls = styled.div`
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
 `;
 const Input = styled.input`
   width: 100%;

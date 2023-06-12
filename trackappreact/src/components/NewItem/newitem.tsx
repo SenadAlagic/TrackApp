@@ -11,7 +11,7 @@ import { GetCategories } from "../../services/categoryService";
 import ItemService from "../../services/itemService";
 
 export interface Category {
-  id: number;
+  categoryId: number;
   name: string;
 }
 
@@ -32,16 +32,18 @@ function NewItem() {
     setUnit(event.target.value);
   }
   function handleClick(cat: Category) {
+    debugger;
     setSelected(cat);
   }
   function AddToDatabase() {
-    if (!name || !selectedCategory?.id) return;
+    if (!name || !selectedCategory?.categoryId) return;
     const body = {
       name,
       unit,
-      categoryId: selectedCategory?.id,
+      categoryId: selectedCategory?.categoryId,
     };
     ItemService.addItemToDb(body);
+    alert("Succesfully saved a new item to database");
   }
 
   return (
@@ -85,7 +87,6 @@ function NewItem() {
           <SmallButton
             className="btn btn-primary control"
             type="button"
-            data-bs-dismiss="modal"
             onClick={() => AddToDatabase()}
           >
             Confirm

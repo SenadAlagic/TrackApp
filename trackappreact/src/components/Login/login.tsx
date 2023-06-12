@@ -14,7 +14,7 @@ function Login() {
   return (
     <LocalWrapper>
       <br />
-      <label>Your Name: </label>
+      <label id="loginLabel">Your Name: </label>
       <input
         className="form-control control"
         placeholder="Your name"
