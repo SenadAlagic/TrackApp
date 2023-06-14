@@ -33,9 +33,10 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
     navigate(`/history/${id}`);
   }
   function toDelete(id: number) {
-    if (window.confirm("Are you sure you want to delete this item?") === true) {
-      deleteFromList(id);
-    }
+    // if (window.confirm("Are you sure you want to delete this item?") === true) {
+    //   deleteFromList(id);
+    // }
+    deleteFromList(id);
   }
   return (
     <>
@@ -78,7 +79,7 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
                               modalTitle="Delete record?"
                               icon={<IconDelete />}
                             >
-                              <Confirm />
+                              <Confirm onDelete={() => toDelete(rows.itemId)} />
                             </CustomModal>
                           </SmallWidthLeft>
                         }

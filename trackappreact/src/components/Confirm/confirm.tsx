@@ -1,11 +1,21 @@
 import "./confirm.css";
-function Confirm() {
+
+interface IConfirm {
+  onDelete: () => void;
+  //onGoBack: () => void;
+}
+function Confirm({ onDelete }: IConfirm) {
   return (
     <>
-      <button className="btn btn-danger confirmDelete">Yes, delete</button>
-      <button className="btn btn-outline-secondary confirmDelete">
-        No, go back
+      <button className="btn btn-danger confirmDelete" onClick={onDelete}>
+        Yes, delete
       </button>
+      {/* <button
+        className="btn btn-outline-secondary confirmDelete"
+        onClick={onGoBack}
+      >
+        No, go back
+      </button> */}
     </>
   );
 }
