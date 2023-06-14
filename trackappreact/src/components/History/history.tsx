@@ -48,6 +48,7 @@ function History() {
   function goToPurchase(purchaseId: number) {
     navigate(`/purchase/${purchaseId}`);
   }
+
   return (
     <LocalWrapper>
       <StyledTitle>Item history</StyledTitle>
@@ -74,7 +75,7 @@ function History() {
           <tr>
             <td></td>
             <th>Total price:</th>
-            <td>{TotalPrice(purchases)} KM</td>
+            <LocalTh>{TotalPrice(purchases)} KM</LocalTh>
           </tr>
         </tbody>
       </table>

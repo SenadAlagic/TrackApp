@@ -22,10 +22,13 @@ function CustomModal({ children, modalTitle, modalButtonTitle, icon }: IModal) {
 
   return (
     <>
-      <Button className="btn btn-primary" onClick={openModal}>
-        {modalButtonTitle}
-        {icon}
-      </Button>
+      <StyledButton
+        className="btn btn-primary"
+        onClick={openModal}
+        icon={icon !== undefined}
+      >
+        {modalButtonTitle ? modalButtonTitle : icon}
+      </StyledButton>
       <Modal show={show} onHide={closeModal}>
         <Modal.Header closeButton>
           <ModalTitle>{modalTitle}</ModalTitle>
@@ -48,4 +51,15 @@ const Button = styled.button`
 `;
 const Close = styled(Button)`
   width: 100%;
+`;
+
+const StyledButton = styled(Button)<{ icon: boolean }>`
+  ${(props) =>
+    props.icon &&
+    `
+    background: transparent;
+    border: none;
+    padding:0;
+    margin:0;
+    `}
 `;

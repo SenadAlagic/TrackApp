@@ -6,6 +6,7 @@ import { ReactComponent as IconDelete } from "../../assets/icon_delete.svg";
 import { ReactComponent as IconBuy } from "../../assets/icon_buy.svg";
 import CustomModal from "../Modal/modal";
 import Confirm from "../Confirm/confirm";
+import "./currentlist.css";
 
 export interface ItemsList {
   id: number;
@@ -67,19 +68,20 @@ const CurrentList = ({ items, details, totalPrice }: Props) => {
                         <SmallWidthRight onClick={() => toRestock(rows.itemId)}>
                           <IconBuy />
                         </SmallWidthRight>
-                        <SmallWidthRight onClick={() => toDelete(rows.itemId)}>
+                        {/* <SmallWidthRight onClick={() => toDelete(rows.itemId)}>
                           <IconDelete />
-                        </SmallWidthRight>
-
-                        {/* <SmallWidthLeft>
-                          <CustomModal
-                            modalButtonTitle=""
-                            modalTitle="Delete record?"
-                            icon={<IconDelete />}
-                          >
-                            <Confirm />
-                          </CustomModal>
-                        </SmallWidthLeft> */}
+                        </SmallWidthRight> */}
+                        {
+                          <SmallWidthLeft>
+                            <CustomModal
+                              modalButtonTitle=""
+                              modalTitle="Delete record?"
+                              icon={<IconDelete />}
+                            >
+                              <Confirm />
+                            </CustomModal>
+                          </SmallWidthLeft>
+                        }
                       </>
                     )}
                   </Tr>

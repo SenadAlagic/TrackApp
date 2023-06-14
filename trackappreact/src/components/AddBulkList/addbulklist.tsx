@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AddBulkRow from "../AddBulkRow/addbulkrow";
 import styled from "styled-components";
 import { StyledTitle } from "../../styles/title.styled";
@@ -55,9 +55,6 @@ function AddBulk() {
 
 export default AddBulk;
 
-const Row = styled(AddBulkRow)`
-  background-color: red;
-`;
 const Wrapper = styled.div`
   width: 60%;
   margin-left: auto;

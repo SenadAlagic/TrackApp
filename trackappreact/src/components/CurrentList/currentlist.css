@@ -1,4 +1,3 @@
-button{
-    height:17px;
-    width: 17px;
+td button:hover{
+    background-color: transparent !important;
 }

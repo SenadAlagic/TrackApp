@@ -18,9 +18,6 @@ function Sidenav() {
     localStorage.setItem("sidebar", currentState);
   };
 
-  function openChat() {
-    console.log("open chat");
-  }
   return (
     <>
       <div className={`sidenav ${isOpen ? "open" : ""}`}>

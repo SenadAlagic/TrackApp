@@ -51,6 +51,15 @@ namespace TrackApp.Controllers
             return Ok(_itemService.AddItem(newItem));
         }
 
+        [HttpPost]
+        public ActionResult<Item> AddImageLink(int itemId, string imageLink)
+        {
+            var itemToUpdate = _itemService.AddImageLink(itemId, imageLink);
+            if (itemToUpdate == null)
+                return BadRequest();
+            return Ok(itemToUpdate);
+        }
+
         [HttpDelete]
         public ActionResult<Item> RemoveItem(int id)
         {

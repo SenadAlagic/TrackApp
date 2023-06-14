@@ -12,6 +12,7 @@ namespace TrackApp.Service
         public List<Item> GetItems();
         public List<ItemsByCategoryVM> GetItemsByCategory();
         public Item GetById(int id);
+        public Item AddImageLink(int id, string imageLink);
     }
 
     public class ItemService : IItemService
@@ -73,6 +74,16 @@ namespace TrackApp.Service
             }
 
             return result;
+        }
+
+        public Item AddImageLink(int id, string imageLink)
+        {
+            var itemToGet = GetById(id);
+            if (itemToGet == null)
+                return null;
+            itemToGet.ImageLink = imageLink;
+            _itemRepository.Update(itemToGet);
+            return itemToGet;
         }
     }
 }
