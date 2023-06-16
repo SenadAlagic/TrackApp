@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrackApp.Core;
 using TrackApp.Service;
@@ -17,7 +18,8 @@ namespace TrackApp.Controllers
         {
             this._categoryService = categoryService;
         }
-
+        
+        [Authorize]
         [HttpGet]
         public ActionResult<List<Category>> GetCategories()
         {
